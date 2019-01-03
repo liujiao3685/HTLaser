@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1195E7B-C6BE-4AC8-B0EC-FDF444A635B0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HuaTianProject</RootNamespace>
+    <AssemblyName>HuaTianProject</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>HTLOGO.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.94.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommandLibs\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="Core\AppSetting.cs" />
+    <Compile Include="Core\CPKHelper.cs" />
+    <Compile Include="Core\SQLiteHelper.cs" />
+    <Compile Include="Libs\AppLog.cs" />
+    <Compile Include="Libs\CDMC5400A.cs" />
+    <Compile Include="Core\DBHelper.cs" />
+    <Compile Include="Core\DBTool.cs" />
+    <Compile Include="Core\LTDMC.cs" />
+    <Compile Include="Core\MyEvent.cs" />
+    <Compile Include="Core\XmlHelperPaint.cs" />
+    <Compile Include="Entity\Paint\Ellipse.cs" />
+    <Compile Include="Entity\Paint\Line.cs" />
+    <Compile Include="Entity\Paint\TrajectoryChatBase.cs" />
+    <Compile Include="Entity\Param.cs" />
+    <Compile Include="Entity\User.cs" />
+    <Compile Include="Core\Utility.cs" />
+    <Compile Include="Core\XMLHelper.cs" />
+    <Compile Include="Entity\Axes.cs" />
+    <Compile Include="EXControl\EXComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EXControl\EXListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\IAxis.cs" />
+    <Compile Include="Interface\IAxisMove.cs" />
+    <Compile Include="Interface\IAxisState.cs" />
+    <Compile Include="Interface\Impl\AxisMove.cs" />
+    <Compile Include="Interface\Impl\AxisState.cs" />
+    <Compile Include="Interface\Impl\SignalX.cs" />
+    <Compile Include="Interface\Impl\SignalY.cs" />
+    <Compile Include="Interface\Impl\SignalZ.cs" />
+    <Compile Include="Interface\SignalMonitorBase.cs" />
+    <Compile Include="Interface\Impl\SignalMonitor.cs" />
+    <Compile Include="Libs\Hardware\SMACConfig.cs" />
+    <Compile Include="Libs\IIO.cs" />
+    <Compile Include="Libs\IMontion.cs" />
+    <Compile Include="Libs\Parameter\CurrentProject.cs" />
+    <Compile Include="Libs\State.cs" />
+    <Compile Include="Libs\StreamFile.cs" />
+    <Compile Include="Libs\Structure.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test\test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Test\test.Designer.cs">
+      <DependentUpon>test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\AbsoluteControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AbsoluteControlForm.Designer.cs">
+      <DependentUpon>AbsoluteControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BackHomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BackHomeForm.Designer.cs">
+      <DependentUpon>BackHomeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LaserControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LaserControlForm.Designer.cs">
+      <DependentUpon>LaserControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MDIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MDIForm.Designer.cs">
+      <DependentUpon>MDIForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OnlineProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\OnlineProgramForm.Designer.cs">
+      <DependentUpon>OnlineProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\StumpProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\StumpProgramForm.Designer.cs">
+      <DependentUpon>StumpProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FormBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FormBase.Designer.cs">
+      <DependentUpon>FormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\IOStateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\IOStateForm.Designer.cs">
+      <DependentUpon>IOStateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LoginRightsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LoginRightsForm.Designer.cs">
+      <DependentUpon>LoginRightsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ManageUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ManageUserForm.Designer.cs">
+      <DependentUpon>ManageUserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ManualIOForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ManualIOForm.Designer.cs">
+      <DependentUpon>ManualIOForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MontionControlForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\MontionControlForm.Designer.cs">
+      <DependentUpon>MontionControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ParamSetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ParamSetForm.Designer.cs">
+      <DependentUpon>ParamSetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ParamSetForm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ParamSetForm.Designer.cs">
+      <DependentUpon>ParamSetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TeachingUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\TeachingUserControl.Designer.cs">
+      <DependentUpon>TeachingUserControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Test\test.resx">
+      <DependentUpon>test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AbsoluteControlForm.resx">
+      <DependentUpon>AbsoluteControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\BackHomeForm.resx">
+      <DependentUpon>BackHomeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\IOStateForm.resx">
+      <DependentUpon>IOStateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LaserControlForm.resx">
+      <DependentUpon>LaserControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LoginRightsForm.resx">
+      <DependentUpon>LoginRightsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ManageUserForm.resx">
+      <DependentUpon>ManageUserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ManualIOForm.resx">
+      <DependentUpon>ManualIOForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MDIForm.resx">
+      <DependentUpon>MDIForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\OnlineProgramForm.resx">
+      <DependentUpon>OnlineProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\StumpProgramForm.resx">
+      <DependentUpon>StumpProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\MontionControlForm.resx">
+      <DependentUpon>MontionControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ParamSetForm.resx">
+      <DependentUpon>ParamSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ParamSetForm.resx">
+      <DependentUpon>ParamSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TeachingUserControl.resx">
+      <DependentUpon>TeachingUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Command\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HTLOGO.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

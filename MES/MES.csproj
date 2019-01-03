@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3D3B2D92-B001-463D-9A59-941E18E64503}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProductManage</RootNamespace>
+    <AssemblyName>HT 生产管理系统</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>HTLOGO.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HslCommunication, Version=5.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\HslCommunication.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Client, Version=1.3.342.0, Culture=neutral, PublicKeyToken=78aea80f6827b5ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpcUaHelper.1.0.2\lib\Opc.Ua.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.ClientControls, Version=1.3.342.0, Culture=neutral, PublicKeyToken=78aea80f6827b5ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpcUaHelper.1.0.2\lib\Opc.Ua.ClientControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Configuration, Version=1.3.342.0, Culture=neutral, PublicKeyToken=78aea80f6827b5ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpcUaHelper.1.0.2\lib\Opc.Ua.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Opc.Ua.Core, Version=1.3.342.0, Culture=neutral, PublicKeyToken=78aea80f6827b5ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpcUaHelper.1.0.2\lib\Opc.Ua.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpcUaHelper, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpcUaHelper.1.0.2\lib\OpcUaHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\CommandLibs\System.Data.SQLite.DLL</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppSetting.cs" />
+    <Compile Include="BasicFramework\SoftBasic.cs" />
+    <Compile Include="Core\Alarm.cs" />
+    <Compile Include="IDAL\IDbBase.cs" />
+    <Compile Include="TcpCommunicate\MyTcpClient.cs" />
+    <Compile Include="TcpCommunicate\MyTcpServer.cs" />
+    <Compile Include="TcpCommunicate\StateObject.cs" />
+    <Compile Include="TcpCommunicate\StateOneBase.cs" />
+    <Compile Include="Core\WeldHelper.cs" />
+    <Compile Include="Core\WindowsMessage.cs" />
+    <Compile Include="Core\XmlHelperBase.cs" />
+    <Compile Include="DAL\DbUserHelper.cs" />
+    <Compile Include="Core\MyEvent.cs" />
+    <Compile Include="Core\Types.cs" />
+    <Compile Include="Core\UpdateProgress.cs" />
+    <Compile Include="Core\XmlModuleHelper.cs" />
+    <Compile Include="DAL\DBHelper.cs" />
+    <Compile Include="DAL\DBTool.cs" />
+    <Compile Include="Entity\Enum\ErrorType.cs" />
+    <Compile Include="Entity\Logs.cs" />
+    <Compile Include="Entity\Product.cs" />
+    <Compile Include="Entity\SpotDatas.cs" />
+    <Compile Include="Entity\User.cs" />
+    <Compile Include="Entity\WeldModule.cs" />
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Language\DefaultLanguage.cs" />
+    <Compile Include="Language\English.cs" />
+    <Compile Include="Language\MyLanguageTool\ResourceCulture.cs" />
+    <Compile Include="Language\SimpleChinese.cs" />
+    <Compile Include="Language\StringResources.cs" />
+    <Compile Include="LogNet\Core\Types.cs" />
+    <Compile Include="PLC\PlcHelper.cs" />
+    <Compile Include="PLC\PLC_SocketTcp.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
+    <Compile Include="TcpCommunicate\TcpBase.cs" />
+    <Compile Include="UI\FormPLCTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormPLCTest.Designer.cs">
+      <DependentUpon>FormPLCTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormCheckAuth.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormCheckAuth.Designer.cs">
+      <DependentUpon>FormCheckAuth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormParamSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormParamSetting.Designer.cs">
+      <DependentUpon>FormParamSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormParamSettingL.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormParamSettingL.Designer.cs">
+      <DependentUpon>FormParamSettingL.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormQuitWait.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormQuitWait.Designer.cs">
+      <DependentUpon>FormQuitWait.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormSpotDatas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormSpotDatas.Designer.cs">
+      <DependentUpon>FormSpotDatas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\OMCSForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\OMCSForm.Designer.cs">
+      <DependentUpon>OMCSForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ChoseRightsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ChoseRightsForm.Designer.cs">
+      <DependentUpon>ChoseRightsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ManualCheckForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ManualCheckForm.Designer.cs">
+      <DependentUpon>ManualCheckForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\QueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\QueryForm.Designer.cs">
+      <DependentUpon>QueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SelfCheckWarmForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SelfCheckWarmForm.Designer.cs">
+      <DependentUpon>SelfCheckWarmForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SpotCheckForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SpotCheckForm.Designer.cs">
+      <DependentUpon>SpotCheckForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\WeldingModuleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\WeldingModuleForm.Designer.cs">
+      <DependentUpon>WeldingModuleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CollectingSystem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CollectingSystem.Designer.cs">
+      <DependentUpon>CollectingSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LoadProgressBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LoadProgressBar.Designer.cs">
+      <DependentUpon>LoadProgressBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LogErrorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LogErrorControl.Designer.cs">
+      <DependentUpon>LogErrorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LogSystemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LogSystemControl.Designer.cs">
+      <DependentUpon>LogSystemControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MonitorLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\MonitorLControl.Designer.cs">
+      <DependentUpon>MonitorLControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MontiorSControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\MontiorSControl.Designer.cs">
+      <DependentUpon>MontiorSControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SiemensPLC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SiemensPLC.Designer.cs">
+      <DependentUpon>SiemensPLC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SpotCheckControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SpotCheckControl.Designer.cs">
+      <DependentUpon>SpotCheckControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SystemParamControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SystemParamControl.Designer.cs">
+      <DependentUpon>SystemParamControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TraceSystem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\TraceSystem.Designer.cs">
+      <DependentUpon>TraceSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vision\DeviceData.cs" />
+    <Compile Include="Vision\MeasureData.cs" />
+    <Compile Include="Vision\NativeMethods.cs" />
+    <Compile Include="Vision\OpenEthernetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vision\OpenEthernetForm.Designer.cs">
+      <DependentUpon>OpenEthernetForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vision\ProfileData.cs" />
+    <Compile Include="Vision\ProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vision\ProfileForm.Designer.cs">
+      <DependentUpon>ProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Vision\Utility.cs" />
+    <Compile Include="Vision\VisionLJ7000.cs" />
+    <EmbeddedResource Include="FormMain.en-GB.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.en.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.en-US.resx" />
+    <EmbeddedResource Include="Properties\Resource.zh-CN.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="UI\FormPLCTest.resx">
+      <DependentUpon>FormPLCTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormCheckAuth.resx">
+      <DependentUpon>FormCheckAuth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormParamSetting.resx">
+      <DependentUpon>FormParamSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormParamSettingL.resx">
+      <DependentUpon>FormParamSettingL.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormQuitWait.resx">
+      <DependentUpon>FormQuitWait.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormSpotDatas.resx">
+      <DependentUpon>FormSpotDatas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\OMCSForm.resx">
+      <DependentUpon>OMCSForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ChoseRightsForm.resx">
+      <DependentUpon>ChoseRightsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ManualCheckForm.resx">
+      <DependentUpon>ManualCheckForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\QueryForm.resx">
+      <DependentUpon>QueryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SelfCheckWarmForm.resx">
+      <DependentUpon>SelfCheckWarmForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SpotCheckForm.resx">
+      <DependentUpon>SpotCheckForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\WeldingModuleForm.resx">
+      <DependentUpon>WeldingModuleForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CollectingSystem.resx">
+      <DependentUpon>CollectingSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LoadProgressBar.resx">
+      <DependentUpon>LoadProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogErrorControl.resx">
+      <DependentUpon>LogErrorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogSystemControl.resx">
+      <DependentUpon>LogSystemControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\MonitorLControl.resx">
+      <DependentUpon>MonitorLControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\MontiorSControl.resx">
+      <DependentUpon>MontiorSControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SiemensPLC.resx">
+      <DependentUpon>SiemensPLC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SpotCheckControl.resx">
+      <DependentUpon>SpotCheckControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SystemParamControl.resx">
+      <DependentUpon>SystemParamControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\TraceSystem.resx">
+      <DependentUpon>TraceSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vision\OpenEthernetForm.resx">
+      <DependentUpon>OpenEthernetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Vision\ProfileForm.resx">
+      <DependentUpon>ProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Vision\LJV7_IF.dll" />
+    <Content Include="HTLOGO.ico" />
+    <Content Include="Img\ClassIcon.ico" />
+    <Content Include="Img\RegistryEditor_5838.ico" />
+    <Content Include="Img\SingleMessage_5727.ico" />
+    <Content Include="Img\UserInterfaceEditor_5845.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BLL\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

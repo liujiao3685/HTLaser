@@ -1,0 +1,666 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BarCode" xml:space="preserve">
+    <value>条码</value>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="CurrentUser" xml:space="preserve">
+    <value>当前用户：</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>英文</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>注销</value>
+  </data>
+  <data name="LogSystem" xml:space="preserve">
+    <value>日志系统</value>
+  </data>
+  <data name="OffLine" xml:space="preserve">
+    <value>离线</value>
+  </data>
+  <data name="OMCS" xml:space="preserve">
+    <value>维护中心</value>
+  </data>
+  <data name="OnLine" xml:space="preserve">
+    <value>在线</value>
+  </data>
+  <data name="ParamMonitor" xml:space="preserve">
+    <value>参数监控</value>
+  </data>
+  <data name="ParamSetting" xml:space="preserve">
+    <value>参数配置</value>
+  </data>
+  <data name="ProductManageSystem" xml:space="preserve">
+    <value>HT 生产管理系统</value>
+  </data>
+  <data name="RealTime" xml:space="preserve">
+    <value>实时监控</value>
+  </data>
+  <data name="RunOut" xml:space="preserve">
+    <value>同心度</value>
+  </data>
+  <data name="Surface" xml:space="preserve">
+    <value>表面成型</value>
+  </data>
+  <data name="Tips" xml:space="preserve">
+    <value>提示：</value>
+  </data>
+  <data name="TraceSystem" xml:space="preserve">
+    <value>追溯系统</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>添加用户</value>
+  </data>
+  <data name="AfterPage" xml:space="preserve">
+    <value>尾页</value>
+  </data>
+  <data name="Auth" xml:space="preserve">
+    <value>权限</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="ChooseModule" xml:space="preserve">
+    <value>选择模板</value>
+  </data>
+  <data name="ChuckClamp" xml:space="preserve">
+    <value>卡盘夹紧力</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="CoaxDown" xml:space="preserve">
+    <value>同心度下限</value>
+  </data>
+  <data name="Coaxiality" xml:space="preserve">
+    <value>同心度</value>
+  </data>
+  <data name="CoaxUp" xml:space="preserve">
+    <value>同心度上限</value>
+  </data>
+  <data name="CreateModule" xml:space="preserve">
+    <value>创建模板</value>
+  </data>
+  <data name="DealTime" xml:space="preserve">
+    <value>处理时间</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DepthDown" xml:space="preserve">
+    <value>焊缝深度下限</value>
+  </data>
+  <data name="DepthUp" xml:space="preserve">
+    <value>焊缝深度上限</value>
+  </data>
+  <data name="EmpNo" xml:space="preserve">
+    <value>员工编号</value>
+  </data>
+  <data name="FinalResult" xml:space="preserve">
+    <value>综合检测结果</value>
+  </data>
+  <data name="HappenTime" xml:space="preserve">
+    <value>发生时间</value>
+  </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>条</value>
+  </data>
+  <data name="LargeParmSet" xml:space="preserve">
+    <value>大环参数设置</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>上一页</value>
+  </data>
+  <data name="LogContent" xml:space="preserve">
+    <value>日志内容</value>
+  </data>
+  <data name="LoginTips" xml:space="preserve">
+    <value>请输入用户名密码</value>
+  </data>
+  <data name="LogResult" xml:space="preserve">
+    <value>日志结果</value>
+  </data>
+  <data name="LwmResult" xml:space="preserve">
+    <value>Lwm检测结果</value>
+  </data>
+  <data name="ManualCheck" xml:space="preserve">
+    <value>人工干预</value>
+  </data>
+  <data name="ModifyLog" xml:space="preserve">
+    <value>编辑日志</value>
+  </data>
+  <data name="ModifyReson" xml:space="preserve">
+    <value>修改原因</value>
+  </data>
+  <data name="ModuleSetting" xml:space="preserve">
+    <value>模板配置</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>下一页</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="OutExcel" xml:space="preserve">
+    <value>导出Excel</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>页</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>每页条数</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Production" xml:space="preserve">
+    <value>总产量:</value>
+  </data>
+  <data name="ProductType" xml:space="preserve">
+    <value>产品类别</value>
+  </data>
+  <data name="ProtectFlow" xml:space="preserve">
+    <value>保护气流量</value>
+  </data>
+  <data name="Query" xml:space="preserve">
+    <value>查询</value>
+  </data>
+  <data name="QueryValue" xml:space="preserve">
+    <value>查询条件</value>
+  </data>
+  <data name="Record" xml:space="preserve">
+    <value>记录</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="SelectedUser" xml:space="preserve">
+    <value>当前选中用户</value>
+  </data>
+  <data name="SelectLatestLog" xml:space="preserve">
+    <value>查询最新日志</value>
+  </data>
+  <data name="SelectLog" xml:space="preserve">
+    <value>搜索日志</value>
+  </data>
+  <data name="SelectMethod" xml:space="preserve">
+    <value>查询方式</value>
+  </data>
+  <data name="SmallParmSet" xml:space="preserve">
+    <value>小环参数设置</value>
+  </data>
+  <data name="SpotCenter" xml:space="preserve">
+    <value>点检中心</value>
+  </data>
+  <data name="SpotParmSet" xml:space="preserve">
+    <value>点检参数</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>共</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="WeldDepth" xml:space="preserve">
+    <value>焊缝高度差</value>
+  </data>
+  <data name="WeldPower" xml:space="preserve">
+    <value>焊接功率</value>
+  </data>
+  <data name="WeldRPos" xml:space="preserve">
+    <value>R坐标</value>
+  </data>
+  <data name="WeldSpeed" xml:space="preserve">
+    <value>焊接速度</value>
+  </data>
+  <data name="WeldTime" xml:space="preserve">
+    <value>焊接时间</value>
+  </data>
+  <data name="WeldXPos" xml:space="preserve">
+    <value>X坐标</value>
+  </data>
+  <data name="WeldYPos" xml:space="preserve">
+    <value>Y坐标</value>
+  </data>
+  <data name="WeldZPos" xml:space="preserve">
+    <value>Z坐标</value>
+  </data>
+  <data name="Which" xml:space="preserve">
+    <value>第</value>
+  </data>
+  <data name="WorkpiecePressure" xml:space="preserve">
+    <value>工件压紧力</value>
+  </data>
+  <data name="Handled" xml:space="preserve">
+    <value>已处理</value>
+  </data>
+  <data name="KeyWords" xml:space="preserve">
+    <value>内容关键字</value>
+  </data>
+  <data name="Untreated" xml:space="preserve">
+    <value>未处理</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>修改</value>
+  </data>
+  <data name="ModuleName" xml:space="preserve">
+    <value>模板名称</value>
+  </data>
+  <data name="Pressure" xml:space="preserve">
+    <value>压力值</value>
+  </data>
+  <data name="StoreTime" xml:space="preserve">
+    <value>入库时间</value>
+  </data>
+  <data name="WeldFlow" xml:space="preserve">
+    <value>流量值</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="FinalCheckResult" xml:space="preserve">
+    <value>检测结果</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>半径值</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>管理员</value>
+  </data>
+  <data name="AvgDepthDown" xml:space="preserve">
+    <value>焊缝高度差下限:</value>
+  </data>
+  <data name="AvgDepthUp" xml:space="preserve">
+    <value>焊缝高度差上限:</value>
+  </data>
+  <data name="CheckDataSet" xml:space="preserve">
+    <value>检测参数设置</value>
+  </data>
+  <data name="ChoseSpotModule" xml:space="preserve">
+    <value>选择点检模板</value>
+  </data>
+  <data name="CoaxialityDown" xml:space="preserve">
+    <value>同心度下限:</value>
+  </data>
+  <data name="CoaxialityUp" xml:space="preserve">
+    <value>同心度上限:</value>
+  </data>
+  <data name="CurrentModule" xml:space="preserve">
+    <value>当前模板:</value>
+  </data>
+  <data name="EditLog" xml:space="preserve">
+    <value>编辑日志</value>
+  </data>
+  <data name="Operator" xml:space="preserve">
+    <value>操作员</value>
+  </data>
+  <data name="SpotCheck" xml:space="preserve">
+    <value>点检</value>
+  </data>
+  <data name="SpotDataSet" xml:space="preserve">
+    <value>点检参数设置</value>
+  </data>
+  <data name="UserCenter" xml:space="preserve">
+    <value>用户中心</value>
+  </data>
+  <data name="AuthNotEnough" xml:space="preserve">
+    <value>您的权限不够，请联系管理员！</value>
+  </data>
+  <data name="BarCodeTips" xml:space="preserve">
+    <value>条码--&gt;</value>
+  </data>
+  <data name="ChoseModuleFail" xml:space="preserve">
+    <value>选择模板失败！</value>
+  </data>
+  <data name="CoaxialityNG" xml:space="preserve">
+    <value>同心度NG</value>
+  </data>
+  <data name="ErrorBarCode" xml:space="preserve">
+    <value>错误条码--&gt;</value>
+  </data>
+  <data name="InvalidBarCode" xml:space="preserve">
+    <value>异常条码--&gt;</value>
+  </data>
+  <data name="LwmConnectFail" xml:space="preserve">
+    <value>LWM连接失败!</value>
+  </data>
+  <data name="PLCConnectException" xml:space="preserve">
+    <value>PLC通讯异常！</value>
+  </data>
+  <data name="PleaseChoseMethod" xml:space="preserve">
+    <value>请选择查询方式!</value>
+  </data>
+  <data name="PleaseInputValue" xml:space="preserve">
+    <value>请输入查询条件!</value>
+  </data>
+  <data name="PleaseLogin" xml:space="preserve">
+    <value>请登录后再执行此操作！</value>
+  </data>
+  <data name="SaveWeldDataFail" xml:space="preserve">
+    <value>数据保存失败！</value>
+  </data>
+  <data name="SaveWeldDataFailNoBarcode" xml:space="preserve">
+    <value>焊接参数保存失败，条码不存在！</value>
+  </data>
+  <data name="SaveWeldDataOK" xml:space="preserve">
+    <value>焊接参数保存成功！</value>
+  </data>
+  <data name="SurfaceNG" xml:space="preserve">
+    <value>表面检测NG</value>
+  </data>
+  <data name="UserLoginOut" xml:space="preserve">
+    <value>当前用户：未登录</value>
+  </data>
+  <data name="VisionCheckConnectFail" xml:space="preserve">
+    <value>3D相机连接失败！</value>
+  </data>
+  <data name="WeldDepthNG" xml:space="preserve">
+    <value>焊缝NG</value>
+  </data>
+  <data name="SpotUser" xml:space="preserve">
+    <value>点检人</value>
+  </data>
+  <data name="LwmCheck" xml:space="preserve">
+    <value>LWM检测</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="PleaseChoseSpotModule" xml:space="preserve">
+    <value>请选择点检模板！</value>
+  </data>
+  <data name="IsFirstPage" xml:space="preserve">
+    <value>现已是第一页!</value>
+  </data>
+  <data name="IsLastPage" xml:space="preserve">
+    <value>现已是最后一页!</value>
+  </data>
+  <data name="PleaseInputEmpNo" xml:space="preserve">
+    <value>请输入点检人编号！</value>
+  </data>
+  <data name="SaveFail" xml:space="preserve">
+    <value>保存失败！</value>
+  </data>
+  <data name="SaveSuccess" xml:space="preserve">
+    <value>保存成功！</value>
+  </data>
+  <data name="SpotOK" xml:space="preserve">
+    <value>点检成功！</value>
+  </data>
+  <data name="TheEmpNoNotExist" xml:space="preserve">
+    <value>您输入的员工编号不存在！</value>
+  </data>
+  <data name="Fail" xml:space="preserve">
+    <value>失败</value>
+  </data>
+  <data name="SelectLatestData" xml:space="preserve">
+    <value>查询最新点检数据</value>
+  </data>
+  <data name="SpotDataCenter" xml:space="preserve">
+    <value>点检数据中心</value>
+  </data>
+  <data name="SpotFailReason" xml:space="preserve">
+    <value>点检失败原因</value>
+  </data>
+  <data name="SpotRecord" xml:space="preserve">
+    <value>点检记录</value>
+  </data>
+  <data name="SpotResult" xml:space="preserve">
+    <value>点检结果</value>
+  </data>
+  <data name="SpotTime" xml:space="preserve">
+    <value>点检时间</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>成功</value>
+  </data>
+  <data name="AdminCanNotDelete" xml:space="preserve">
+    <value>超级管理员无法被删除!</value>
+  </data>
+  <data name="DeleteFail" xml:space="preserve">
+    <value>删除失败！</value>
+  </data>
+  <data name="DeleteOK" xml:space="preserve">
+    <value>删除成功！</value>
+  </data>
+  <data name="EmpNoEmpty" xml:space="preserve">
+    <value>员工编号不能为空！</value>
+  </data>
+  <data name="IsSaved" xml:space="preserve">
+    <value>是否保存？</value>
+  </data>
+  <data name="LogContentNotEmpty" xml:space="preserve">
+    <value>日志内容不能为空！</value>
+  </data>
+  <data name="ModifyReason" xml:space="preserve">
+    <value>修改原因</value>
+  </data>
+  <data name="NotData" xml:space="preserve">
+    <value>未查询到任何数据!</value>
+  </data>
+  <data name="OutExcelOK" xml:space="preserve">
+    <value>导出成功！</value>
+  </data>
+  <data name="PasswordIsEmpty" xml:space="preserve">
+    <value>密码不能为空！</value>
+  </data>
+  <data name="PasswordNoEmpty" xml:space="preserve">
+    <value>密码不能为空！</value>
+  </data>
+  <data name="ReasonEmpty" xml:space="preserve">
+    <value>修改原因不能为空,修改失败！</value>
+  </data>
+  <data name="SelectFail" xml:space="preserve">
+    <value>查询失败！</value>
+  </data>
+  <data name="StartTimeMoreThanEndTime" xml:space="preserve">
+    <value>起始时间不能大于终止时间</value>
+  </data>
+  <data name="UpdateFail" xml:space="preserve">
+    <value>修改失败！</value>
+  </data>
+  <data name="UpdateSuccess" xml:space="preserve">
+    <value>修改成功！</value>
+  </data>
+  <data name="UserNameIsEmpty" xml:space="preserve">
+    <value>用户名不能为空！</value>
+  </data>
+  <data name="UserNameNoEmpty" xml:space="preserve">
+    <value>用户名不能为空！</value>
+  </data>
+  <data name="UserNameOrPasswordError" xml:space="preserve">
+    <value>用户名或密码错误！</value>
+  </data>
+  <data name="AdminNotModify" xml:space="preserve">
+    <value>超级管理员不允许被修改</value>
+  </data>
+  <data name="ContentHundredWord" xml:space="preserve">
+    <value>内容上限100个字符！</value>
+  </data>
+  <data name="IfSureDelete" xml:space="preserve">
+    <value>是否删除？一旦删除不可恢复！</value>
+  </data>
+  <data name="TheEmpNoExist" xml:space="preserve">
+    <value>此员工编号已存在，请修改！</value>
+  </data>
+  <data name="TheUserNameExist" xml:space="preserve">
+    <value>此用户名已存在，请修改！</value>
+  </data>
+  <data name="WeldFlowOut" xml:space="preserve">
+    <value>焊接流量未达标！</value>
+  </data>
+  <data name="WeldPowerOut" xml:space="preserve">
+    <value>焊接功率未达标！</value>
+  </data>
+  <data name="WeldPressureOut" xml:space="preserve">
+    <value>焊接压力未达标！</value>
+  </data>
+  <data name="WeldRPosOut" xml:space="preserve">
+    <value>焊接坐标R未达标！</value>
+  </data>
+  <data name="WeldSpeedOut" xml:space="preserve">
+    <value>焊接速度未达标！</value>
+  </data>
+  <data name="WeldXPosOut" xml:space="preserve">
+    <value>焊接坐标X未达标！</value>
+  </data>
+  <data name="WeldYPosOut" xml:space="preserve">
+    <value>焊接坐标Y未达标！</value>
+  </data>
+  <data name="WeldZPosOut" xml:space="preserve">
+    <value>焊接坐标Z未达标！</value>
+  </data>
+  <data name="ModuleNameEmpty" xml:space="preserve">
+    <value>模板名称不能为空！</value>
+  </data>
+  <data name="WeldFlowMoreLimit" xml:space="preserve">
+    <value>焊接流量下限不能大于上限!</value>
+  </data>
+  <data name="WeldPowerMoreLimit" xml:space="preserve">
+    <value>焊接功率下限不能大于上限!</value>
+  </data>
+  <data name="WeldSpeedMoreLimit" xml:space="preserve">
+    <value>焊接速度下限不能大于上限!</value>
+  </data>
+  <data name="WeldPressMoreLimit" xml:space="preserve">
+    <value>焊接压力下限不能大于上限！</value>
+  </data>
+</root>

@@ -1,0 +1,670 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BarCode" xml:space="preserve">
+    <value>BarCode</value>
+  </data>
+  <data name="Chinese" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
+  <data name="CurrentUser" xml:space="preserve">
+    <value>CurrentUser：</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="LogSystem" xml:space="preserve">
+    <value>LogSystem</value>
+  </data>
+  <data name="OffLine" xml:space="preserve">
+    <value>OffLine</value>
+  </data>
+  <data name="OMCS" xml:space="preserve">
+    <value>OMCS</value>
+    <comment>维护中心</comment>
+  </data>
+  <data name="OnLine" xml:space="preserve">
+    <value>OnLine</value>
+  </data>
+  <data name="ParamMonitor" xml:space="preserve">
+    <value>DataMonitor</value>
+  </data>
+  <data name="ParamSetting" xml:space="preserve">
+    <value>ParamSetting</value>
+    <comment>参数配置</comment>
+  </data>
+  <data name="ProductManageSystem" xml:space="preserve">
+    <value>HT ProductManageSystem</value>
+    <comment>HT 生产管理系统</comment>
+  </data>
+  <data name="RealTime" xml:space="preserve">
+    <value>Real-Time</value>
+    <comment>实时监控</comment>
+  </data>
+  <data name="RunOut" xml:space="preserve">
+    <value>Run-Out</value>
+    <comment>同心度</comment>
+  </data>
+  <data name="Pressure" xml:space="preserve">
+    <value>Pressure</value>
+  </data>
+  <data name="Surface" xml:space="preserve">
+    <value>Surface</value>
+  </data>
+  <data name="Tips" xml:space="preserve">
+    <value>Tips：</value>
+  </data>
+  <data name="TraceSystem" xml:space="preserve">
+    <value>TraceSystem</value>
+  </data>
+  <data name="UserCenter" xml:space="preserve">
+    <value>UserCenter</value>
+    <comment>用户中心</comment>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>AddUser</value>
+  </data>
+  <data name="AfterPage" xml:space="preserve">
+    <value>After</value>
+  </data>
+  <data name="Auth" xml:space="preserve">
+    <value>Auth</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Choose</value>
+  </data>
+  <data name="ChooseModule" xml:space="preserve">
+    <value>ChooseModule</value>
+  </data>
+  <data name="ChuckClamp" xml:space="preserve">
+    <value>ChuckClamp</value>
+    <comment>卡盘夹紧力</comment>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="CoaxDown" xml:space="preserve">
+    <value>CoaxDown</value>
+  </data>
+  <data name="Coaxiality" xml:space="preserve">
+    <value>Coaxiality</value>
+  </data>
+  <data name="CoaxUp" xml:space="preserve">
+    <value>CoaxUp</value>
+  </data>
+  <data name="CreateModule" xml:space="preserve">
+    <value>CreateModule</value>
+  </data>
+  <data name="DealTime" xml:space="preserve">
+    <value>DealTime</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EmpNo" xml:space="preserve">
+    <value>EmpNo</value>
+  </data>
+  <data name="FinalResult" xml:space="preserve">
+    <value>FinalResult</value>
+  </data>
+  <data name="HappenTime" xml:space="preserve">
+    <value>HappenTime</value>
+  </data>
+  <data name="HomePage" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="LargeParmSet" xml:space="preserve">
+    <value>LargeParmSet</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="LogContent" xml:space="preserve">
+    <value>LogContent</value>
+  </data>
+  <data name="LogResult" xml:space="preserve">
+    <value>LogResult</value>
+  </data>
+  <data name="ManualCheck" xml:space="preserve">
+    <value>ManualCheck</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="ModifyLog" xml:space="preserve">
+    <value>ModifyLog</value>
+  </data>
+  <data name="ModifyReson" xml:space="preserve">
+    <value>ModifyReson</value>
+  </data>
+  <data name="ModuleSetting" xml:space="preserve">
+    <value>ModuleSetting</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>PageSize</value>
+  </data>
+  <data name="Production" xml:space="preserve">
+    <value>Production:</value>
+  </data>
+  <data name="ProductType" xml:space="preserve">
+    <value>ProductType</value>
+  </data>
+  <data name="ProtectFlow" xml:space="preserve">
+    <value>ProtectFlow</value>
+  </data>
+  <data name="Query" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="QueryValue" xml:space="preserve">
+    <value>QueryValue</value>
+  </data>
+  <data name="Record" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectLatestLog" xml:space="preserve">
+    <value>SelectLatestLog</value>
+  </data>
+  <data name="SelectLog" xml:space="preserve">
+    <value>SelectLog</value>
+  </data>
+  <data name="SelectMethod" xml:space="preserve">
+    <value>SelectWays</value>
+  </data>
+  <data name="SmallParmSet" xml:space="preserve">
+    <value>SmallParmSet</value>
+  </data>
+  <data name="SpotCenter" xml:space="preserve">
+    <value>SpotCenter</value>
+  </data>
+  <data name="SpotParmSet" xml:space="preserve">
+    <value>SpotData</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Sum</value>
+  </data>
+  <data name="WeldDepth" xml:space="preserve">
+    <value>WeldDepth</value>
+  </data>
+  <data name="WeldPower" xml:space="preserve">
+    <value>WeldPower</value>
+  </data>
+  <data name="WeldRPos" xml:space="preserve">
+    <value>WeldRPos</value>
+  </data>
+  <data name="WeldSpeed" xml:space="preserve">
+    <value>WeldSpeed</value>
+  </data>
+  <data name="WeldTime" xml:space="preserve">
+    <value>WeldTime</value>
+  </data>
+  <data name="WeldXPos" xml:space="preserve">
+    <value>WeldXPos</value>
+  </data>
+  <data name="WeldYPos" xml:space="preserve">
+    <value>WeldYPos</value>
+  </data>
+  <data name="WeldZPos" xml:space="preserve">
+    <value>WeldZPos</value>
+  </data>
+  <data name="Which" xml:space="preserve">
+    <value>Which</value>
+  </data>
+  <data name="WorkpiecePressure" xml:space="preserve">
+    <value>PushPressure</value>
+    <comment>工件压紧力</comment>
+  </data>
+  <data name="Handled" xml:space="preserve">
+    <value>Handled</value>
+  </data>
+  <data name="Untreated" xml:space="preserve">
+    <value>Untreated</value>
+  </data>
+  <data name="KeyWords" xml:space="preserve">
+    <value>KeyWords</value>
+  </data>
+  <data name="LoginTips" xml:space="preserve">
+    <value>PleaseInputPassword</value>
+  </data>
+  <data name="LwmResult" xml:space="preserve">
+    <value>LwmResult</value>
+  </data>
+  <data name="ModuleName" xml:space="preserve">
+    <value>ModuleName</value>
+  </data>
+  <data name="OutExcel" xml:space="preserve">
+    <value>OutExcel</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="StoreTime" xml:space="preserve">
+    <value>StoreTime</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>UserName</value>
+  </data>
+  <data name="WeldFlow" xml:space="preserve">
+    <value>WeldFlow</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="SelectedUser" xml:space="preserve">
+    <value>CurrentSelectUser</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="FinalCheckResult" xml:space="preserve">
+    <value>FinalResult</value>
+  </data>
+  <data name="Radius" xml:space="preserve">
+    <value>Radius</value>
+    <comment>半径值</comment>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="EditLog" xml:space="preserve">
+    <value>EditLog</value>
+  </data>
+  <data name="Operator" xml:space="preserve">
+    <value>Operator</value>
+  </data>
+  <data name="AvgDepthDown" xml:space="preserve">
+    <value>AvgDepthDown:</value>
+  </data>
+  <data name="AvgDepthUp" xml:space="preserve">
+    <value>AvgDepthUp:</value>
+  </data>
+  <data name="CheckDataSet" xml:space="preserve">
+    <value>CheckDataSet</value>
+  </data>
+  <data name="ChoseSpotModule" xml:space="preserve">
+    <value>ChoseSpotModule</value>
+  </data>
+  <data name="CoaxialityDown" xml:space="preserve">
+    <value>CoaxialityDown:</value>
+  </data>
+  <data name="CoaxialityUp" xml:space="preserve">
+    <value>CoaxialityUp:</value>
+  </data>
+  <data name="CurrentModule" xml:space="preserve">
+    <value>CurrentModule:</value>
+  </data>
+  <data name="SpotCheck" xml:space="preserve">
+    <value>SpotCheck</value>
+  </data>
+  <data name="SpotDataSet" xml:space="preserve">
+    <value>SpotDataSet</value>
+  </data>
+  <data name="AuthNotEnough" xml:space="preserve">
+    <value>Your Auth Not Enough！</value>
+  </data>
+  <data name="BarCodeTips" xml:space="preserve">
+    <value>BarCode--&gt;</value>
+  </data>
+  <data name="ChoseModuleFail" xml:space="preserve">
+    <value>ChoseModuleFail！</value>
+  </data>
+  <data name="CoaxialityNG" xml:space="preserve">
+    <value>CoaxialityNG</value>
+  </data>
+  <data name="ErrorBarCode" xml:space="preserve">
+    <value>ErrorBarCode：</value>
+  </data>
+  <data name="InvalidBarCode" xml:space="preserve">
+    <value>InvalidBarCode:</value>
+  </data>
+  <data name="LwmConnectFail" xml:space="preserve">
+    <value>LwmConnectFail</value>
+  </data>
+  <data name="PLCConnectException" xml:space="preserve">
+    <value>PLCConnectException！</value>
+  </data>
+  <data name="PleaseChoseMethod" xml:space="preserve">
+    <value>PleaseChoseMethod!</value>
+  </data>
+  <data name="PleaseInputValue" xml:space="preserve">
+    <value>PleaseInputValue!</value>
+  </data>
+  <data name="PleaseLogin" xml:space="preserve">
+    <value>PleaseLogin！</value>
+  </data>
+  <data name="SaveWeldDataFail" xml:space="preserve">
+    <value>SaveDataFail！</value>
+  </data>
+  <data name="SaveWeldDataFailNoBarcode" xml:space="preserve">
+    <value>SaveWeldDataFailNoBarcode</value>
+  </data>
+  <data name="SaveWeldDataOK" xml:space="preserve">
+    <value>SaveWeldDataOK</value>
+  </data>
+  <data name="SurfaceNG" xml:space="preserve">
+    <value>SurfaceNG</value>
+  </data>
+  <data name="UserLoginOut" xml:space="preserve">
+    <value>CurrentUser:Not Login</value>
+  </data>
+  <data name="VisionCheckConnectFail" xml:space="preserve">
+    <value>VisionCheckConnectFail</value>
+  </data>
+  <data name="WeldDepthNG" xml:space="preserve">
+    <value>WeldDepthNG</value>
+  </data>
+  <data name="SpotUser" xml:space="preserve">
+    <value>SpotUser</value>
+  </data>
+  <data name="LwmCheck" xml:space="preserve">
+    <value>LwmCheck</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="PleaseChoseSpotModule" xml:space="preserve">
+    <value>PleaseChoseSpotModule！</value>
+  </data>
+  <data name="IsFirstPage" xml:space="preserve">
+    <value>Now is the First page！</value>
+  </data>
+  <data name="IsLastPage" xml:space="preserve">
+    <value>Now is the Last page！</value>
+  </data>
+  <data name="PleaseInputEmpNo" xml:space="preserve">
+    <value>PleaseInputEmpNo！</value>
+  </data>
+  <data name="SaveFail" xml:space="preserve">
+    <value>SaveFail</value>
+  </data>
+  <data name="SaveSuccess" xml:space="preserve">
+    <value>SaveDataSuccess！</value>
+  </data>
+  <data name="SpotOK" xml:space="preserve">
+    <value>SpotSuccess！</value>
+  </data>
+  <data name="TheEmpNoNotExist" xml:space="preserve">
+    <value>TheEmpNoNotExist！</value>
+  </data>
+  <data name="SelectLatestData" xml:space="preserve">
+    <value>SelectLatestData</value>
+  </data>
+  <data name="SpotDataCenter" xml:space="preserve">
+    <value>SpotDataCenter</value>
+  </data>
+  <data name="SpotFailReason" xml:space="preserve">
+    <value>SpotFailReason</value>
+  </data>
+  <data name="SpotRecord" xml:space="preserve">
+    <value>SpotRecord</value>
+  </data>
+  <data name="SpotResult" xml:space="preserve">
+    <value>SpotResult</value>
+  </data>
+  <data name="SpotTime" xml:space="preserve">
+    <value>SpotTime</value>
+  </data>
+  <data name="Fail" xml:space="preserve">
+    <value>Fail</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="AdminCanNotDelete" xml:space="preserve">
+    <value>AdminCanNotDelete!</value>
+  </data>
+  <data name="DeleteFail" xml:space="preserve">
+    <value>DeleteFail！</value>
+  </data>
+  <data name="DeleteOK" xml:space="preserve">
+    <value>DeleteOK！</value>
+  </data>
+  <data name="EmpNoEmpty" xml:space="preserve">
+    <value>EmpNoEmpty！</value>
+  </data>
+  <data name="IsSaved" xml:space="preserve">
+    <value>IsSaved？</value>
+  </data>
+  <data name="LogContentNotEmpty" xml:space="preserve">
+    <value>LogContentNotEmpty！</value>
+  </data>
+  <data name="ModifyReason" xml:space="preserve">
+    <value>ModifyReason</value>
+  </data>
+  <data name="NotData" xml:space="preserve">
+    <value>NotData!</value>
+  </data>
+  <data name="OutExcelOK" xml:space="preserve">
+    <value>OutExcelOK！</value>
+  </data>
+  <data name="PasswordIsEmpty" xml:space="preserve">
+    <value>PasswordIsEmpty！</value>
+  </data>
+  <data name="PasswordNoEmpty" xml:space="preserve">
+    <value>PasswordNoEmpty！</value>
+  </data>
+  <data name="ReasonEmpty" xml:space="preserve">
+    <value>ReasonEmpty!</value>
+  </data>
+  <data name="SelectFail" xml:space="preserve">
+    <value>SelectFail！</value>
+  </data>
+  <data name="StartTimeMoreThanEndTime" xml:space="preserve">
+    <value>StartTimeMoreThanEndTime!</value>
+  </data>
+  <data name="UpdateFail" xml:space="preserve">
+    <value>UpdateFail！</value>
+  </data>
+  <data name="UpdateSuccess" xml:space="preserve">
+    <value>UpdateSuccess!</value>
+  </data>
+  <data name="UserNameIsEmpty" xml:space="preserve">
+    <value>UserNameIsEmpty！</value>
+  </data>
+  <data name="UserNameNoEmpty" xml:space="preserve">
+    <value>UserNameNoEmpty！</value>
+  </data>
+  <data name="UserNameOrPasswordError" xml:space="preserve">
+    <value>UserNameOrPasswordError!</value>
+  </data>
+  <data name="AdminNotModify" xml:space="preserve">
+    <value>AdminCan'tModify!</value>
+  </data>
+  <data name="ContentHundredWord" xml:space="preserve">
+    <value>ContentHundredWordLimit!</value>
+  </data>
+  <data name="IfSureDelete" xml:space="preserve">
+    <value>DeleteCan'tRestore</value>
+    <comment>删除不可恢复！</comment>
+  </data>
+  <data name="TheEmpNoExist" xml:space="preserve">
+    <value>TheEmpNoExistInDB!</value>
+  </data>
+  <data name="TheUserNameExist" xml:space="preserve">
+    <value>TheUserNameExistInDB!</value>
+  </data>
+  <data name="WeldFlowOut" xml:space="preserve">
+    <value>WeldFlowOutStandard!</value>
+  </data>
+  <data name="WeldPowerOut" xml:space="preserve">
+    <value>WeldPowerOutStandard!</value>
+  </data>
+  <data name="WeldPressureOut" xml:space="preserve">
+    <value>WeldPressureOutStandard!</value>
+  </data>
+  <data name="WeldRPosOut" xml:space="preserve">
+    <value>WeldRPosOutStandard!</value>
+  </data>
+  <data name="WeldSpeedOut" xml:space="preserve">
+    <value>WeldSpeedOutStandard!</value>
+  </data>
+  <data name="WeldXPosOut" xml:space="preserve">
+    <value>WeldXPosOutStandard!</value>
+  </data>
+  <data name="WeldYPosOut" xml:space="preserve">
+    <value>WeldYPosOutStandard!</value>
+  </data>
+  <data name="WeldZPosOut" xml:space="preserve">
+    <value>WeldZPosOutStandard!</value>
+  </data>
+  <data name="ModuleNameEmpty" xml:space="preserve">
+    <value>ModuleNameisEmpty！</value>
+  </data>
+  <data name="WeldFlowMoreLimit" xml:space="preserve">
+    <value>WeldFlowMoreLimit！</value>
+  </data>
+  <data name="WeldPowerMoreLimit" xml:space="preserve">
+    <value>WeldPowerMoreLimit！</value>
+  </data>
+  <data name="WeldSpeedMoreLimit" xml:space="preserve">
+    <value>WeldSpeedMoreLimit！</value>
+  </data>
+  <data name="WeldPressMoreLimit" xml:space="preserve">
+    <value>WeldPressureMoreLimit！</value>
+  </data>
+</root>
