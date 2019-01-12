@@ -39,28 +39,9 @@
             this.numCoaxUpS = new System.Windows.Forms.NumericUpDown();
             this.btnSave = new HslCommunication.Controls.UserButton();
             this.btnExist = new HslCommunication.Controls.UserButton();
-            this.grbSpotCheck = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.chkSpotCheck = new System.Windows.Forms.CheckBox();
-            this.labPower = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.labFlow = new System.Windows.Forms.Label();
-            this.labSpeed = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.numWeldPressure = new System.Windows.Forms.NumericUpDown();
-            this.numWeldPower = new System.Windows.Forms.NumericUpDown();
-            this.labPress = new System.Windows.Forms.Label();
-            this.numWeldSpeed = new System.Windows.Forms.NumericUpDown();
-            this.numWeldFlow = new System.Windows.Forms.NumericUpDown();
             this.grbS.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxDownS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxUpS)).BeginInit();
-            this.grbSpotCheck.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldPressure)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldPower)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldSpeed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldFlow)).BeginInit();
             this.SuspendLayout();
             // 
             // grbS
@@ -193,215 +174,12 @@
             this.btnExist.UIText = "关闭";
             this.btnExist.Click += new System.EventHandler(this.btnExist_Click);
             // 
-            // grbSpotCheck
-            // 
-            this.grbSpotCheck.Controls.Add(this.label13);
-            this.grbSpotCheck.Controls.Add(this.label14);
-            this.grbSpotCheck.Controls.Add(this.chkSpotCheck);
-            this.grbSpotCheck.Controls.Add(this.labPower);
-            this.grbSpotCheck.Controls.Add(this.label15);
-            this.grbSpotCheck.Controls.Add(this.labFlow);
-            this.grbSpotCheck.Controls.Add(this.labSpeed);
-            this.grbSpotCheck.Controls.Add(this.label16);
-            this.grbSpotCheck.Controls.Add(this.numWeldPressure);
-            this.grbSpotCheck.Controls.Add(this.numWeldPower);
-            this.grbSpotCheck.Controls.Add(this.labPress);
-            this.grbSpotCheck.Controls.Add(this.numWeldSpeed);
-            this.grbSpotCheck.Controls.Add(this.numWeldFlow);
-            this.grbSpotCheck.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.grbSpotCheck.Location = new System.Drawing.Point(36, 331);
-            this.grbSpotCheck.Name = "grbSpotCheck";
-            this.grbSpotCheck.Size = new System.Drawing.Size(322, 351);
-            this.grbSpotCheck.TabIndex = 9;
-            this.grbSpotCheck.TabStop = false;
-            this.grbSpotCheck.Visible = false;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.label13.Location = new System.Drawing.Point(238, 294);
-            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(57, 23);
-            this.label13.TabIndex = 49;
-            this.label13.Text = "L/min";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.label14.Location = new System.Drawing.Point(238, 215);
-            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(45, 23);
-            this.label14.TabIndex = 50;
-            this.label14.Text = "MPa";
-            // 
-            // chkSpotCheck
-            // 
-            this.chkSpotCheck.AutoSize = true;
-            this.chkSpotCheck.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.chkSpotCheck.Location = new System.Drawing.Point(1, 0);
-            this.chkSpotCheck.Name = "chkSpotCheck";
-            this.chkSpotCheck.Size = new System.Drawing.Size(108, 27);
-            this.chkSpotCheck.TabIndex = 2;
-            this.chkSpotCheck.Text = "点检参数";
-            this.chkSpotCheck.UseVisualStyleBackColor = true;
-            // 
-            // labPower
-            // 
-            this.labPower.AutoSize = true;
-            this.labPower.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labPower.Location = new System.Drawing.Point(13, 66);
-            this.labPower.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labPower.Name = "labPower";
-            this.labPower.Size = new System.Drawing.Size(93, 23);
-            this.labPower.TabIndex = 41;
-            this.labPower.Text = "焊接功率:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.label15.Location = new System.Drawing.Point(238, 140);
-            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(57, 23);
-            this.label15.TabIndex = 51;
-            this.label15.Text = "mm/s";
-            // 
-            // labFlow
-            // 
-            this.labFlow.AutoSize = true;
-            this.labFlow.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labFlow.Location = new System.Drawing.Point(27, 292);
-            this.labFlow.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labFlow.Name = "labFlow";
-            this.labFlow.Size = new System.Drawing.Size(74, 23);
-            this.labFlow.TabIndex = 44;
-            this.labFlow.Text = "流量值:";
-            // 
-            // labSpeed
-            // 
-            this.labSpeed.AutoSize = true;
-            this.labSpeed.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSpeed.Location = new System.Drawing.Point(12, 139);
-            this.labSpeed.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labSpeed.Name = "labSpeed";
-            this.labSpeed.Size = new System.Drawing.Size(93, 23);
-            this.labSpeed.TabIndex = 43;
-            this.labSpeed.Text = "焊接转速:";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.label16.Location = new System.Drawing.Point(238, 68);
-            this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(27, 23);
-            this.label16.TabIndex = 52;
-            this.label16.Text = "W";
-            // 
-            // numWeldPressure
-            // 
-            this.numWeldPressure.DecimalPlaces = 3;
-            this.numWeldPressure.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.numWeldPressure.Location = new System.Drawing.Point(117, 211);
-            this.numWeldPressure.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numWeldPressure.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.numWeldPressure.Name = "numWeldPressure";
-            this.numWeldPressure.Size = new System.Drawing.Size(116, 30);
-            this.numWeldPressure.TabIndex = 48;
-            this.numWeldPressure.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // numWeldPower
-            // 
-            this.numWeldPower.DecimalPlaces = 3;
-            this.numWeldPower.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.numWeldPower.Location = new System.Drawing.Point(115, 64);
-            this.numWeldPower.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numWeldPower.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.numWeldPower.Name = "numWeldPower";
-            this.numWeldPower.Size = new System.Drawing.Size(116, 30);
-            this.numWeldPower.TabIndex = 45;
-            this.numWeldPower.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // labPress
-            // 
-            this.labPress.AutoSize = true;
-            this.labPress.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labPress.Location = new System.Drawing.Point(27, 213);
-            this.labPress.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labPress.Name = "labPress";
-            this.labPress.Size = new System.Drawing.Size(74, 23);
-            this.labPress.TabIndex = 42;
-            this.labPress.Text = "压力值:";
-            // 
-            // numWeldSpeed
-            // 
-            this.numWeldSpeed.DecimalPlaces = 3;
-            this.numWeldSpeed.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.numWeldSpeed.Location = new System.Drawing.Point(117, 137);
-            this.numWeldSpeed.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numWeldSpeed.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.numWeldSpeed.Name = "numWeldSpeed";
-            this.numWeldSpeed.Size = new System.Drawing.Size(116, 30);
-            this.numWeldSpeed.TabIndex = 47;
-            this.numWeldSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // numWeldFlow
-            // 
-            this.numWeldFlow.DecimalPlaces = 3;
-            this.numWeldFlow.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.numWeldFlow.Location = new System.Drawing.Point(115, 289);
-            this.numWeldFlow.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numWeldFlow.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.numWeldFlow.Name = "numWeldFlow";
-            this.numWeldFlow.Size = new System.Drawing.Size(116, 30);
-            this.numWeldFlow.TabIndex = 46;
-            this.numWeldFlow.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
             // FormParamSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(393, 309);
-            this.Controls.Add(this.grbSpotCheck);
+            this.ClientSize = new System.Drawing.Size(393, 310);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnExist);
             this.Controls.Add(this.grbS);
@@ -410,19 +188,13 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.Name = "FormParamSetting";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "参数配置";
             this.Load += new System.EventHandler(this.FormParamSetting_Load);
             this.grbS.ResumeLayout(false);
             this.grbS.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxDownS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxUpS)).EndInit();
-            this.grbSpotCheck.ResumeLayout(false);
-            this.grbSpotCheck.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldPressure)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldPower)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldSpeed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numWeldFlow)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -437,20 +209,6 @@
         private System.Windows.Forms.Label label4;
         private HslCommunication.Controls.UserButton btnSave;
         private HslCommunication.Controls.UserButton btnExist;
-        private System.Windows.Forms.GroupBox grbSpotCheck;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.CheckBox chkSpotCheck;
-        private System.Windows.Forms.Label labPower;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label labFlow;
-        private System.Windows.Forms.Label labSpeed;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.NumericUpDown numWeldPressure;
-        private System.Windows.Forms.NumericUpDown numWeldPower;
-        private System.Windows.Forms.Label labPress;
-        private System.Windows.Forms.NumericUpDown numWeldSpeed;
-        private System.Windows.Forms.NumericUpDown numWeldFlow;
         private System.Windows.Forms.Label labCoaxUp;
         private System.Windows.Forms.Label labCoaxDown;
     }

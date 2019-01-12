@@ -41,7 +41,7 @@ namespace MES.Core
         public bool IfUpdateResult { set; get; }
 
         /// <summary>
-        /// 产品条码
+        /// 过程条码
         /// </summary>
         public string BarCode { set; get; }
 

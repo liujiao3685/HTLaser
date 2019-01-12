@@ -22,16 +22,14 @@ namespace MES.BasicFramework
             return (TEnum[])Enum.GetValues(typeof(TEnum));
         }
 
-
         #region Hex string and Byte[] transform
-
 
         /// <summary>
         /// 字节数据转化成16进制表示的字符串 ->
         /// Byte data into a string of 16 binary representations
         /// </summary>
         /// <param name="InBytes">字节数组</param>
-        /// <returns>返回的字符串</returns> 
+        /// <returns>返回的字符串</returns>
         public static string ByteToHexString(byte[] InBytes)
         {
             return ByteToHexString(InBytes, (char)0);
@@ -43,7 +41,7 @@ namespace MES.BasicFramework
         /// </summary>
         /// <param name="InBytes">字节数组</param>
         /// <param name="segment">分割符</param>
-        /// <returns>返回的字符串</returns> 
+        /// <returns>返回的字符串</returns>
         public static string ByteToHexString(byte[] InBytes, char segment)
         {
             StringBuilder sb = new StringBuilder();
@@ -60,8 +58,6 @@ namespace MES.BasicFramework
             return sb.ToString();
         }
 
-
-
         /// <summary>
         /// 字符串数据转化成16进制表示的字符串 ->
         /// String data into a string of 16 binary representations
@@ -73,7 +69,6 @@ namespace MES.BasicFramework
         {
             return ByteToHexString(Encoding.Unicode.GetBytes(InString));
         }
-
 
         private static List<char> hexCharList = new List<char>()
             {
@@ -114,8 +109,7 @@ namespace MES.BasicFramework
             return result;
         }
 
-        #endregion
-
+        #endregion Hex string and Byte[] transform
 
         /// <summary>
         /// 强行结束应用程序
@@ -146,7 +140,5 @@ namespace MES.BasicFramework
                 MessageBox.Show(ex.Message);
             }
         }
-
-
     }
 }

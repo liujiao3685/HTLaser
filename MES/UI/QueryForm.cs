@@ -11,6 +11,8 @@ namespace MES.UI
 
         private DataTable m_dataTable;
 
+        private DataTable ProductsTable;
+
         public QueryForm()
         {
             InitializeComponent();
@@ -29,7 +31,7 @@ namespace MES.UI
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
-            this.Invoke((MethodInvoker)LoadData);
+            //this.Invoke((MethodInvoker)LoadData);
         }
 
         private List<ListViewItem> myCache = new List<ListViewItem>();
@@ -42,14 +44,14 @@ namespace MES.UI
 
             if (this.lvProducts.InvokeRequired)
             {
-                UpdateUIDelegate update = new UpdateUIDelegate(LoadData);
-                this.Invoke(update);
+                //UpdateUIDelegate update = new UpdateUIDelegate(LoadData);
+                //this.Invoke(update);
             }
             else
             {
-                if (m_main != null && m_main.ProductsTable != null)
+                if (m_main != null && ProductsTable != null)
                 {
-                    m_dataTable = m_main.ProductsTable;
+                    m_dataTable = ProductsTable;
                     lvProducts.Items.Clear();
 
                     /*

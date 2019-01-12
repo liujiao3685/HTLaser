@@ -13,6 +13,28 @@ namespace ProductManage.Vision
 
         public ushort VisionPort = 24691;//3D视觉端口号   1、24691：接收/发送指令 2、24692：高速通讯
 
+        private bool m_connnectState = false;
+        public bool Connected
+        {
+            get
+            {
+                return m_connnectState;
+            }
+        }
+
+        private static VisionLJ7000 lJ7000 = null;
+        public static VisionLJ7000 Instance
+        {
+            get
+            {
+                if (lJ7000 == null)
+                {
+                    lJ7000 = new VisionLJ7000();
+                }
+                return lJ7000;
+            }
+        }
+
         public VisionLJ7000()
         {
 
@@ -28,9 +50,9 @@ namespace ProductManage.Vision
         /// 打开视觉通讯
         /// </summary>
         /// <returns>是否连接成功</returns>
-        public bool OpenEthernet()
+        public bool OpenVision()
         {
-            bool boo = false;
+            bool boo = true;
 
             for (int i = 0; i < NativeMethods.DeviceCount; i++)
             {
@@ -51,7 +73,7 @@ namespace ProductManage.Vision
                 {
                     _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
                     _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
-                    boo = true;
+                    m_connnectState = boo = true;
                 }
                 //else
                 //{
@@ -60,8 +82,8 @@ namespace ProductManage.Vision
             }
             catch (Exception ex)
             {
-                boo = false;
-                Program.LogNet.WriteError("异常", "3D相机连接失败！--> " + ex.Message);
+                m_connnectState = boo = false;
+                //Program.LogNet.WriteError("异常", "3D相机连接失败！--> " + ex.Message);
             }
             //    }
             //}
@@ -101,7 +123,7 @@ namespace ProductManage.Vision
         /// <returns></returns>
         public float[] CollectAllVaildData()
         {
-            if (!OpenEthernet()) return null;
+            if (!OpenVision()) return null;
 
             int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
             if (rc == (int)Rc.Ok)
@@ -119,6 +141,7 @@ namespace ProductManage.Vision
                         Debug.Write(String.Format("  OUT{0:00}: {1}\r\n", (i + 1), Utility.ConvertToLogString(measureData[i]).ToString()));
                         m_allDatas[i] = measureData[i].fValue;
 
+                        //判断是否是有效数据
                         if (measureData[i].byDataInfo == (int)LJV7IF_MEASURE_DATA_INFO.LJV7IF_MEASURE_DATA_INFO_VALID
                             && measureData[i].byJudge == (int)LJV7IF_JUDGE_RESULT.LJV7IF_JUDGE_RESULT_GO)
                         {
@@ -129,6 +152,7 @@ namespace ProductManage.Vision
                 }
                 catch (Exception ex)
                 {
+                    Program.LogNet.WriteError("异常", "获取视觉有效数据异常：" + ex.Message);
                     return null;
                 }
             }
@@ -141,7 +165,7 @@ namespace ProductManage.Vision
         /// <returns></returns>
         public float[] CollectAllData()
         {
-            if (!OpenEthernet()) return null;
+            if (!OpenVision()) return null;
 
             int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
             if (rc == (int)Rc.Ok)
@@ -161,6 +185,7 @@ namespace ProductManage.Vision
                 }
                 catch (Exception ex)
                 {
+                    Program.LogNet.WriteError("异常", "获取视觉所有数据异常：" + ex.Message);
                     return null;
                 }
             }

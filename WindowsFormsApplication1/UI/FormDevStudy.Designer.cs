@@ -424,7 +424,7 @@
             // 
             // gridColumn14
             // 
-            this.gridColumn14.Caption = "入库时间";
+            this.gridColumn14.Caption = "上线时间";
             this.gridColumn14.DisplayFormat.FormatString = "d";
             this.gridColumn14.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.gridColumn14.FieldName = "StorageTime";
@@ -716,7 +716,7 @@
             // 
             // layoutViewColumn18
             // 
-            this.layoutViewColumn18.Caption = "入库时间";
+            this.layoutViewColumn18.Caption = "上线时间";
             this.layoutViewColumn18.DisplayFormat.FormatString = "d";
             this.layoutViewColumn18.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.layoutViewColumn18.FieldName = "StorageTime";
@@ -1040,7 +1040,7 @@
             // 
             // layoutViewColumn36
             // 
-            this.layoutViewColumn36.Caption = "入库时间";
+            this.layoutViewColumn36.Caption = "上线时间";
             this.layoutViewColumn36.DisplayFormat.FormatString = "d";
             this.layoutViewColumn36.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.layoutViewColumn36.FieldName = "StorageTime";
@@ -1266,7 +1266,7 @@
             // 
             // bandedGridColumn18
             // 
-            this.bandedGridColumn18.Caption = "入库时间";
+            this.bandedGridColumn18.Caption = "上线时间";
             this.bandedGridColumn18.DisplayFormat.FormatString = "d";
             this.bandedGridColumn18.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.bandedGridColumn18.FieldName = "StorageTime";
@@ -1459,7 +1459,7 @@
             // 
             // bandedGridColumn36
             // 
-            this.bandedGridColumn36.Caption = "入库时间";
+            this.bandedGridColumn36.Caption = "上线时间";
             this.bandedGridColumn36.DisplayFormat.FormatString = "d";
             this.bandedGridColumn36.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.bandedGridColumn36.FieldName = "StorageTime";

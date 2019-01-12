@@ -70,6 +70,9 @@
     <Compile Include="Entity\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serial\ComQueue.cs" />
+    <Compile Include="Serial\ComScanner.cs" />
+    <Compile Include="Serial\Result.cs" />
     <Compile Include="UI\FormQuitWait.cs">
       <SubType>Form</SubType>
     </Compile>

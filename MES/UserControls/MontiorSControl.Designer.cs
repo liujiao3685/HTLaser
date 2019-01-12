@@ -76,7 +76,7 @@
             this.labSurface.Name = "labSurface";
             this.labSurface.Size = new System.Drawing.Size(117, 30);
             this.labSurface.TabIndex = 13;
-            this.labSurface.Text = "表面成型";
+            this.labSurface.Text = "焊缝质量";
             // 
             // txtCoaxility
             // 

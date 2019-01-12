@@ -80,9 +80,6 @@ namespace ProductManage.UI
             timeCheckStart.Value = DateTime.Now.AddDays(-1);
             timeCheckEnd.Value = DateTime.Now;
 
-            //cmbSelectCondition.Items.AddRange(conditions);
-            //cmbSelectCondition.SelectedIndex = 0;
-
             //锁定列头
             foreach (DataGridViewColumn column in dgvSpotData.Columns)
             {
@@ -122,7 +119,10 @@ namespace ProductManage.UI
             dgvSpotData.Columns["colEmpNo"].HeaderText = ResourceCulture.GetValue("SpotUser");
             dgvSpotData.Columns["colPWeldPower"].HeaderText = ResourceCulture.GetValue("WeldPower") + "(W)";
             dgvSpotData.Columns["colPWeldSpeed"].HeaderText = ResourceCulture.GetValue("WeldSpeed") + "(°/s)";
-            dgvSpotData.Columns["colPWeldPressure"].HeaderText = ResourceCulture.GetValue("Pressure") + "(MPa)";
+
+            if (m_main.IsStation_S) dgvSpotData.Columns["colPWeldPressure"].HeaderText = ResourceCulture.GetValue("ChuckClamp") + "(MPa)";
+            else dgvSpotData.Columns["colPWeldPressure"].HeaderText = ResourceCulture.GetValue("WorkpiecePressure") + "(MPa)";
+
             dgvSpotData.Columns["colPWeldFlow"].HeaderText = ResourceCulture.GetValue("ProtectFlow") + "(L/min)";
             dgvSpotData.Columns["colPWeldXPos"].HeaderText = ResourceCulture.GetValue("WeldXPos") + "(mm)";
             dgvSpotData.Columns["colPWeldYPos"].HeaderText = ResourceCulture.GetValue("WeldYPos") + "(mm)";
@@ -342,7 +342,7 @@ namespace ProductManage.UI
 
         private bool ConditionJudge()
         {
-            if (!m_main.CheckDbConnected()) return false;
+            if (!m_main.CheckDbState()) return false;
 
             if (cmbSelectCondition.SelectedIndex < 0)
             {
@@ -356,6 +356,11 @@ namespace ProductManage.UI
             if (condition.Equals("点检人") || condition.Equals("SpotUser"))
             {
                 value = txtSelectValue.Text;
+                if (string.IsNullOrEmpty(value))
+                {
+                    MessageBox.Show("请输入查询条件！");
+                    return false;
+                }
             }
             else if (condition.Equals("点检结果") || condition.Equals("SpotResult"))
             {

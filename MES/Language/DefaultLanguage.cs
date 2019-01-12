@@ -34,7 +34,7 @@ namespace ProductManage.Language
 
         public virtual string Coaxiality => "同心度";
 
-        public virtual string Surface => "表面成型";
+        public virtual string Surface => "焊缝质量";
 
         public virtual string Online => "在线";
 
@@ -94,7 +94,7 @@ namespace ProductManage.Language
 
         public virtual string ProductType => "产品类型";
 
-        public virtual string StoreTime => "入库时间";
+        public virtual string StoreTime => "上线时间";
 
         public virtual string EachPageNum => "每页条数";
 

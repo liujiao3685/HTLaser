@@ -17,9 +17,9 @@ namespace WindowsFormsApplication1
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UI.FormQueueStackStudy());
-            //Application.Run(new FormRegister());
-            //Application.Run(new HslCurveForm());
+
+            Application.Run(new UI.FormGenerateGridColumns());
+
         }
     }
 }

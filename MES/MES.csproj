@@ -129,11 +129,13 @@
     <Compile Include="BasicFramework\SoftBasic.cs" />
     <Compile Include="Core\Alarm.cs" />
     <Compile Include="IDAL\IDbBase.cs" />
+    <Compile Include="Lwm\LwmHelper.cs" />
+    <Compile Include="Scanner\KeyenceSR751.cs" />
     <Compile Include="TcpCommunicate\MyTcpClient.cs" />
     <Compile Include="TcpCommunicate\MyTcpServer.cs" />
     <Compile Include="TcpCommunicate\StateObject.cs" />
     <Compile Include="TcpCommunicate\StateOneBase.cs" />
-    <Compile Include="Core\WeldHelper.cs" />
+    <Compile Include="PLC\WeldHelper.cs" />
     <Compile Include="Core\WindowsMessage.cs" />
     <Compile Include="Core\XmlHelperBase.cs" />
     <Compile Include="DAL\DbUserHelper.cs" />
@@ -202,6 +204,18 @@
     </Compile>
     <Compile Include="UI\FormSpotDatas.Designer.cs">
       <DependentUpon>FormSpotDatas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormQuitWithPwd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormQuitWithPwd.Designer.cs">
+      <DependentUpon>FormQuitWithPwd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormMonitor.Designer.cs">
+      <DependentUpon>FormMonitor.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\OMCSForm.cs">
       <SubType>Form</SubType>
@@ -359,6 +373,12 @@
     <EmbeddedResource Include="UI\FormSpotDatas.resx">
       <DependentUpon>FormSpotDatas.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormQuitWithPwd.resx">
+      <DependentUpon>FormQuitWithPwd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormMonitor.resx">
+      <DependentUpon>FormMonitor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\OMCSForm.resx">
       <DependentUpon>OMCSForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -448,16 +468,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Vision\LJV7_IF.dll" />
+    <Content Include="Dll\HslCommunication.dll" />
+    <Content Include="Dll\HslControls.dll" />
+    <Content Include="Resources\HTLOGO.ico" />
     <Content Include="HTLOGO.ico" />
     <Content Include="Img\ClassIcon.ico" />
     <Content Include="Img\RegistryEditor_5838.ico" />
     <Content Include="Img\SingleMessage_5727.ico" />
     <Content Include="Img\UserInterfaceEditor_5845.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BLL\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

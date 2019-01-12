@@ -130,7 +130,7 @@ namespace ProductManage.UI
 
         private void InitFormSet()
         {
-            chkCheckData.Checked = ChkCheckData;
+            chkCheckData.Checked = true;
             numHFDown.Enabled = ChkCheckData;
             numHFUp.Enabled = ChkCheckData;
             numCoaxDownL.Enabled = ChkCheckData;
@@ -145,7 +145,6 @@ namespace ProductManage.UI
             }
 
         }
-
 
         private void chkParamL_CheckedChanged(object sender, EventArgs e)
         {
@@ -167,7 +166,6 @@ namespace ProductManage.UI
             numCoaxUpL.Enabled = boo;
 
         }
-
 
         private void btnSave_Click(object sender, EventArgs e)
         {

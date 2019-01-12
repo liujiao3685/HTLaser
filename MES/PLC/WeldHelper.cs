@@ -15,14 +15,14 @@ namespace ProductManage.Core
             int index = 0;
             try
             {
-                foreach (DataValue value in OpcUaClient.ReadNodes(Nodes))
+                foreach (DataValue node in OpcUaClient.ReadNodes(Nodes))
                 {
                     // 获取到了值，具体的每个变量的解析参照上面类型不确定的解析
-                    object data = value.WrappedValue.Value;
+                    object value = node.WrappedValue.Value;
 
-                    if (data != null)
+                    if (value != null)
                     {
-                        objs.Add(data);
+                        objs.Add(value);
                     }
                     else
                     {

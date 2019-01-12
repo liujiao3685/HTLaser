@@ -1,6 +1,7 @@
 ﻿using CoderMachine.Core;
 using CoderMachine.Core.Structs;
 using CoderMachine.DAL;
+using CoderMachine.Serial;
 using CoderMachine.UI;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -141,7 +143,7 @@ namespace CoderMachine
         /// <summary>
         /// 初始化串口
         /// </summary>
-        private void OpenSerival()
+        private void OpenSerial()
         {
             m_serivalPort = new SerialPort();
             m_serivalPort.PortName = m_servialName;
@@ -164,9 +166,50 @@ namespace CoderMachine
             TotalLength = StartLength + DataLength * 10 + EndLength;
         }
 
+        private ComQueue<byte> ComDatas = new ComQueue<byte>(200);
+
+        private void Analysis_Received(ref ComQueue<byte> rec)
+        {
+            byte[] lastBytes = rec.Reverse().ToArray();
+            List<byte> checkBytes = new List<byte>();
+            for (int i = 0; i < lastBytes.Count(); i++)
+            {
+                if (lastBytes[i] != 0x0a && lastBytes[i] != 0x0d)
+                {
+                    checkBytes.Add(lastBytes[i]);
+                }
+            }
+            Result result = new Result(true, "ScannReceived OK!", checkBytes.Reverse<byte>().ToArray());
+            DoCallBack(result);
+        }
+
+        public Action<Result> DataCallBack;
+
+        private void DoCallBack(Result rs)
+        {
+            DataCallBack?.Invoke(rs);
+        }
+
         //采集数据
         private void ReadData_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            byte[] datas = new byte[m_serivalPort.BytesToRead];
+            m_serivalPort.Read(datas, 0, datas.Length);
+            Array.ForEach(datas, data =>
+            {
+                ComDatas.Enqueue(data);
+                if (data == 0x0a || data == 0x0d)
+                {
+                    Analysis_Received(ref ComDatas);
+                    ComDatas.Clear();
+                }
+                else
+                {
+                    ComDatas.Clear();
+                }
+            });
+
+
             // 接收数据
             data = new byte[TotalLength];
             int receiveCount = 0;
@@ -203,6 +246,8 @@ namespace CoderMachine
 
             ShowData();
         }
+
+
 
         private void ShowData()
         {
@@ -392,7 +437,7 @@ namespace CoderMachine
 
         private void SerialSend(float vaildData)
         {
-            OpenSerival();
+            OpenSerial();
 
             byte[] sendData = null;
 
@@ -442,7 +487,7 @@ namespace CoderMachine
 
         private void btnOpenSerial_Click(object sender, EventArgs e)
         {
-            OpenSerival();
+            OpenSerial();
         }
 
         private void btnCloseSerial_Click(object sender, EventArgs e)

@@ -317,7 +317,7 @@ namespace MES.DAL
             {
                 result = -1;
                 m_sqlTran.Rollback();
-                Program.LogNet.WriteError("异常:TransactionTable-->",  ex.Message);
+                Program.LogNet.WriteError("异常:TransactionTable-->", ex.Message);
                 return result;
             }
             finally
@@ -362,6 +362,7 @@ namespace MES.DAL
             finally
             {
                 cmd?.Dispose();
+                cmd = null;
                 ps = null;
             }
         }
@@ -537,6 +538,56 @@ namespace MES.DAL
             return list;
         }
 
+        public List<Product> TableToProduct(DataTable table)
+        {
+            List<Product> list = new List<Product>();
+            Product p;
+
+            try
+            {
+                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+                if (table == null || table.Rows.Count < 0) return null;
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    p = new Product();
+                    p.Id = Convert.ToInt32(table.Rows[i]["ID"]);
+                    p.WorkNo = table.Rows[i]["ID"].ToString();
+                    p.PNo = table.Rows[i]["PNo"].ToString();
+                    p.Surface = table.Rows[i]["Surface"].ToString();
+                    p.QCResult = table.Rows[i]["QCResult"].ToString();
+                    p.Coaxiality = Convert.ToDouble(table.Rows[i]["Coaxiality"]);
+                    p.CoaxUp = Convert.ToDouble(table.Rows[i]["CoaxUp"]);
+                    p.CoaxDown = Convert.ToDouble(table.Rows[i]["CoaxDown"]);
+                    p.WeldDepth = Convert.ToDouble(table.Rows[i]["WeldDepth"]);
+                    p.Surface = table.Rows[i]["Surface"].ToString();
+                    p.LwmCheck = table.Rows[i]["LwmCheck"].ToString();
+
+                    p.WeldPower = Convert.ToInt32(table.Rows[i]["WeldPower"]);
+                    p.WeldSpeed = Convert.ToInt32(table.Rows[i]["WeldSpeed"]);
+                    p.Pressure = Convert.ToDouble(table.Rows[i]["Pressure"]);
+                    p.Flow = Convert.ToDouble(table.Rows[i]["Flow"]);
+                    p.FlowUp = Convert.ToDouble(table.Rows[i]["FlowUp"]);
+                    p.FlowDown = Convert.ToDouble(table.Rows[i]["FlowDown"]);
+                    p.XPos = Convert.ToDouble(table.Rows[i]["XPos"]);
+                    p.YPos = Convert.ToDouble(table.Rows[i]["YPos"]);
+                    p.ZPos = Convert.ToDouble(table.Rows[i]["ZPos"]);
+                    p.RPos = Convert.ToDouble(table.Rows[i]["RPos"]);
+                    p.WeldTime = Convert.ToInt32(table.Rows[i]["WeldTime"]);
+
+                    list.Add(p);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                list = null;
+                Program.LogNet.WriteError("异常", ex.StackTrace + "--->" + ex.Message);
+            }
+
+            return list;
+        }
+
         /// <summary>
         /// 查询表数据
         /// </summary>
@@ -559,6 +610,11 @@ namespace MES.DAL
                 //TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
                 //TimeSpan use = start.Subtract(end).Duration();
                 //Console.WriteLine("DbTool_SelectTable：" + use.TotalSeconds.ToString("0.000") + "s");
+
+                //for (int i = 0; i < ds.Tables[0].Rows.Count - 1; i++)
+                //{
+                //    string strValue = ds.Tables[0].Rows[i]["ColName"].ToString();
+                //}
 
                 return ds.Tables[0];
             }

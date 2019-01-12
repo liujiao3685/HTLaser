@@ -101,7 +101,7 @@ namespace MES.UI
 
             InitData();
 
-            GetModuleNames();
+            //GetModuleNames();
 
             if (AppSetting.GetTest() != 1) ResetFormData();
 
@@ -175,6 +175,8 @@ namespace MES.UI
             string sql = "select ModuleName from WeldModule";
 
             DataTable names = m_dbTool.SelectTable(sql);
+
+            if (names == null) return;
 
             for (int row = 0; row < names.Rows.Count; row++)
             {
@@ -602,6 +604,7 @@ namespace MES.UI
         {
             if (!Hide)
             {
+                Dispose();
                 Application.Exit();
             }
         }

@@ -66,25 +66,6 @@
             this.labSum = new System.Windows.Forms.Label();
             this.labSelectValue = new System.Windows.Forms.Label();
             this.dgvLookBoard = new System.Windows.Forms.DataGridView();
-            this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCheckResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCoaxiality = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWeldDepth = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSurface = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colLwmCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colXPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colYPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colZPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colRPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWeldPower = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWeldSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPressure = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFlow = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colWeldTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colMnaualCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmbSelectCondition = new System.Windows.Forms.ComboBox();
             this.labSelectMethod = new System.Windows.Forms.Label();
             this.btnSelectByTerm = new System.Windows.Forms.Button();
@@ -94,6 +75,29 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWorkNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCheckResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCoaxiality = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCoaxUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCoaxDown = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWeldDepth = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSurface = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLwmCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWeldPower = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWeldSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPressure = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFlow = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFlowUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFlowDown = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colXPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colYPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colZPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colWeldTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colMnaualCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLookBoard)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -169,7 +173,8 @@
             // btnOutExcel
             // 
             this.btnOutExcel.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnOutExcel.Location = new System.Drawing.Point(702, 109);
+            this.btnOutExcel.ForeColor = System.Drawing.Color.Blue;
+            this.btnOutExcel.Location = new System.Drawing.Point(835, 121);
             this.btnOutExcel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnOutExcel.Name = "btnOutExcel";
             this.btnOutExcel.Size = new System.Drawing.Size(130, 60);
@@ -181,7 +186,7 @@
             // btnManualCheck
             // 
             this.btnManualCheck.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnManualCheck.Location = new System.Drawing.Point(928, 109);
+            this.btnManualCheck.Location = new System.Drawing.Point(1037, 121);
             this.btnManualCheck.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnManualCheck.Name = "btnManualCheck";
             this.btnManualCheck.Size = new System.Drawing.Size(130, 60);
@@ -193,7 +198,7 @@
             // txtQCResult
             // 
             this.txtQCResult.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.txtQCResult.Location = new System.Drawing.Point(128, 154);
+            this.txtQCResult.Location = new System.Drawing.Point(130, 178);
             this.txtQCResult.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtQCResult.Name = "txtQCResult";
             this.txtQCResult.Size = new System.Drawing.Size(157, 34);
@@ -206,7 +211,7 @@
             this.cmbQCResult.Items.AddRange(new object[] {
             "Pass",
             "NG"});
-            this.cmbQCResult.Location = new System.Drawing.Point(128, 154);
+            this.cmbQCResult.Location = new System.Drawing.Point(130, 178);
             this.cmbQCResult.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbQCResult.Name = "cmbQCResult";
             this.cmbQCResult.Size = new System.Drawing.Size(157, 35);
@@ -217,46 +222,46 @@
             // labEach
             // 
             this.labEach.AutoSize = true;
-            this.labEach.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labEach.Location = new System.Drawing.Point(27, 28);
+            this.labEach.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labEach.Location = new System.Drawing.Point(26, 28);
             this.labEach.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labEach.Name = "labEach";
-            this.labEach.Size = new System.Drawing.Size(93, 23);
+            this.labEach.Size = new System.Drawing.Size(97, 24);
             this.labEach.TabIndex = 58;
             this.labEach.Text = "每页条数:";
             // 
             // txtCurPage
             // 
-            this.txtCurPage.Font = new System.Drawing.Font("Tahoma", 11F);
+            this.txtCurPage.Font = new System.Drawing.Font("Tahoma", 12F);
             this.txtCurPage.Location = new System.Drawing.Point(460, 23);
             this.txtCurPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtCurPage.Name = "txtCurPage";
             this.txtCurPage.ReadOnly = true;
-            this.txtCurPage.Size = new System.Drawing.Size(68, 30);
+            this.txtCurPage.Size = new System.Drawing.Size(68, 32);
             this.txtCurPage.TabIndex = 57;
             this.txtCurPage.Text = "0";
             this.txtCurPage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtAllCount
             // 
-            this.txtAllCount.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.txtAllCount.Location = new System.Drawing.Point(975, 20);
+            this.txtAllCount.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.txtAllCount.Location = new System.Drawing.Point(998, 23);
             this.txtAllCount.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtAllCount.Name = "txtAllCount";
             this.txtAllCount.ReadOnly = true;
-            this.txtAllCount.Size = new System.Drawing.Size(82, 30);
+            this.txtAllCount.Size = new System.Drawing.Size(82, 32);
             this.txtAllCount.TabIndex = 55;
             this.txtAllCount.Text = "0";
             this.txtAllCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtPageCount
             // 
-            this.txtPageCount.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.txtPageCount.Location = new System.Drawing.Point(800, 20);
+            this.txtPageCount.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.txtPageCount.Location = new System.Drawing.Point(821, 23);
             this.txtPageCount.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtPageCount.Name = "txtPageCount";
             this.txtPageCount.ReadOnly = true;
-            this.txtPageCount.Size = new System.Drawing.Size(63, 30);
+            this.txtPageCount.Size = new System.Drawing.Size(63, 32);
             this.txtPageCount.TabIndex = 56;
             this.txtPageCount.Text = "0";
             this.txtPageCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -264,33 +269,33 @@
             // labPage
             // 
             this.labPage.AutoSize = true;
-            this.labPage.Font = new System.Drawing.Font("Tahoma", 11F);
+            this.labPage.Font = new System.Drawing.Font("Tahoma", 12F);
             this.labPage.Location = new System.Drawing.Point(535, 27);
             this.labPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labPage.Name = "labPage";
-            this.labPage.Size = new System.Drawing.Size(29, 23);
+            this.labPage.Size = new System.Drawing.Size(30, 24);
             this.labPage.TabIndex = 54;
             this.labPage.Text = "页";
             // 
             // labWhich
             // 
             this.labWhich.AutoSize = true;
-            this.labWhich.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labWhich.Location = new System.Drawing.Point(406, 27);
+            this.labWhich.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labWhich.Location = new System.Drawing.Point(404, 27);
             this.labWhich.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labWhich.Name = "labWhich";
-            this.labWhich.Size = new System.Drawing.Size(29, 23);
+            this.labWhich.Size = new System.Drawing.Size(30, 24);
             this.labWhich.TabIndex = 53;
             this.labWhich.Text = "第";
             // 
             // labAfterPage
             // 
             this.labAfterPage.AutoSize = true;
-            this.labAfterPage.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labAfterPage.Location = new System.Drawing.Point(664, 26);
+            this.labAfterPage.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.labAfterPage.Location = new System.Drawing.Point(671, 25);
             this.labAfterPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labAfterPage.Name = "labAfterPage";
-            this.labAfterPage.Size = new System.Drawing.Size(48, 23);
+            this.labAfterPage.Size = new System.Drawing.Size(56, 27);
             this.labAfterPage.TabIndex = 52;
             this.labAfterPage.TabStop = true;
             this.labAfterPage.Text = "末页";
@@ -300,11 +305,11 @@
             // labNextPage
             // 
             this.labNextPage.AutoSize = true;
-            this.labNextPage.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labNextPage.Location = new System.Drawing.Point(585, 26);
+            this.labNextPage.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.labNextPage.Location = new System.Drawing.Point(585, 25);
             this.labNextPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labNextPage.Name = "labNextPage";
-            this.labNextPage.Size = new System.Drawing.Size(67, 23);
+            this.labNextPage.Size = new System.Drawing.Size(78, 27);
             this.labNextPage.TabIndex = 51;
             this.labNextPage.TabStop = true;
             this.labNextPage.Text = "下一页";
@@ -314,11 +319,11 @@
             // labLastPage
             // 
             this.labLastPage.AutoSize = true;
-            this.labLastPage.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labLastPage.Location = new System.Drawing.Point(337, 27);
+            this.labLastPage.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.labLastPage.Location = new System.Drawing.Point(323, 25);
             this.labLastPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labLastPage.Name = "labLastPage";
-            this.labLastPage.Size = new System.Drawing.Size(67, 23);
+            this.labLastPage.Size = new System.Drawing.Size(78, 27);
             this.labLastPage.TabIndex = 50;
             this.labLastPage.TabStop = true;
             this.labLastPage.Text = "上一页";
@@ -328,11 +333,11 @@
             // labHomePage
             // 
             this.labHomePage.AutoSize = true;
-            this.labHomePage.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labHomePage.Location = new System.Drawing.Point(278, 27);
+            this.labHomePage.Font = new System.Drawing.Font("Tahoma", 13F);
+            this.labHomePage.Location = new System.Drawing.Point(263, 25);
             this.labHomePage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labHomePage.Name = "labHomePage";
-            this.labHomePage.Size = new System.Drawing.Size(48, 23);
+            this.labHomePage.Size = new System.Drawing.Size(56, 27);
             this.labHomePage.TabIndex = 49;
             this.labHomePage.TabStop = true;
             this.labHomePage.Text = "首页";
@@ -341,7 +346,7 @@
             // 
             // cmbPageSize
             // 
-            this.cmbPageSize.Font = new System.Drawing.Font("Tahoma", 11F);
+            this.cmbPageSize.Font = new System.Drawing.Font("Tahoma", 12F);
             this.cmbPageSize.FormattingEnabled = true;
             this.cmbPageSize.Items.AddRange(new object[] {
             "10",
@@ -351,10 +356,10 @@
             "500",
             "700",
             "900"});
-            this.cmbPageSize.Location = new System.Drawing.Point(130, 25);
+            this.cmbPageSize.Location = new System.Drawing.Point(129, 25);
             this.cmbPageSize.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbPageSize.Name = "cmbPageSize";
-            this.cmbPageSize.Size = new System.Drawing.Size(87, 30);
+            this.cmbPageSize.Size = new System.Drawing.Size(87, 32);
             this.cmbPageSize.TabIndex = 48;
             this.cmbPageSize.SelectedIndexChanged += new System.EventHandler(this.cmbPageSize_SelectedIndexChanged);
             this.cmbPageSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbPageSize_KeyPress);
@@ -362,44 +367,44 @@
             // labItem
             // 
             this.labItem.AutoSize = true;
-            this.labItem.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labItem.Location = new System.Drawing.Point(1065, 23);
+            this.labItem.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labItem.Location = new System.Drawing.Point(1088, 26);
             this.labItem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labItem.Name = "labItem";
-            this.labItem.Size = new System.Drawing.Size(29, 23);
+            this.labItem.Size = new System.Drawing.Size(30, 24);
             this.labItem.TabIndex = 47;
             this.labItem.Text = "条";
             // 
             // labPage2
             // 
             this.labPage2.AutoSize = true;
-            this.labPage2.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labPage2.Location = new System.Drawing.Point(868, 24);
+            this.labPage2.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labPage2.Location = new System.Drawing.Point(889, 27);
             this.labPage2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labPage2.Name = "labPage2";
-            this.labPage2.Size = new System.Drawing.Size(29, 23);
+            this.labPage2.Size = new System.Drawing.Size(30, 24);
             this.labPage2.TabIndex = 46;
             this.labPage2.Text = "页";
             // 
             // labSum2
             // 
             this.labSum2.AutoSize = true;
-            this.labSum2.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSum2.Location = new System.Drawing.Point(929, 24);
+            this.labSum2.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labSum2.Location = new System.Drawing.Point(951, 27);
             this.labSum2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSum2.Name = "labSum2";
-            this.labSum2.Size = new System.Drawing.Size(36, 23);
+            this.labSum2.Size = new System.Drawing.Size(37, 24);
             this.labSum2.TabIndex = 45;
             this.labSum2.Text = "共:";
             // 
             // labSum
             // 
             this.labSum.AutoSize = true;
-            this.labSum.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSum.Location = new System.Drawing.Point(756, 25);
+            this.labSum.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labSum.Location = new System.Drawing.Point(772, 28);
             this.labSum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSum.Name = "labSum";
-            this.labSum.Size = new System.Drawing.Size(36, 23);
+            this.labSum.Size = new System.Drawing.Size(37, 24);
             this.labSum.TabIndex = 44;
             this.labSum.Text = "共:";
             // 
@@ -407,7 +412,7 @@
             // 
             this.labSelectValue.AutoSize = true;
             this.labSelectValue.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSelectValue.Location = new System.Drawing.Point(26, 159);
+            this.labSelectValue.Location = new System.Drawing.Point(26, 183);
             this.labSelectValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSelectValue.Name = "labSelectValue";
             this.labSelectValue.Size = new System.Drawing.Size(93, 23);
@@ -421,23 +426,27 @@
             this.dgvLookBoard.ColumnHeadersHeight = 30;
             this.dgvLookBoard.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colID,
+            this.colWorkNo,
             this.colPNo,
             this.colCheckResult,
             this.colCoaxiality,
+            this.colCoaxUp,
+            this.colCoaxDown,
             this.colWeldDepth,
             this.colSurface,
             this.colLwmCheck,
-            this.colXPos,
-            this.colYPos,
-            this.colZPos,
-            this.colRPos,
             this.colWeldPower,
             this.colWeldSpeed,
             this.colPressure,
             this.colFlow,
+            this.colFlowUp,
+            this.colFlowDown,
+            this.colXPos,
+            this.colYPos,
+            this.colZPos,
+            this.colRPos,
             this.colWeldTime,
             this.colMnaualCheck,
-            this.colPType,
             this.colTime});
             this.dgvLookBoard.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvLookBoard.Location = new System.Drawing.Point(0, 0);
@@ -447,202 +456,15 @@
             this.dgvLookBoard.ReadOnly = true;
             this.dgvLookBoard.RowTemplate.Height = 23;
             this.dgvLookBoard.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLookBoard.Size = new System.Drawing.Size(1171, 424);
+            this.dgvLookBoard.Size = new System.Drawing.Size(1171, 397);
             this.dgvLookBoard.TabIndex = 37;
             this.dgvLookBoard.DataSourceChanged += new System.EventHandler(this.dgvLookBoard_DataSourceChanged);
-            // 
-            // colID
-            // 
-            this.colID.DataPropertyName = "ID";
-            this.colID.HeaderText = "ID";
-            this.colID.Name = "colID";
-            this.colID.ReadOnly = true;
-            this.colID.Visible = false;
-            this.colID.Width = 52;
-            // 
-            // colPNo
-            // 
-            this.colPNo.DataPropertyName = "PNo";
-            this.colPNo.HeaderText = "条码";
-            this.colPNo.Name = "colPNo";
-            this.colPNo.ReadOnly = true;
-            this.colPNo.Width = 73;
-            // 
-            // colCheckResult
-            // 
-            this.colCheckResult.DataPropertyName = "QCResult";
-            this.colCheckResult.HeaderText = "综合检测结果";
-            this.colCheckResult.Name = "colCheckResult";
-            this.colCheckResult.ReadOnly = true;
-            this.colCheckResult.Width = 141;
-            // 
-            // colCoaxiality
-            // 
-            this.colCoaxiality.DataPropertyName = "Coaxiality";
-            dataGridViewCellStyle1.Format = "N3";
-            dataGridViewCellStyle1.NullValue = null;
-            this.colCoaxiality.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colCoaxiality.HeaderText = "同心度(mm)";
-            this.colCoaxiality.Name = "colCoaxiality";
-            this.colCoaxiality.ReadOnly = true;
-            this.colCoaxiality.Width = 132;
-            // 
-            // colWeldDepth
-            // 
-            this.colWeldDepth.DataPropertyName = "WeldDepth";
-            dataGridViewCellStyle2.Format = "N3";
-            dataGridViewCellStyle2.NullValue = null;
-            this.colWeldDepth.DefaultCellStyle = dataGridViewCellStyle2;
-            this.colWeldDepth.HeaderText = "焊缝高度差(mm)";
-            this.colWeldDepth.Name = "colWeldDepth";
-            this.colWeldDepth.ReadOnly = true;
-            this.colWeldDepth.Width = 166;
-            // 
-            // colSurface
-            // 
-            this.colSurface.DataPropertyName = "Surface";
-            this.colSurface.HeaderText = "表面成型";
-            this.colSurface.Name = "colSurface";
-            this.colSurface.ReadOnly = true;
-            this.colSurface.Width = 107;
-            // 
-            // colLwmCheck
-            // 
-            this.colLwmCheck.DataPropertyName = "LwmCheck";
-            this.colLwmCheck.HeaderText = "Lwm检测结果";
-            this.colLwmCheck.Name = "colLwmCheck";
-            this.colLwmCheck.ReadOnly = true;
-            this.colLwmCheck.Width = 142;
-            // 
-            // colXPos
-            // 
-            this.colXPos.DataPropertyName = "XPos";
-            dataGridViewCellStyle3.Format = "N3";
-            dataGridViewCellStyle3.NullValue = null;
-            this.colXPos.DefaultCellStyle = dataGridViewCellStyle3;
-            this.colXPos.HeaderText = "X坐标(mm)";
-            this.colXPos.Name = "colXPos";
-            this.colXPos.ReadOnly = true;
-            this.colXPos.Width = 125;
-            // 
-            // colYPos
-            // 
-            this.colYPos.DataPropertyName = "YPos";
-            dataGridViewCellStyle4.Format = "N3";
-            dataGridViewCellStyle4.NullValue = null;
-            this.colYPos.DefaultCellStyle = dataGridViewCellStyle4;
-            this.colYPos.HeaderText = "Y坐标(mm)";
-            this.colYPos.Name = "colYPos";
-            this.colYPos.ReadOnly = true;
-            this.colYPos.Width = 125;
-            // 
-            // colZPos
-            // 
-            this.colZPos.DataPropertyName = "ZPos";
-            dataGridViewCellStyle5.Format = "N3";
-            dataGridViewCellStyle5.NullValue = null;
-            this.colZPos.DefaultCellStyle = dataGridViewCellStyle5;
-            this.colZPos.HeaderText = "Z坐标(mm)";
-            this.colZPos.Name = "colZPos";
-            this.colZPos.ReadOnly = true;
-            this.colZPos.Width = 125;
-            // 
-            // colRPos
-            // 
-            this.colRPos.DataPropertyName = "RPos";
-            dataGridViewCellStyle6.Format = "N3";
-            dataGridViewCellStyle6.NullValue = null;
-            this.colRPos.DefaultCellStyle = dataGridViewCellStyle6;
-            this.colRPos.HeaderText = "R坐标(°)";
-            this.colRPos.Name = "colRPos";
-            this.colRPos.ReadOnly = true;
-            this.colRPos.Width = 106;
-            // 
-            // colWeldPower
-            // 
-            this.colWeldPower.DataPropertyName = "WeldPower";
-            dataGridViewCellStyle7.Format = "N3";
-            dataGridViewCellStyle7.NullValue = null;
-            this.colWeldPower.DefaultCellStyle = dataGridViewCellStyle7;
-            this.colWeldPower.HeaderText = "焊接功率(W)";
-            this.colWeldPower.Name = "colWeldPower";
-            this.colWeldPower.ReadOnly = true;
-            this.colWeldPower.Width = 136;
-            // 
-            // colWeldSpeed
-            // 
-            this.colWeldSpeed.DataPropertyName = "WeldSpeed";
-            this.colWeldSpeed.HeaderText = "焊接速度(°/s)";
-            this.colWeldSpeed.Name = "colWeldSpeed";
-            this.colWeldSpeed.ReadOnly = true;
-            this.colWeldSpeed.Width = 144;
-            // 
-            // colPressure
-            // 
-            this.colPressure.DataPropertyName = "Pressure";
-            dataGridViewCellStyle8.Format = "N3";
-            dataGridViewCellStyle8.NullValue = null;
-            this.colPressure.DefaultCellStyle = dataGridViewCellStyle8;
-            this.colPressure.HeaderText = "气体压力值(MPa)";
-            this.colPressure.Name = "colPressure";
-            this.colPressure.ReadOnly = true;
-            this.colPressure.Width = 169;
-            // 
-            // colFlow
-            // 
-            this.colFlow.DataPropertyName = "Flow";
-            dataGridViewCellStyle9.Format = "N3";
-            dataGridViewCellStyle9.NullValue = null;
-            this.colFlow.DefaultCellStyle = dataGridViewCellStyle9;
-            this.colFlow.HeaderText = "保护气流量(L/min)";
-            this.colFlow.Name = "colFlow";
-            this.colFlow.ReadOnly = true;
-            this.colFlow.Width = 180;
-            // 
-            // colWeldTime
-            // 
-            this.colWeldTime.DataPropertyName = "WeldTime";
-            dataGridViewCellStyle10.Format = "N3";
-            dataGridViewCellStyle10.NullValue = null;
-            this.colWeldTime.DefaultCellStyle = dataGridViewCellStyle10;
-            this.colWeldTime.HeaderText = "焊接时间(S)";
-            this.colWeldTime.Name = "colWeldTime";
-            this.colWeldTime.ReadOnly = true;
-            this.colWeldTime.Width = 130;
-            // 
-            // colMnaualCheck
-            // 
-            this.colMnaualCheck.DataPropertyName = "ManualCheck";
-            this.colMnaualCheck.HeaderText = "人工干预";
-            this.colMnaualCheck.Name = "colMnaualCheck";
-            this.colMnaualCheck.ReadOnly = true;
-            this.colMnaualCheck.Width = 107;
-            // 
-            // colPType
-            // 
-            this.colPType.DataPropertyName = "PType";
-            this.colPType.HeaderText = "产品类型";
-            this.colPType.Name = "colPType";
-            this.colPType.ReadOnly = true;
-            this.colPType.Visible = false;
-            this.colPType.Width = 96;
-            // 
-            // colTime
-            // 
-            this.colTime.DataPropertyName = "StorageTime";
-            dataGridViewCellStyle11.Format = "G";
-            dataGridViewCellStyle11.NullValue = null;
-            this.colTime.DefaultCellStyle = dataGridViewCellStyle11;
-            this.colTime.HeaderText = "入库时间";
-            this.colTime.Name = "colTime";
-            this.colTime.ReadOnly = true;
-            this.colTime.Width = 107;
             // 
             // cmbSelectCondition
             // 
             this.cmbSelectCondition.Font = new System.Drawing.Font("Tahoma", 12F);
             this.cmbSelectCondition.FormattingEnabled = true;
-            this.cmbSelectCondition.Location = new System.Drawing.Point(130, 92);
+            this.cmbSelectCondition.Location = new System.Drawing.Point(129, 101);
             this.cmbSelectCondition.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbSelectCondition.Name = "cmbSelectCondition";
             this.cmbSelectCondition.Size = new System.Drawing.Size(144, 32);
@@ -654,7 +476,7 @@
             // 
             this.labSelectMethod.AutoSize = true;
             this.labSelectMethod.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSelectMethod.Location = new System.Drawing.Point(26, 96);
+            this.labSelectMethod.Location = new System.Drawing.Point(25, 105);
             this.labSelectMethod.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSelectMethod.Name = "labSelectMethod";
             this.labSelectMethod.Size = new System.Drawing.Size(93, 23);
@@ -664,7 +486,8 @@
             // btnSelectByTerm
             // 
             this.btnSelectByTerm.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnSelectByTerm.Location = new System.Drawing.Point(472, 109);
+            this.btnSelectByTerm.ForeColor = System.Drawing.Color.Blue;
+            this.btnSelectByTerm.Location = new System.Drawing.Point(622, 121);
             this.btnSelectByTerm.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnSelectByTerm.Name = "btnSelectByTerm";
             this.btnSelectByTerm.Size = new System.Drawing.Size(130, 60);
@@ -677,39 +500,36 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.label6.Location = new System.Drawing.Point(286, 160);
+            this.label6.Location = new System.Drawing.Point(421, 107);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(24, 23);
             this.label6.TabIndex = 70;
             this.label6.Text = "~";
-            this.label6.Visible = false;
             // 
             // timeCheckEnd
             // 
             this.timeCheckEnd.CustomFormat = "yyyy/MM/dd";
-            this.timeCheckEnd.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.timeCheckEnd.Font = new System.Drawing.Font("Tahoma", 10F);
             this.timeCheckEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.timeCheckEnd.Location = new System.Drawing.Point(313, 156);
+            this.timeCheckEnd.Location = new System.Drawing.Point(445, 104);
             this.timeCheckEnd.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.timeCheckEnd.Name = "timeCheckEnd";
-            this.timeCheckEnd.Size = new System.Drawing.Size(139, 32);
+            this.timeCheckEnd.Size = new System.Drawing.Size(134, 28);
             this.timeCheckEnd.TabIndex = 69;
             this.timeCheckEnd.Value = new System.DateTime(2018, 7, 17, 0, 0, 0, 0);
-            this.timeCheckEnd.Visible = false;
             // 
             // timeCheckStart
             // 
             this.timeCheckStart.CustomFormat = "yyyy/MM/dd";
-            this.timeCheckStart.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.timeCheckStart.Font = new System.Drawing.Font("Tahoma", 10F);
             this.timeCheckStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.timeCheckStart.Location = new System.Drawing.Point(128, 156);
+            this.timeCheckStart.Location = new System.Drawing.Point(286, 104);
             this.timeCheckStart.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.timeCheckStart.Name = "timeCheckStart";
-            this.timeCheckStart.Size = new System.Drawing.Size(157, 32);
+            this.timeCheckStart.Size = new System.Drawing.Size(132, 28);
             this.timeCheckStart.TabIndex = 68;
             this.timeCheckStart.Value = new System.DateTime(2018, 7, 17, 0, 0, 0, 0);
-            this.timeCheckStart.Visible = false;
             // 
             // panel1
             // 
@@ -755,9 +575,9 @@
             this.panel2.Controls.Add(this.labHomePage);
             this.panel2.Controls.Add(this.labLastPage);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 515);
+            this.panel2.Location = new System.Drawing.Point(0, 488);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1171, 213);
+            this.panel2.Size = new System.Drawing.Size(1171, 240);
             this.panel2.TabIndex = 72;
             // 
             // panel3
@@ -766,8 +586,228 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 91);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1171, 424);
+            this.panel3.Size = new System.Drawing.Size(1171, 397);
             this.panel3.TabIndex = 73;
+            // 
+            // colID
+            // 
+            this.colID.DataPropertyName = "ID";
+            this.colID.HeaderText = "ID";
+            this.colID.Name = "colID";
+            this.colID.ReadOnly = true;
+            this.colID.Visible = false;
+            this.colID.Width = 57;
+            // 
+            // colWorkNo
+            // 
+            this.colWorkNo.DataPropertyName = "WorkNo";
+            this.colWorkNo.HeaderText = "工单号";
+            this.colWorkNo.Name = "colWorkNo";
+            this.colWorkNo.ReadOnly = true;
+            this.colWorkNo.Visible = false;
+            this.colWorkNo.Width = 90;
+            // 
+            // colPNo
+            // 
+            this.colPNo.DataPropertyName = "PNo";
+            this.colPNo.HeaderText = "过程条码";
+            this.colPNo.Name = "colPNo";
+            this.colPNo.ReadOnly = true;
+            this.colPNo.Width = 107;
+            // 
+            // colCheckResult
+            // 
+            this.colCheckResult.DataPropertyName = "QCResult";
+            this.colCheckResult.HeaderText = "状态";
+            this.colCheckResult.Name = "colCheckResult";
+            this.colCheckResult.ReadOnly = true;
+            this.colCheckResult.Width = 73;
+            // 
+            // colCoaxiality
+            // 
+            this.colCoaxiality.DataPropertyName = "Coaxiality";
+            dataGridViewCellStyle1.Format = "N3";
+            dataGridViewCellStyle1.NullValue = null;
+            this.colCoaxiality.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colCoaxiality.HeaderText = "同心度(mm)";
+            this.colCoaxiality.Name = "colCoaxiality";
+            this.colCoaxiality.ReadOnly = true;
+            this.colCoaxiality.Width = 132;
+            // 
+            // colCoaxUp
+            // 
+            this.colCoaxUp.DataPropertyName = "CoaxUp";
+            this.colCoaxUp.HeaderText = "同心度上限(mm)";
+            this.colCoaxUp.Name = "colCoaxUp";
+            this.colCoaxUp.ReadOnly = true;
+            this.colCoaxUp.Width = 166;
+            // 
+            // colCoaxDown
+            // 
+            this.colCoaxDown.DataPropertyName = "CoaxDown";
+            this.colCoaxDown.HeaderText = "同心度下限(mm)";
+            this.colCoaxDown.Name = "colCoaxDown";
+            this.colCoaxDown.ReadOnly = true;
+            this.colCoaxDown.Width = 166;
+            // 
+            // colWeldDepth
+            // 
+            this.colWeldDepth.DataPropertyName = "WeldDepth";
+            dataGridViewCellStyle2.Format = "N3";
+            dataGridViewCellStyle2.NullValue = null;
+            this.colWeldDepth.DefaultCellStyle = dataGridViewCellStyle2;
+            this.colWeldDepth.HeaderText = "焊缝高度差(mm)";
+            this.colWeldDepth.Name = "colWeldDepth";
+            this.colWeldDepth.ReadOnly = true;
+            this.colWeldDepth.Width = 166;
+            // 
+            // colSurface
+            // 
+            this.colSurface.DataPropertyName = "Surface";
+            this.colSurface.HeaderText = "焊缝质量";
+            this.colSurface.Name = "colSurface";
+            this.colSurface.ReadOnly = true;
+            this.colSurface.Width = 107;
+            // 
+            // colLwmCheck
+            // 
+            this.colLwmCheck.DataPropertyName = "LwmCheck";
+            this.colLwmCheck.HeaderText = "Lwm检测结果";
+            this.colLwmCheck.Name = "colLwmCheck";
+            this.colLwmCheck.ReadOnly = true;
+            this.colLwmCheck.Width = 142;
+            // 
+            // colWeldPower
+            // 
+            this.colWeldPower.DataPropertyName = "WeldPower";
+            dataGridViewCellStyle3.Format = "N3";
+            dataGridViewCellStyle3.NullValue = null;
+            this.colWeldPower.DefaultCellStyle = dataGridViewCellStyle3;
+            this.colWeldPower.HeaderText = "焊接功率(W)";
+            this.colWeldPower.Name = "colWeldPower";
+            this.colWeldPower.ReadOnly = true;
+            this.colWeldPower.Width = 136;
+            // 
+            // colWeldSpeed
+            // 
+            this.colWeldSpeed.DataPropertyName = "WeldSpeed";
+            this.colWeldSpeed.HeaderText = "焊接速度(°/s)";
+            this.colWeldSpeed.Name = "colWeldSpeed";
+            this.colWeldSpeed.ReadOnly = true;
+            this.colWeldSpeed.Width = 144;
+            // 
+            // colPressure
+            // 
+            this.colPressure.DataPropertyName = "Pressure";
+            dataGridViewCellStyle4.Format = "N3";
+            dataGridViewCellStyle4.NullValue = null;
+            this.colPressure.DefaultCellStyle = dataGridViewCellStyle4;
+            this.colPressure.HeaderText = "气体压力值(MPa)";
+            this.colPressure.Name = "colPressure";
+            this.colPressure.ReadOnly = true;
+            this.colPressure.Width = 169;
+            // 
+            // colFlow
+            // 
+            this.colFlow.DataPropertyName = "Flow";
+            dataGridViewCellStyle5.Format = "N3";
+            dataGridViewCellStyle5.NullValue = null;
+            this.colFlow.DefaultCellStyle = dataGridViewCellStyle5;
+            this.colFlow.HeaderText = "保护气流量(L/min)";
+            this.colFlow.Name = "colFlow";
+            this.colFlow.ReadOnly = true;
+            this.colFlow.Width = 180;
+            // 
+            // colFlowUp
+            // 
+            this.colFlowUp.DataPropertyName = "FlowUp";
+            this.colFlowUp.HeaderText = "保护气流量上限(L/min)";
+            this.colFlowUp.Name = "colFlowUp";
+            this.colFlowUp.ReadOnly = true;
+            this.colFlowUp.Width = 214;
+            // 
+            // colFlowDown
+            // 
+            this.colFlowDown.DataPropertyName = "FlowDown";
+            this.colFlowDown.HeaderText = "保护气流量下限(L/min)";
+            this.colFlowDown.Name = "colFlowDown";
+            this.colFlowDown.ReadOnly = true;
+            this.colFlowDown.Width = 214;
+            // 
+            // colXPos
+            // 
+            this.colXPos.DataPropertyName = "XPos";
+            dataGridViewCellStyle6.Format = "N3";
+            dataGridViewCellStyle6.NullValue = null;
+            this.colXPos.DefaultCellStyle = dataGridViewCellStyle6;
+            this.colXPos.HeaderText = "X坐标(mm)";
+            this.colXPos.Name = "colXPos";
+            this.colXPos.ReadOnly = true;
+            this.colXPos.Width = 125;
+            // 
+            // colYPos
+            // 
+            this.colYPos.DataPropertyName = "YPos";
+            dataGridViewCellStyle7.Format = "N3";
+            dataGridViewCellStyle7.NullValue = null;
+            this.colYPos.DefaultCellStyle = dataGridViewCellStyle7;
+            this.colYPos.HeaderText = "Y坐标(mm)";
+            this.colYPos.Name = "colYPos";
+            this.colYPos.ReadOnly = true;
+            this.colYPos.Width = 125;
+            // 
+            // colZPos
+            // 
+            this.colZPos.DataPropertyName = "ZPos";
+            dataGridViewCellStyle8.Format = "N3";
+            dataGridViewCellStyle8.NullValue = null;
+            this.colZPos.DefaultCellStyle = dataGridViewCellStyle8;
+            this.colZPos.HeaderText = "Z坐标(mm)";
+            this.colZPos.Name = "colZPos";
+            this.colZPos.ReadOnly = true;
+            this.colZPos.Width = 125;
+            // 
+            // colRPos
+            // 
+            this.colRPos.DataPropertyName = "RPos";
+            dataGridViewCellStyle9.Format = "N3";
+            dataGridViewCellStyle9.NullValue = null;
+            this.colRPos.DefaultCellStyle = dataGridViewCellStyle9;
+            this.colRPos.HeaderText = "R坐标(°)";
+            this.colRPos.Name = "colRPos";
+            this.colRPos.ReadOnly = true;
+            this.colRPos.Width = 106;
+            // 
+            // colWeldTime
+            // 
+            this.colWeldTime.DataPropertyName = "WeldTime";
+            dataGridViewCellStyle10.Format = "N3";
+            dataGridViewCellStyle10.NullValue = null;
+            this.colWeldTime.DefaultCellStyle = dataGridViewCellStyle10;
+            this.colWeldTime.HeaderText = "焊接时间(S)";
+            this.colWeldTime.Name = "colWeldTime";
+            this.colWeldTime.ReadOnly = true;
+            this.colWeldTime.Width = 130;
+            // 
+            // colMnaualCheck
+            // 
+            this.colMnaualCheck.DataPropertyName = "ManualCheck";
+            this.colMnaualCheck.HeaderText = "人工干预";
+            this.colMnaualCheck.Name = "colMnaualCheck";
+            this.colMnaualCheck.ReadOnly = true;
+            this.colMnaualCheck.Visible = false;
+            this.colMnaualCheck.Width = 107;
+            // 
+            // colTime
+            // 
+            this.colTime.DataPropertyName = "StorageTime";
+            dataGridViewCellStyle11.Format = "G";
+            dataGridViewCellStyle11.NullValue = null;
+            this.colTime.DefaultCellStyle = dataGridViewCellStyle11;
+            this.colTime.HeaderText = "上线时间";
+            this.colTime.Name = "colTime";
+            this.colTime.ReadOnly = true;
+            this.colTime.Width = 107;
             // 
             // TraceSystem
             // 
@@ -830,23 +870,27 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colWorkNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCheckResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCoaxiality;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCoaxUp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCoaxDown;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWeldDepth;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSurface;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLwmCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colXPos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colYPos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colZPos;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colRPos;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWeldPower;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWeldSpeed;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPressure;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFlow;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFlowUp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFlowDown;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colXPos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colYPos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colZPos;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colRPos;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWeldTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colMnaualCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPType;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTime;
     }
 }

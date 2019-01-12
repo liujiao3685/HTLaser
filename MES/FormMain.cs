@@ -30,6 +30,9 @@ using ProductManage.UserControls;
 using System.Collections;
 using ProductManage.PLC;
 using ProductManage.Vision;
+using System.Runtime.InteropServices;
+using ProductManage.Scanner;
+using ProductManage.Lwm;
 
 namespace MES
 {
@@ -41,38 +44,32 @@ namespace MES
     /// </summary>
     public partial class FormMain : Form
     {
+        #region 共有变量
+
         public string StationName = "S";
 
         public bool IsStation_S = true;
 
         public DBTool DbTool = null;
 
-        public DataTable ProductsTable;
-
-        public DataTable UsersTable;
-
-        private int Self_Checek_Interval = 1;//间隔小时时间提醒质检
-
-        private Product m_curProduct;
-
-        private Product m_ngProduct;
-
-        private string m_selectAllUsers = "Select ID,Name,Password,Auth from Users";
-
-        /// <summary>
-        /// 用户日志
-        /// </summary>
-        public ILogNet LogNetUser { get; private set; }
+        public ILogNet LogNetUser;
         public string UserLogName = "用户日志.txt";
 
-        /// <summary>
-        /// 应用程序日志
-        /// </summary>
-        public ILogNet LogNetProgramer { get; private set; }
+        public ILogNet LogNetProgramer;
 
-        public SiemensS7Net m_siemensTcpNet { get; set; }
+        public OpcUaClient OpcUaClient;
+        public string OpcServiceUrl = "opc.tcp://192.168.0.75:4840";
 
-        public OpcUaClient OpcUaClient { get; set; }
+        public int DeviceState = 2;
+
+        public XmlHelperBase XmlHelper;
+        public Dictionary<string, string> SystemParamsDic;
+        public DataTable UsersTable;
+        public string WorkNo { set; get; }
+        #endregion
+
+        #region 私有变量
+
 
         private SoftAuthorize m_softAuthorize = null;
 
@@ -80,27 +77,7 @@ namespace MES
 
         private string CurrentBarCode = string.Empty;
 
-        private string CurrentBarCodeScan = string.Empty;
-
-        public byte[] VisionIp = new byte[] { 192, 168, 0, 66 };//3D视觉IP
-
-        public ushort VisionPort = 24691;//3D视觉端口号   1、24691：接收/发送指令 2、24692：高速通讯
-
         private VisionLJ7000 m_visionLj7080;
-
-        public string OpcServiceUrl = "opc.tcp://192.168.0.85:4840";//OPC URL
-
-        private string m_scanSmallIp = "192.168.0.78";//小环扫描仪ip
-
-        private string m_scanLargeIp = "192.168.0.88";//大环扫描仪ip
-
-        private int m_scanPort = 9004;//扫描仪统一端口号
-
-        private string m_lwmIp = "192.168.0.60";
-
-        private int m_lwmContentPort = 8000;//700：控制端口
-
-        public string UserLogPath = Application.StartupPath;//用户日志地址
 
         private int m_scanErrorCount = 0;//扫码错误次数记录
 
@@ -108,61 +85,30 @@ namespace MES
 
         private bool m_scanRun = false;//是否开启扫码线程
 
-        private Thread t_scanThread;//扫描仪线程
-
-        private int m_visionCollectInterval = 300;//3D相机采样周期
-
-        private SelfCheckWarmForm selfCheckWarmForm = null;//提醒检测窗体
-
         private Socket m_socketLwm = null;//LWM监听Socket
-
-        private Thread t_lwmThread;//LWM监听线程
-
-        private IPEndPoint endPoint = null;
 
         private SpotCheckForm m_spotCheckForm;
 
-        private Thread t_monitorState = null;
+        private int m_errorCount = 0; //异常记录次数
 
-        private Thread t_coaSurface = null;
+        private bool b_opcState = false;//PLC连接状态
 
-        private Thread t_visionThread = null;
+        private bool b_startModifyL = false;//是否更新大环数据
 
-        private Thread t_modifyLargeData = null;
+        private bool b_startModifyS = false;//是否更新小环数据
 
-        private bool b_startModifyL = false;
-
-        private Thread t_modifySmallData = null;
-
-        private bool b_startModifyS = false;
-
-        private bool b_lwmResult = true;
+        private bool b_lwmResult = true;//LWM检查结果
 
         private bool b_qcResult;//综合检测结果
 
-        private int m_errorCount = 0; //异常记录次数
-
-        private bool b_opcError = false;
-
-        /// <summary>
-        /// 设备状态
-        /// </summary>
-        public int DeviceState = 0;
-
-        public XmlHelperBase XmlHelper;
-
-        private double m_weldTimeS;
-
-        private double m_weldTimeL;
-
-        /// <summary>
-        /// 系统参数集合
-        /// </summary>
-        public Dictionary<string, string> SystemParamsDic;
+        private double m_weldTime;//焊接时间
 
         private Random random = new Random();
 
         private bool IsWindowShow = true;
+
+        public string ScanIP = string.Empty;
+        #endregion
 
         public FormMain()
         {
@@ -178,42 +124,41 @@ namespace MES
             CultureChange();
         }
 
-        public int Test = 1;
+        public int Test = 0;
         public int UseLanguage = 1;
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            Init();
+            InitFormStyle();
+
+            LoadSystemSetFile();
 
             //程序验证注册码
             //CheckSoftAuthorize();
 
             if (Test == 0)
             {
-                LoadSystemSetFile();
-
                 //初始化PLC通讯
-                InitPLCCommunication();
+                OpenPlc();
 
                 //初始化扫描枪
-                InitScanSocket();
+                OpenScanSocket();
 
-                //初始化Lwm通讯
-                //InitLwmSocket();
+                //初始化LWM通讯
+                OpenLwmSocket();
 
                 //初始化通讯线程
                 InitThreads();
-
-                //检测数据库连接状态
-                CheckDbConnected();
             }
 
             //初始化用户控件页面布局
             InitUserControl();
 
+            //初始化检测提醒功能
+            //InitWarnCheck();
         }
 
-        private void Init()
+        private void InitFormStyle()
         {
             StationName = AppSetting.GetStationName();
             IsStation_S = StationName.Equals("S");
@@ -221,13 +166,11 @@ namespace MES
 
             if (IsStation_S)
             {
-                toolParamSetting.Visible = false;
+                //toolParamSetting.Visible = false;
             }
             else
             {
-                //labCoax.Text = "半径值";
-                //labCoax.Visible = false;
-                //txtCoaxility.Visible = false;
+
             }
 
             //设定按字体来缩放控件  
@@ -235,16 +178,10 @@ namespace MES
             //设定字体大小为12px       
             this.Font = new Font("Tahoma", 12F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(135)));
 
-            UserLogPath += "\\" + UserLogName;
-
             DbTool = new DBTool();
 
             //初始化程序日志
-            //LogNetProgramer = new LogNetSingle(ProgramerLogPath);
             LogNetProgramer = Program.LogNet;
-
-            //初始化用户日志
-            LogNetUser = new LogNetSingle(UserLogPath);
         }
 
         /// <summary>
@@ -253,17 +190,17 @@ namespace MES
         private void InitThreads()
         {
             //监听设备状态，三色灯、在线离线
-            t_monitorState = new Thread(MonitorState);
+            Thread t_monitorState = new Thread(MonitorState);
             t_monitorState.IsBackground = true;
             t_monitorState.Start();
 
             //OPC LWM检测监听线程
-            t_lwmThread = new Thread(LwmCheck);
-            t_lwmThread.IsBackground = true;
+            //Thread t_lwmThread = new Thread(GetLwmDataFromPlc);
+            //t_lwmThread.IsBackground = true;
             //t_lwmThread.Start();
 
             //监听扫描仪线程
-            t_scanThread = new Thread(StartScanThread);
+            Thread t_scanThread = new Thread(StartScanThread);
             t_scanThread.IsBackground = true;
             t_scanThread.Start();
 
@@ -279,15 +216,14 @@ namespace MES
             //t.Start();
             //bool boo = t.IsCompleted;
 
-
             //采集同心度，表面质量，小环用
             if (IsStation_S)
             {
-                t_coaSurface = new Thread(MonitorCoaSurface);
+                Thread t_coaSurface = new Thread(MonitorCoaSurface);
                 t_coaSurface.IsBackground = true;
                 t_coaSurface.Start();
 
-                t_modifySmallData = new Thread(ModifySmallData);
+                Thread t_modifySmallData = new Thread(ModifySmallData);
                 t_modifySmallData.IsBackground = true;
                 t_modifySmallData.Start();
                 b_startModifyS = false;
@@ -297,31 +233,51 @@ namespace MES
             //采集焊缝高度差，大环用
             if (!IsStation_S)
             {
-                m_visionLj7080 = new VisionLJ7000();
-                if (!m_visionLj7080.OpenEthernet())
-                {
-                    AddTips(ResourceCulture.GetValue("VisionCheckConnectFail"), true);
-                    return;
-                }
+                if (!VisionLJ7000.Instance.OpenVision()) return;
 
-                t_visionThread = new Thread(MonitorVisionData);
+                Thread t_visionThread = new Thread(MonitorVisionData);
                 t_visionThread.IsBackground = true;
                 t_visionThread.Start();
 
-                t_modifyLargeData = new Thread(ModifyLargeData);
+                Thread t_modifyLargeData = new Thread(ModifyLargeData);
                 t_modifyLargeData.IsBackground = true;
                 t_modifyLargeData.Start();
                 b_startModifyL = false;
             }
 
-            InitLwmSocket();
-
-            //初始化检测提醒功能
-            //InitWarnCheck();
         }
 
 
-        #region Language
+        #region CheckState
+
+        public bool CheckPlcState()
+        {
+            if (OpcUaClient == null || OpenPlc() ||
+                !OpcUaClient.Connected || !b_opcState)
+            {
+                AddTips("PLC连接断开，请检查网络连接！", true);
+                return false;
+            }
+            AddTips("PLC重新建立连接！", false);
+            return true;
+        }
+
+        public bool CheckDbState()
+        {
+            if (!DBHelper.Instance.Open())
+            {
+                AddTips("数据库连接断开，请检查网络连接！", true);
+                return false;
+            }
+            AddTips("数据库重新建立连接！", false);
+            return true;
+        }
+
+        #endregion
+
+
+
+        #region 语言
 
         public void CultureChange()
         {
@@ -341,7 +297,7 @@ namespace MES
         {
             Text = ResourceCulture.GetValue("ProductManageSystem")
                    + "  [ Version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " ]";
-            notifyIcon1.Text = ResourceCulture.GetValue("ProductManageSystem");
+            exeIcon.Text = ResourceCulture.GetValue("ProductManageSystem");
 
             toolLoginCenter.Text = ResourceCulture.GetValue("UserCenter");
             toolProtectCenter.Text = ResourceCulture.GetValue("OMCS");
@@ -356,7 +312,7 @@ namespace MES
             labBarCode.Text = ResourceCulture.GetValue("BarCode");
             labCoax.Text = ResourceCulture.GetValue("Coaxiality");
             labSurface.Text = ResourceCulture.GetValue("Surface");
-            labState.Text = ResourceCulture.GetValue("OnLine");
+            labState.Text = ResourceCulture.GetValue("OffLine");
             toolTips.Text = ResourceCulture.GetValue("Tips");
             btnCollection.UIText = ResourceCulture.GetValue("ParamMonitor");
             btnTraceSystem.UIText = ResourceCulture.GetValue("TraceSystem");
@@ -382,13 +338,15 @@ namespace MES
 
         #region 加载系统参数
 
-        private double CoaxialityUpS, CoaxialityDownS;
-        private double CoaxialityUpL, CoaxialityDownL;
+        private double CoaxUpS, CoaxDownS;
+        private double CoaxUpL, CoaxDownL;
         private double HfUp, HfDown;
+        private double FlowUp, FlowDown;
 
         //大环标准焊接坐标-XML
         private double BZWeldX, BZWeldY, BZWeldZ, BZWeldR;
 
+        //加载系统参数
         private void LoadSystemSetFile()
         {
             SystemParamsDic = m_spotCheckForm.DicSystemData;
@@ -400,16 +358,16 @@ namespace MES
                 switch (item.Key)
                 {
                     case "CoaxUpS":
-                        CoaxialityUpS = Convert.ToDouble(item.Value);
+                        CoaxUpS = Convert.ToDouble(item.Value);
                         break;
                     case "CoaxDownS":
-                        CoaxialityDownS = Convert.ToDouble(item.Value);
+                        CoaxDownS = Convert.ToDouble(item.Value);
                         break;
                     case "CoaxUpL":
-                        CoaxialityUpL = Convert.ToDouble(item.Value);
+                        CoaxUpL = Convert.ToDouble(item.Value);
                         break;
                     case "CoaxDownL":
-                        CoaxialityDownL = Convert.ToDouble(item.Value);
+                        CoaxDownL = Convert.ToDouble(item.Value);
                         break;
                     case "HFUp":
                         HfUp = Convert.ToDouble(item.Value);
@@ -437,17 +395,14 @@ namespace MES
 
 
 
-        #region PLC-OPC相关
+        #region PLC相关
 
         /// <summary>
         /// 初始化PLC通讯
         /// </summary>
-        private void InitPLCCommunication()
+        private bool OpenPlc()
         {
-            //实例化一个西门子通讯对象
-            //m_siemensTcpNet = new SiemensS7Net(SiemensPLCS.S1500);
-            //m_siemensTcpNet.IpAddress = AppSetting.GetPLCIP();
-
+            OpcServiceUrl = string.Empty;
             //实例化一个OPC客户端对象
             if (IsStation_S)
             {
@@ -457,7 +412,6 @@ namespace MES
             {
                 OpcServiceUrl = "opc.tcp://192.168.0.85:4840";
             }
-            //OpcServiceUrl = AppSetting.GetOPCAddress();
             OpcUaClient = new OpcUaClient();
 
             try
@@ -467,9 +421,15 @@ namespace MES
             }
             catch (Exception ex)
             {
-                MessageBox.Show("连接PLC失败,请检查网络连接！");
-                LogNetProgramer.WriteError("异常", "OPC服务器连接失败：" + ex.Message);
+                m_errorCount++;
+                if (m_errorCount > 50)
+                {
+                    m_errorCount = 0;
+                    LogNetProgramer.WriteError("异常", "PLC连接失败：" + ex.Message);
+                }
+                return false;
             }
+            return true;
         }
 
         private void OpcUaClient_OpcStatusChange(object sender, OpcUaStatusEventArgs e)
@@ -485,31 +445,19 @@ namespace MES
 
             if (e.Error)
             {
-                b_opcError = e.Error;
                 try
                 {
                     OpcUaClient.ConnectServer(OpcServiceUrl);
-                    AddTips("与PLC重新建立连接！", false);
+                    b_opcState = true;
+                    AddTips("PLC重新建立连接！", false);
                 }
                 catch (Exception ex)
                 {
-                    LogNetProgramer.WriteError("异常", "与PLC重新建立连接失败！" + ex.Message);
+                    b_opcState = false;
+                    LogNetProgramer.WriteError("异常", "PLC重新建立连接失败！" + ex.Message);
                     AddTips(ResourceCulture.GetValue("PLCConnectException"), true);
                 }
             }
-        }
-
-        /// <summary>
-        /// 检测opc连接状态
-        /// </summary>
-        /// <returns></returns>
-        public bool CheckOpcConnected()
-        {
-            if (OpcUaClient != null && OpcUaClient.Connected)
-            {
-                return true;
-            }
-            return false;
         }
 
         #endregion
@@ -525,14 +473,14 @@ namespace MES
         private string m_lwmCode = string.Empty;
 
         /// <summary>
-        /// 建立LWM通讯TCP
+        /// 建立LWM通讯
         /// </summary>
-        private bool InitLwmSocket()
+        private bool OpenLwmSocket()
         {
             try
             {
                 m_socketLwm = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                endPoint = new IPEndPoint(IPAddress.Parse(m_lwmIp), m_lwmContentPort);
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.60"), 8000);//8000;//700：控制端口
 
                 if (!m_socketLwm.Connected)
                 {
@@ -543,12 +491,11 @@ namespace MES
             }
             catch (Exception ex)
             {
+                AddTips("LWM连接失败,请检查网络连接！", true);
                 m_errorCount++;
                 if (m_errorCount > 10)
                 {
                     m_errorCount = 0;
-                    AddTips("LWM连接失败！", true);
-                    //MessageBox.Show("LWM连接失败，请检查网络连接！");
                     LogNetProgramer.WriteDebug("LWM连接异常：" + ex.Message);
                 }
                 return false;
@@ -561,28 +508,29 @@ namespace MES
             {
                 try
                 {
-                    if (m_socketLwm == null || !m_socketLwm.Connected) InitLwmSocket();
+                    if (m_socketLwm == null || !m_socketLwm.Connected) OpenLwmSocket();
                     m_socketLwm.Send(Encoding.ASCII.GetBytes(barcode));
                     b_sendLwmDataSuccess = true;
-                    TcpSafeClose(m_socketLwm);
+                    LwmHelper.GetInstance().SafeClose(m_socketLwm);
+                    //TcpSafeClose(m_socketLwm);
                 }
                 catch (Exception ex)
                 {
+                    b_sendLwmDataSuccess = false;
                     m_errorCount++;
                     if (m_errorCount > 10)
                     {
                         m_errorCount = 0;
                         LogNetProgramer.WriteError("异常", "发送LWM条码异常：" + ex.Message);
                     }
-                    b_sendLwmDataSuccess = false;
                 }
             }
         }
 
         /// <summary>
-        /// 读取 OPC LWM检测结果
+        /// 读取 PLC LWM检测结果
         /// </summary>
-        private void LwmCheck()
+        private void GetLwmDataFromPlc()
         {
             while (IsWindowShow)
             {
@@ -598,19 +546,19 @@ namespace MES
                         if (result == 1)
                         {
                             b_lwmResult = true;
-                            btnLwmCheck.UIText = "OK";
-                            btnLwmCheck.OriginalColor = Color.Lime;
+                            txtLwmCheck.UIText = "OK";
+                            txtLwmCheck.OriginalColor = Color.Lime;
                         }
                         else if (result == 2)
                         {
                             b_lwmResult = false;
-                            btnLwmCheck.UIText = "NG";
-                            btnLwmCheck.OriginalColor = Color.Red;
+                            txtLwmCheck.UIText = "NG";
+                            txtLwmCheck.OriginalColor = Color.Red;
                         }
                         else
                         {
-                            btnLwmCheck.UIText = "LwmResult:0";
-                            btnLwmCheck.OriginalColor = Color.OrangeRed;
+                            txtLwmCheck.UIText = "LwmResult:0";
+                            txtLwmCheck.OriginalColor = Color.OrangeRed;
                         }
 
                         OpcUaClient.WriteNode(PlcHelper.OPC_DB_LwmCheck, 0);
@@ -627,7 +575,9 @@ namespace MES
             }
         }
 
+
         #endregion
+
 
         public bool TcpSafeClose(Socket socket)
         {
@@ -637,10 +587,10 @@ namespace MES
             try
             {
                 socket.Shutdown(SocketShutdown.Both);
-                Thread.Sleep(10);
 
                 socket.Close();
                 socket.Dispose();
+                socket = null;
                 return true;
             }
             catch (Exception ex)
@@ -657,22 +607,21 @@ namespace MES
 
         #region 扫描仪相关
 
-        private void InitScanSocket()
+        private bool OpenScanSocket()
         {
             try
             {
-                string scanIP;
                 if (IsStation_S)
                 {
-                    scanIP = m_scanSmallIp;
+                    ScanIP = "192.168.0.78";
                 }
                 else
                 {
-                    scanIP = m_scanLargeIp;
+                    ScanIP = "192.168.0.88";
                 }
 
                 m_socketScan = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                endPoint = new IPEndPoint(IPAddress.Parse(scanIP), m_scanPort);
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ScanIP), 9004);
 
                 if (!m_socketScan.Connected)
                 {
@@ -687,10 +636,10 @@ namespace MES
             catch (Exception ex)
             {
                 m_scanRun = false;
-                AddTips("扫描仪SR-751连接失败！", true);
-                MessageBox.Show("扫描仪SR-751连接失败，请检查网络连接！");
+                AddTips("扫描仪SR-751连接失败,请检查网络连接！", true);
                 LogNetProgramer.WriteDebug("扫描仪连接异常：" + ex.Message);
             }
+            return m_scanRun;
         }
 
         private byte[] scanData;
@@ -755,8 +704,11 @@ namespace MES
             }
         }
 
+
         #endregion
 
+
+        #region 小环相关
 
         private double CoaxialityS;
         private int m_surface;
@@ -777,7 +729,7 @@ namespace MES
             {
                 try
                 {
-                    if (CheckOpcConnected())
+                    if (CheckPlcState())
                     {
                         bool order = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCode);
                         if (order)
@@ -809,7 +761,6 @@ namespace MES
                         m_errorCount = 0;
                         LogNetProgramer.WriteError("异常", "保存小环焊接数据异常-->" + ex.Message);
                     }
-                    //AddTips(ResourceCulture.GetValue("PLCConnectException"), true);
                 }
 
                 Thread.Sleep(200);
@@ -818,6 +769,7 @@ namespace MES
 
         private void CollectWeldData()
         {
+            objs.Clear();
             objs = WeldHelper.CollectWeldData(OpcUaClient, PlcHelper.Nodes_S);
 
             if (objs != null && objs.Count > 0)
@@ -829,8 +781,12 @@ namespace MES
                 avgPower = Math.Round(Convert.ToDouble(objs[4]), 3);
                 avgPressure = Math.Round(Convert.ToDouble(objs[5]), 3);
                 avgFlow = Math.Round(Convert.ToDouble(objs[6]), 3);
+
+                FlowUp = Math.Round(Convert.ToDouble(objs[7]), 3);
+                FlowDown = Math.Round(Convert.ToDouble(objs[8]), 3);
+
                 avgSpeed = Convert.ToInt32(objs[7]);
-                m_weldTimeS = Math.Round(Convert.ToDouble(objs[8]), 3);
+                m_weldTime = Math.Round(Convert.ToDouble(objs[8]), 3);
                 CurrentBarCode = objs[9].ToString();
                 CoaxialityS = Math.Round(Convert.ToDouble(objs[10]), 3);
                 m_surface = Convert.ToInt32(objs[11]);
@@ -843,46 +799,44 @@ namespace MES
         /// </summary>
         private void UpdateCCDUI()
         {
-            //Invoke(new Action(() =>
-            //{
-            if (m_surface == 1)
+            Invoke(new Action(() =>
             {
-                m_surfaceType = "OK";
-                txtSurface.UIText = "OK";
-                txtSurface.OriginalColor = Color.Lime;
-                b_surfaceCheck = b_coaCheckS = true;
-            }
-            else if (m_surface == 3)
-            {
-                m_surfaceType = "瑕疵NG";
-                txtSurface.UIText = "瑕疵NG";
-                txtSurface.OriginalColor = Color.Red;
-                b_surfaceCheck = false;
-            }
-            else if (m_surface == 4)
-            {
-                m_surfaceType = "同心度NG";
-                txtSurface.UIText = "NG";
-                txtSurface.OriginalColor = Color.Red;
-                b_coaCheckS = false;
-            }
+                if (m_surface == 1)
+                {
+                    m_surfaceType = "OK";
+                    txtSurface.UIText = "OK";
+                    txtSurface.OriginalColor = Color.Lime;
+                    b_surfaceCheck = b_coaCheckS = true;
+                }
+                else if (m_surface == 3)
+                {
+                    m_surfaceType = "瑕疵NG";
+                    txtSurface.UIText = "瑕疵NG";
+                    txtSurface.OriginalColor = Color.Red;
+                    b_surfaceCheck = false;
+                }
+                else if (m_surface == 4 || !TypeCoaxiality(CoaxialityS))
+                {
+                    m_surfaceType = "同心度NG";
+                    txtSurface.UIText = "NG";
+                    txtSurface.OriginalColor = Color.Red;
+                    b_coaCheckS = false;
+                }
 
-            if (m_lwmResult == 1)
-            {
-                b_lwmResult = true;
-                btnLwmCheck.UIText = "OK";
-                btnLwmCheck.OriginalColor = Color.Lime;
-            }
-            else if (m_lwmResult == 2)
-            {
-                b_lwmResult = false;
-                btnLwmCheck.UIText = "NG";
-                btnLwmCheck.OriginalColor = Color.Red;
-            }
-
-            txtCoaxility.UIText = CoaxialityS + "mm";
-            //}));
-
+                if (m_lwmResult == 1)
+                {
+                    b_lwmResult = true;
+                    txtLwmCheck.UIText = "OK";
+                    txtLwmCheck.OriginalColor = Color.Lime;
+                }
+                else if (m_lwmResult == 2)
+                {
+                    b_lwmResult = false;
+                    txtLwmCheck.UIText = "NG";
+                    txtLwmCheck.OriginalColor = Color.Red;
+                }
+                txtCoaxility.UIText = CoaxialityS + "mm";
+            }));
 
         }
 
@@ -895,8 +849,8 @@ namespace MES
             {
                 if (b_startModifyS)
                 {
-                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,Pressure=@press,WeldTime=@time," +
-                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coa,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
+                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown,Pressure=@press,WeldTime=@time," +
+                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coa,CoaxUp=@coaxUp,CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
 
                     if (b_surfaceCheck && b_coaCheckS && b_lwmResult) b_qcResult = true;
                     else b_qcResult = false;
@@ -905,18 +859,25 @@ namespace MES
                     {
                         SqlParameter[] sqlParameters =
                         {
+                            //new SqlParameter {ParameterName = "@workNo", SqlDbType = SqlDbType.Decimal, SqlValue = WorkNo},
                             new SqlParameter {ParameterName = "@power", SqlDbType = SqlDbType.Decimal, SqlValue = avgPower},
-                            new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
                             new SqlParameter {ParameterName = "@press", SqlDbType = SqlDbType.Decimal, SqlValue = avgPressure},
-                            new SqlParameter {ParameterName = "@coa", SqlDbType = SqlDbType.Decimal, SqlValue = CoaxialityS},
                             new SqlParameter {ParameterName = "@speed", SqlDbType = SqlDbType.Int, SqlValue = avgSpeed},
+                            new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
+
+                            new SqlParameter {ParameterName = "@flowUp", SqlDbType = SqlDbType.Decimal, SqlValue = FlowUp},
+                            new SqlParameter {ParameterName = "@flowDown", SqlDbType = SqlDbType.Decimal, SqlValue = FlowDown},
+
+                            new SqlParameter {ParameterName = "@coa", SqlDbType = SqlDbType.Decimal, SqlValue = CoaxialityS},
+                            new SqlParameter {ParameterName = "@coaxUp", SqlDbType = SqlDbType.Decimal, SqlValue = CoaxUpS},
+                            new SqlParameter {ParameterName = "@coaxDown", SqlDbType = SqlDbType.Decimal, SqlValue = CoaxDownS},
 
                             new SqlParameter {ParameterName = "@x", SqlDbType = SqlDbType.Decimal, SqlValue = WeldXPos},
                             new SqlParameter {ParameterName = "@y", SqlDbType = SqlDbType.Decimal, SqlValue = WeldYPos},
                             new SqlParameter {ParameterName = "@z", SqlDbType = SqlDbType.Decimal, SqlValue = WeldZPos},
                             new SqlParameter {ParameterName = "@r", SqlDbType = SqlDbType.Decimal, SqlValue = WeldRPos},
 
-                            new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTimeS},
+                            new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTime},
                             new SqlParameter {ParameterName = "@sur", SqlDbType = SqlDbType.NVarChar, SqlValue = m_surfaceType},
                             new SqlParameter {ParameterName = "@lwm", SqlDbType = SqlDbType.NVarChar, SqlValue = b_lwmResult==true ? "OK":"NG"},
                             new SqlParameter {ParameterName = "@qcr", SqlDbType = SqlDbType.NVarChar, SqlValue = b_qcResult==true ? "OK":"NG"},
@@ -939,7 +900,7 @@ namespace MES
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataFail") + "BarCode：" + CurrentBarCode, true);
 
                                 LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow + "avgPressure:" + avgPressure +
-                                    "CoaxialityS：" + CoaxialityS + "avgSpeed：" + avgSpeed + "m_weldTimeS：" + m_weldTimeS);
+                                    "CoaxialityS：" + CoaxialityS + "avgSpeed：" + avgSpeed + "m_weldTimeS：" + m_weldTime);
                             }
                             b_startModifyS = !b_startModifyS;
                         }
@@ -973,14 +934,14 @@ namespace MES
             bool res = true;
             if (IsStation_S)
             {
-                if (coa > CoaxialityUpS || coa < CoaxialityDownS)//小环（-0.3~0.3）
+                if (coa > CoaxUpS || coa < CoaxDownS)//小环
                 {
                     res = false;
                 }
             }
             else
             {
-                if (coa > CoaxialityUpL || coa < CoaxialityDownL)//大环（-0.15~0.2）
+                if (coa > CoaxUpL || coa < CoaxDownL)//大环
                 {
                     res = false;
                 }
@@ -989,14 +950,18 @@ namespace MES
             return res;
         }
 
+
+        #endregion
+
+
         /// <summary>
         /// 初始化提醒检测模块
         /// </summary>
         private void InitWarnCheck()
         {
-            Self_Checek_Interval = AppSetting.GetCheckInterval();
+            int interval = AppSetting.GetCheckInterval();
 
-            if (Self_Checek_Interval < 1)
+            if (interval < 1)
             {
                 MessageBox.Show("自检间隔不能小于一小时！请重新配置后重启软件！");
                 return;
@@ -1004,18 +969,15 @@ namespace MES
 
             m_selfCheckTimer = new Timer();
             m_selfCheckTimer.Tick += new EventHandler(SelfeCheck_Tick);
-            m_selfCheckTimer.Interval = Self_Checek_Interval * 1000;// * 3600;
+            m_selfCheckTimer.Interval = 1 * 1000;// * 3600;
             m_selfCheckTimer.Enabled = true;
         }
 
         private void SelfeCheck_Tick(object sender, EventArgs e)
         {
-            //报警器提醒检测
-            OpcUaClient.WriteNode(PlcHelper.OPC_DB_WarnCheck, 1);
-
             //窗口提醒检测
-            //selfCheckWarmForm = new SelfCheckWarmForm(this);
-            //selfCheckWarmForm?.Show();
+            SelfCheckWarmForm selfCheckWarmForm = new SelfCheckWarmForm(this);
+            selfCheckWarmForm.Show();
         }
 
 
@@ -1025,8 +987,6 @@ namespace MES
         private CollectingSystem collecting;
 
         private TraceSystem traceSystem;
-
-        private LogSystemControl logSystem;
 
         private LogErrorControl logError;
 
@@ -1038,9 +998,6 @@ namespace MES
             traceSystem = new TraceSystem(this);
             traceSystem.Dock = DockStyle.Fill;
 
-            logSystem = new LogSystemControl(this);
-            logSystem.Dock = DockStyle.Fill;
-
             logError = new LogErrorControl(this);
             logError.Dock = DockStyle.Fill;
 
@@ -1051,25 +1008,20 @@ namespace MES
         private void btnCollection_Click(object sender, EventArgs e)
         {
             collecting.Show();
-
             traceSystem.Hide();
-            logSystem.Hide();
-
+            logError.Hide();
         }
 
         private void btnTraceSystem_Click(object sender, EventArgs e)
         {
             traceSystem.Show();
-
             collecting.Hide();
-            logSystem.Hide();
+            logError.Hide();
         }
 
         private void btnLogSystem_Click(object sender, EventArgs e)
         {
-            //logSystem.Show();
             logError.Show();
-
             collecting.Hide();
             traceSystem.Hide();
         }
@@ -1128,16 +1080,6 @@ namespace MES
         #endregion
 
 
-        //检测数据库是否连接正常
-        public bool CheckDbConnected()
-        {
-            if (DbTool.m_sqlCon == null)
-            {
-                return false;
-            }
-            return true;
-        }
-
         public delegate void SetTips(string s, bool boo);
         public void AddTips(string v, bool error)
         {
@@ -1189,32 +1131,26 @@ namespace MES
             //Invoke(new MethodInvoker(delegate () { }));
         }
 
-        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        public void HideTips()
         {
-            //DialogResult result = MessageBox.Show("是否关闭应用程序？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (DialogResult.Yes == result)
-            //{
-            //    e.Cancel = false;
-
-            //using (FormQuitWait form = new FormQuitWait(() =>
-            //{
-            //    CloseCommunicate();
-            //}))
-            //{
-            //    form.ShowDialog();
-            //}
-
-            IsWindowShow = false;
-            OnWindowState(this, new MyEvent() { IsWindowShow = false });
-            Application.Exit();
-
-            //}
-            //else
-            //{
-            //    e.Cancel = true;
-            //}
-
+            try
+            {
+                if (IsWindowShow && !this.IsDisposed)
+                {
+                    if (this.InvokeRequired)
+                    {
+                        toolTips.Text = ResourceCulture.GetValue("Tips");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogNetProgramer.WriteError("异常", "HideTips:" + ex.Message);
+            }
         }
+
+
+        #region 登录相关
 
         private bool Result = false;
 
@@ -1261,6 +1197,9 @@ namespace MES
             CurrentUser = e.LoginUser;
         }
 
+        #endregion
+
+
 
         //手动输入条码
         private void txtFirstScan_KeyPress(object sender, KeyPressEventArgs e)
@@ -1273,7 +1212,6 @@ namespace MES
 
                 MonitorBarCode(CurrentBarCode);
                 txtBarCode.Text = string.Empty;
-
             }
         }
 
@@ -1283,8 +1221,6 @@ namespace MES
             if (m_scanErrorCount >= 2)//如果扫码失败次数大于2次
             {
                 m_scanErrorCount = 0;
-                //AddTips(" 扫码失败次数大于两次！ ", true);
-                //ScanCallBack(2);
                 return;
             }
 
@@ -1308,9 +1244,7 @@ namespace MES
 
             ScanCallBack(1);
 
-            //CurrentBarCode = barCode.Replace("ERROR", "");
-
-            CurrentBarCodeScan = CurrentBarCode = barCode;
+            CurrentBarCode = barCode;
 
             int rs = IsStorage(CurrentBarCode);
             if (rs != 3)
@@ -1328,9 +1262,6 @@ namespace MES
 
                 AddTips(ResourceCulture.GetValue("BarCodeTips") + CurrentBarCode, false);
             }
-
-            //若存在此产品，则执行检测操作
-            //SelfCheck(barCode);
         }
 
         /// <summary>
@@ -1355,7 +1286,7 @@ namespace MES
         }
 
         /// <summary>
-        /// 判断产品是否入库
+        /// 产品是否入库
         /// </summary>
         /// <param name="barCode"></param>
         /// <returns>产品是否入库</returns>
@@ -1371,12 +1302,11 @@ namespace MES
             }
             else if (exist == 2)//不存在
             {
-                string sql = "insert into Product(PNo,StorageTime) Values('" + barCode + "','" + DateTime.Now + "')";
+                string sql = "INSERT INTO Product(PNo,StorageTime) Values('" + barCode + "','" + DateTime.Now + "')";
                 int c = DbTool.ModifyTable(sql);
                 if (c > 0)
                 {
                     rs = 2;
-                    Debug.Write(barCode + "入库成功！");
                 }
                 else
                 {
@@ -1387,97 +1317,30 @@ namespace MES
             return rs;
         }
 
+
+        #region 内存回收
+        [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize")]
+        public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
         /// <summary>
-        /// 检测产品数据是否合格
+        /// 释放内存
         /// </summary>
-        /// <param name="pno"></param>
-        /// <returns></returns>
-        private bool SelfCheck(string pno)
+        public static void ClearMemory()
         {
-            Product pro = DbTool.SelectProductByNo(pno);
-
-            if (pro != null)
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                //合格标准判断
-                bool pass = true;
-
-                if (pro.QCResult == "NG")
-                {
-                    pass = false;
-                    LogNetUser.WriteInfo("正常", "产品条码：" + pro.PNo + "，不合格！");
-                }
-                else
-                {
-                    if (IsStation_S) //小环（-0.3~0.3）
-                    {
-                        if (pro.Coaxiality > CoaxialityUpS || pro.Coaxiality < CoaxialityDownS)
-                        {
-                            pass = false;
-                            LogNetUser.WriteInfo("正常", "小环同心度NG，,同心度：" + pro.Coaxiality + ",产品条码：" + pro.PNo);
-                        }
-                        else if (pro.Surface.Equals("表面NG"))
-                        {
-                            pass = false;
-                            LogNetUser.WriteInfo("正常", "小环表面NG，产品条码：" + pro.PNo);
-                        }
-                    }
-                    else //大环（-0.15~0.2）
-                    {
-                        if (pro.Coaxiality > CoaxialityUpL || pro.Coaxiality < CoaxialityDownL)
-                        {
-                            pass = false;
-                            LogNetUser.WriteInfo("正常", "大环同心度NG,同心度：" + pro.Coaxiality + "，产品条码：" + pro.PNo);
-                        }
-                        else if (pro.Surface.Equals("焊缝NG"))
-                        {
-                            pass = false;
-                            LogNetUser.WriteInfo("正常", "大环焊缝NG，产品条码：" + pro.PNo);
-                        }
-                    }
-                }
-
-                if (!pass)
-                {
-                    //AddTips("产品编号:" + pro.PNo + "，检测NG！");
-
-                    //不合格，报警并停机...
-                    //m_opcUaClient.WriteNode("ns=3;s=\"WeldPara\".\"CheckResult\"", 2);
-
-                    m_ngProduct = pro;
-                    return false;
-                }
-                else
-                {
-                    //AddTips("检测结果：OK，开始焊接！");
-                    //合格开始焊接
-                    //m_opcUaClient.WriteNode("ns=3;s=\"WeldPara\".\"CheckResult\"", 1);
-
-                    m_curProduct = pro;
-                    LogNetUser.WriteInfo("检测合格，产品条码：" + pro.PNo);
-                }
+                SetProcessWorkingSetSize(Process.GetCurrentProcess().Handle, -1, -1);
             }
-            else
-            {
-                return false;
-            }
-            return true;
         }
+        #endregion
 
 
+        #region 大环相关
 
-        #region Vision相关
-
-        private int _currentDeviceId;
-
-        private List<MeasureData> _measureDatas = new List<MeasureData>();
-
-        private DeviceData[] _deviceData = new DeviceData[NativeMethods.DeviceCount];
+        private int _currentDeviceId = 0;
 
         private LJV7IF_MEASURE_DATA[] measureData = new LJV7IF_MEASURE_DATA[NativeMethods.MeasurementDataCount];
-
-        private float[] m_allDatas = new float[NativeMethods.MeasurementDataCount];//全部数据
-
-        private float[] m_vaildDatas = new float[NativeMethods.MeasurementDataCount];//有效数据
 
         private float heightData = float.NaN;//每次采样的高度差
 
@@ -1494,11 +1357,8 @@ namespace MES
         private float avgCoax = 0;
 
         private double avgPower = 0;//采集功率数据平均值
-
         private double avgFlow = 0;
-
         private int avgSpeed = 0;
-
         private double avgPressure = 0;
 
         //实际坐标-PLC
@@ -1513,7 +1373,7 @@ namespace MES
             {
                 try
                 {
-                    if (CheckOpcConnected())
+                    if (CheckPlcState())
                     {
                         m_weldOrder = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_VisionOrder);//PLC是否发送焊接指令
 
@@ -1539,7 +1399,7 @@ namespace MES
                     }
                     //AddTips(ResourceCulture.GetValue("PLCConnectException"), true);
                 }
-                Thread.Sleep(m_visionCollectInterval);
+                Thread.Sleep(300);
             }
         }
 
@@ -1555,7 +1415,7 @@ namespace MES
 
         private void AnalysisVisionData()
         {
-            if (m_weldOrder == 1)//开始焊接
+            if (m_weldOrder == 1 && VisionLJ7000.Instance.Connected)//开始焊接
             {
                 int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
 
@@ -1593,6 +1453,7 @@ namespace MES
 
         private void CollectWeldDataL()
         {
+            objs.Clear();
             objs = WeldHelper.CollectWeldData(OpcUaClient, PlcHelper.Nodes_L);
 
             if (objs != null && objs.Count > 0)
@@ -1604,8 +1465,12 @@ namespace MES
                 avgPower = Math.Round(Convert.ToDouble(objs[4]), 3);
                 avgPressure = Math.Round(Convert.ToDouble(objs[5]), 3);
                 avgFlow = Math.Round(Convert.ToDouble(objs[6]), 3);
+
+                FlowUp = Math.Round(Convert.ToDouble(objs[7]), 3);
+                FlowDown = Math.Round(Convert.ToDouble(objs[8]), 3);
+
                 avgSpeed = Convert.ToInt32(objs[7]);
-                m_weldTimeL = Math.Round(Convert.ToDouble(objs[8]), 3);
+                m_weldTime = Math.Round(Convert.ToDouble(objs[8]), 3);
                 CurrentBarCode = objs[9].ToString();
                 m_lwmResult = Convert.ToInt32(objs[10]);
             }
@@ -1628,14 +1493,14 @@ namespace MES
             if (m_lwmResult == 1)
             {
                 b_lwmResult = true;
-                btnLwmCheck.UIText = "OK";
-                btnLwmCheck.OriginalColor = Color.Lime;
+                txtLwmCheck.UIText = "OK";
+                txtLwmCheck.OriginalColor = Color.Lime;
             }
             else if (m_lwmResult == 2)
             {
                 b_lwmResult = false;
-                btnLwmCheck.UIText = "NG";
-                btnLwmCheck.OriginalColor = Color.Red;
+                txtLwmCheck.UIText = "NG";
+                txtLwmCheck.OriginalColor = Color.Red;
             }
 
             if (height < 0 || height > 10 || float.IsNaN(height))//非数字无效值
@@ -1645,7 +1510,7 @@ namespace MES
 
             if (coax < 0 || coax > 10 || float.IsNaN(coax))//非数字无效值
             {
-                avgCoax = (float)CoaxialityUpL + ((float)random.NextDouble() * 1000) / 1000;
+                avgCoax = (float)CoaxUpL + ((float)random.NextDouble() * 1000) / 1000;
                 txtCoaxility.UIText = avgCoax.ToString("0.000") + "mm";//"NaN";
             }
             else
@@ -1653,7 +1518,7 @@ namespace MES
                 txtCoaxility.UIText = coax.ToString("0.000") + "mm";
             }
 
-            if (height < HfUp && height > HfDown && coax < CoaxialityUpL && coax > CoaxialityDownL) //TYPE 1 同心度和焊缝都合格
+            if (height < HfUp && height > HfDown && coax < CoaxUpL && coax > CoaxDownL) //TYPE 1 同心度和焊缝都合格
             {
                 m_surfaceCheckL = "OK";
                 txtSurface.UIText = "OK";
@@ -1661,7 +1526,7 @@ namespace MES
                 txtSurface.OriginalColor = Color.Lime;
                 return 1;
             }
-            else if (coax > CoaxialityUpL || coax < CoaxialityDownL)
+            else if (coax > CoaxUpL || coax < CoaxDownL)
             {
                 m_surfaceCheckL = ResourceCulture.GetValue("CoaxialityNG");
                 txtSurface.UIText = ResourceCulture.GetValue("CoaxialityNG");
@@ -1690,8 +1555,8 @@ namespace MES
             {
                 if (b_startModifyL)
                 {
-                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,Pressure=@press,WeldDepth=@depth,WeldTime=@time," +
-                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
+                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown,Pressure=@press,WeldDepth=@depth,WeldTime=@time," +
+                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,CoaxUp=@coaxUp,CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
 
                     if (b_visionCheck && b_lwmResult) b_qcResult = true;
                     else b_qcResult = false;
@@ -1700,19 +1565,26 @@ namespace MES
                     {
                         SqlParameter[] sqlParameters =
                         {
+                            //new SqlParameter {ParameterName = "@workNo", SqlDbType = SqlDbType.Decimal, SqlValue = WorkNo},
                             new SqlParameter {ParameterName = "@power", SqlDbType = SqlDbType.Decimal, SqlValue = avgPower},
-                            new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
                             new SqlParameter {ParameterName = "@press", SqlDbType = SqlDbType.Decimal, SqlValue = avgPressure},
-                            new SqlParameter {ParameterName = "@depth", SqlDbType = SqlDbType.Decimal, SqlValue = avgHeight},
-                            new SqlParameter {ParameterName = "@coax", SqlDbType = SqlDbType.Decimal, SqlValue = avgCoax},
                             new SqlParameter {ParameterName = "@speed", SqlDbType = SqlDbType.Int, SqlValue = avgSpeed},
+                            new SqlParameter {ParameterName = "@depth", SqlDbType = SqlDbType.Decimal, SqlValue = avgHeight},
+                            new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
+
+                            new SqlParameter {ParameterName = "@flowUp", SqlDbType = SqlDbType.Decimal, SqlValue = FlowUp},
+                            new SqlParameter {ParameterName = "@flowDown", SqlDbType = SqlDbType.Decimal, SqlValue = FlowDown},
+
+                            new SqlParameter {ParameterName = "@coax", SqlDbType = SqlDbType.Decimal, SqlValue = avgCoax},
+                            new SqlParameter {ParameterName = "@coaxUp", SqlDbType = SqlDbType.Decimal, SqlValue = CoaxUpL},
+                            new SqlParameter {ParameterName = "@coaxDown", SqlDbType = SqlDbType.Decimal, SqlValue = CoaxDownL},
 
                             new SqlParameter {ParameterName = "@x", SqlDbType = SqlDbType.Decimal, SqlValue = WeldXPos},
                             new SqlParameter {ParameterName = "@y", SqlDbType = SqlDbType.Decimal, SqlValue = WeldYPos},
                             new SqlParameter {ParameterName = "@z", SqlDbType = SqlDbType.Decimal, SqlValue = WeldZPos},
                             new SqlParameter {ParameterName = "@r", SqlDbType = SqlDbType.Decimal, SqlValue = WeldRPos},
 
-                            new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTimeL},
+                            new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTime},
                             new SqlParameter {ParameterName = "@sur", SqlDbType = SqlDbType.NVarChar, SqlValue = m_surfaceCheckL},
                             new SqlParameter {ParameterName = "@lwm", SqlDbType = SqlDbType.NVarChar, SqlValue = b_lwmResult==true ? "OK":"NG"},
                             new SqlParameter {ParameterName = "@qcr", SqlDbType = SqlDbType.NVarChar, SqlValue = b_qcResult==true ? "OK":"NG"},
@@ -1736,7 +1608,7 @@ namespace MES
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = false });
 
                                 LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow + "avgPressure:" + avgPressure +
-                                   "avgHeight：" + avgHeight + "avgCoax：" + avgCoax + "avgSpeed：" + avgSpeed + "m_weldTimeL：" + m_weldTimeL);
+                                   "avgHeight：" + avgHeight + "avgCoax：" + avgCoax + "avgSpeed：" + avgSpeed + "m_weldTimeL：" + m_weldTime);
                             }
                             b_startModifyL = !b_startModifyL;
                         }
@@ -1783,7 +1655,7 @@ namespace MES
         #endregion
 
 
-        #region MyTest
+        #region 测试用
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1792,7 +1664,7 @@ namespace MES
 
             CurrentBarCode = "3";
             avgCoax = avgHeight = (float)100.1235;
-            m_weldTimeL = WeldRPos = WeldZPos = WeldYPos = WeldXPos = avgPressure = avgFlow = avgPower = 111.2225;
+            m_weldTime = WeldRPos = WeldZPos = WeldYPos = WeldXPos = avgPressure = avgFlow = avgPower = 111.2225;
 
             SqlParameter[] sqlParameters =
             {
@@ -1808,7 +1680,7 @@ namespace MES
                     new SqlParameter {ParameterName = "@z", SqlDbType = SqlDbType.Decimal, SqlValue = WeldZPos},
                     new SqlParameter {ParameterName = "@r", SqlDbType = SqlDbType.Decimal, SqlValue = WeldRPos},
 
-                    new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTimeL},
+                    new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTime},
                     new SqlParameter {ParameterName = "@sur", SqlDbType = SqlDbType.NVarChar, SqlValue = m_surfaceCheckL},
                     new SqlParameter {ParameterName = "@lwm", SqlDbType = SqlDbType.NVarChar, SqlValue = b_lwmResult==true ? "OK":"NG"},
                     new SqlParameter {ParameterName = "@qcr", SqlDbType = SqlDbType.NVarChar, SqlValue = b_qcResult==true ? "OK":"NG"},
@@ -1838,7 +1710,7 @@ namespace MES
 
         private void TestLwm()
         {
-            if (!InitLwmSocket())
+            if (!OpenLwmSocket())
             {
                 MessageBox.Show(ResourceCulture.GetValue("LwmConnectFail"));
                 return;
@@ -1866,7 +1738,6 @@ namespace MES
 
         private void ReceiveCallback(IAsyncResult ar)
         {
-            /*
             if (ar.AsyncState is StateObject state)
             {
                 try
@@ -1904,7 +1775,7 @@ namespace MES
                     state.ErrerMsg = ex.Message;
                     state.WaitDone.Set();
                 }
-            }*/
+            }
         }
 
         private byte[] AnalysicLwmData(byte[] barcode)
@@ -1928,12 +1799,6 @@ namespace MES
         #endregion
 
 
-        private string m_light = string.Empty;
-
-        private string m_sqlUpdateState = string.Empty;
-
-        private DateTime m_stateUpdateTime = DateTime.Now;
-
         //实时监听设备状态
         private void MonitorState()
         {
@@ -1941,7 +1806,7 @@ namespace MES
             {
                 try
                 {
-                    if (CheckOpcConnected())
+                    if (CheckPlcState())
                     {
                         DeviceState = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_OffLine);
                         //Task<int> t = OpcUaClient.ReadNodeAsync<int>(s_offLine);
@@ -1986,6 +1851,7 @@ namespace MES
                 lanternState.LanternBackground = Color.Gray;
             }
 
+            string m_light = string.Empty;
             switch (light)
             {
                 case 1:
@@ -2002,9 +1868,9 @@ namespace MES
                     break;
             }
 
-            m_stateUpdateTime = DateTime.Now;
-            m_sqlUpdateState = " update DeviceState set State=('" + m_light + "'),UpdateTime='" + m_stateUpdateTime + "' ; ";
-            int rs = DbTool.ModifyTable(m_sqlUpdateState, null);
+            string sqlUpdateState = " update DeviceState set State=('" + m_light + "'),UpdateTime='" + DateTime.Now + "' ; ";
+            int rs = DbTool.ModifyTable(sqlUpdateState, null);
+            if (rs <= 0) LogNetProgramer.WriteError("更新设备状态失败：" + rs);
         }
 
         /// <summary>
@@ -2050,8 +1916,8 @@ namespace MES
 
         private void 点检中心ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OnClickSpotForm(this, new MyEvent() { HideSpotForm = false });
-            m_spotCheckForm.Show();
+            //OnClickSpotForm(this, new MyEvent() { HideSpotForm = false });
+            //m_spotCheckForm.Show();
         }
 
         private void 中文ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2079,7 +1945,7 @@ namespace MES
                 ShowInTaskbar = true;
 
                 //托盘图标隐藏
-                notifyIcon1.Visible = false;
+                //notifyIcon1.Visible = false;
             }
         }
 
@@ -2088,9 +1954,15 @@ namespace MES
             //判断窗体是否为最小化
             if (WindowState == FormWindowState.Minimized)
             {
-                ShowInTaskbar = false;
-                notifyIcon1.Visible = true;
+                //ShowInTaskbar = false;
+                exeIcon.Visible = true;
             }
+        }
+
+        //垃圾定时回收
+        private void timerGC_Tick(object sender, EventArgs e)
+        {
+            ClearMemory();
         }
 
         private void 英语ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2102,6 +1974,12 @@ namespace MES
             AppSetting.SetLanguage(Culture);
 
             //MessageBox.Show("Select English");
+        }
+
+        private void 通讯监控ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormMonitor form = new FormMonitor(this);
+            form.ShowDialog();
         }
 
         private void 点检记录ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2127,7 +2005,8 @@ namespace MES
 
             if (!Result || !CheckUserAuth()) return;
 
-            UsersTable = DbTool.SelectTable(m_selectAllUsers);
+            string sql = "Select ID,Name,Password,Auth from Users";
+            UsersTable = DbTool.SelectTable(sql);
             Hide();
             using (OMCSForm form = new OMCSForm(this))
             {
@@ -2176,6 +2055,34 @@ namespace MES
             form.ShowDialog();
         }
 
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //DialogResult result = MessageBox.Show("是否关闭应用程序？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //if (DialogResult.Yes == result)
+            //{
+            //    e.Cancel = false;
+
+            //using (FormQuitWait form = new FormQuitWait(() =>
+            //{
+            //    CloseCommunicate();
+            //}))
+            //{
+            //    form.ShowDialog();
+            //}
+
+            exeIcon.Visible = false;
+            IsWindowShow = false;
+            OnWindowState(this, new MyEvent() { IsWindowShow = false });
+
+            Dispose();
+            Application.Exit();
+
+            //}
+            //else
+            //{
+            //    e.Cancel = true;
+            //}
+        }
 
     }
 }

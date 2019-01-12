@@ -667,4 +667,13 @@
   <data name="WeldPressMoreLimit" xml:space="preserve">
     <value>WeldPressureMoreLimit！</value>
   </data>
+  <data name="WorkNo" xml:space="preserve">
+    <value>WorkNo</value>
+  </data>
+  <data name="ProtectFlowDown" xml:space="preserve">
+    <value>ProtectFlowDown</value>
+  </data>
+  <data name="ProtectFlowUp" xml:space="preserve">
+    <value>ProtectFlowUp</value>
+  </data>
 </root>

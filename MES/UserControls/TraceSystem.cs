@@ -50,8 +50,7 @@ namespace MES.UserControls
 
         private int m_culture = 1;
 
-        private object[] conditionS = { "检测结果", "条码", "表面成型", "LWM检测", "入库时间" };
-        private object[] conditionL = { "检测结果", "条码", "表面成型", "LWM检测", "入库时间" };
+        private object[] conditions = { "状态", "过程条码", "焊缝质量", "LWM检测" };
 
         private Stopwatch sw = new Stopwatch();
 
@@ -62,12 +61,14 @@ namespace MES.UserControls
         /// <summary>
         /// 执最终行查询的sql语句
         /// </summary>
-        private string sqlByCondition = string.Empty;
+        private string m_sqlByCondition = string.Empty;
+        private StringBuilder m_sqlByConditionSB = new StringBuilder();
 
         /// <summary>
         /// 额外的查询条件
         /// </summary>
         private string m_conditionExtra = string.Empty;
+        private StringBuilder m_conditionExtraSB = new StringBuilder();
 
         private string m_dbColunmsNames = string.Empty;
 
@@ -101,39 +102,55 @@ namespace MES.UserControls
         private void TraceSystem_Load(object sender, EventArgs e)
         {
             Init();
-
         }
 
         private void Init()
         {
+            initSqlStrings();
+
+            initDGVStyle();
+
+            initDefaultData();
+        }
+
+        //界面默认值
+        private void initDefaultData()
+        {
+            btnManualCheck.Visible = false;
             if (m_main.IsStation_S)
             {
                 dgvLookBoard.Columns["colWeldDepth"].Visible = false;
-                dgvLookBoard.Columns["colPressure"].HeaderText = "卡盘夹紧力(MPa)";
             }
             else
             {
-                dgvLookBoard.Columns["colPressure"].HeaderText = "工件压紧力(MPa)";
             }
             timeCheckStart.Value = timeCheckEnd.Value = DateTime.Now;
             cmbPageSize.SelectedIndex = 0;
 
-            m_dbColunmsNames = "ID,PNo,QCResult,Coaxiality,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed,Pressure,Flow,XPos,YPos,ZPos,RPos," +
-                "WeldTime,ManualCheck,PType,StorageTime ";
+            txtCurPage.Text = txtPageCount.Text = txtAllCount.Text = "1";
+            timeCheckStart.Value = DateTime.Now.AddDays(-1);
+            timeCheckEnd.Value = DateTime.Now;
+        }
 
-            sqlByCondition = "select * from Product where QCResult is not null order by StorageTime desc;";
-
-            m_conditionExtra = "QCResult is not null";
-
+        //样式设置
+        private void initDGVStyle()
+        {
             //锁定列头不可排序
             foreach (DataGridViewColumn column in dgvLookBoard.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+        }
 
-            txtCurPage.Text = txtPageCount.Text = txtAllCount.Text = "1";
-            timeCheckStart.Value = DateTime.Now.AddDays(-1);
-            timeCheckEnd.Value = DateTime.Now;
+        //数据库查询字段
+        private void initSqlStrings()
+        {
+            m_dbColunmsNames = " ID,WorkNo,PNo,QCResult,Coaxiality,CoaxUp,CoaxDown,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed," +
+                "Pressure,Flow,FlowUp,FlowDown,XPos,YPos,ZPos,RPos,WeldTime,ManualCheck,StorageTime ";
+
+            m_sqlByCondition = "select " + m_dbColunmsNames + "  from Product where QCResult is not null order by StorageTime desc";
+
+            m_conditionExtra = " QCResult is not null";
         }
 
         private void M_main_WeldSuccessEvent(object obj, MyEvent e)
@@ -184,35 +201,40 @@ namespace MES.UserControls
         {
             cmbSelectCondition.Items.Clear();
             cmbQCResult.Items.Clear();
+
+            conditions = new object[] { ResourceCulture.GetValue("FinalCheckResult"), ResourceCulture.GetValue("BarCode"),
+               /* ResourceCulture.GetValue("WorkNo"),*/ ResourceCulture.GetValue("Surface"),ResourceCulture.GetValue("LwmCheck") };
+            cmbSelectCondition.Items.AddRange(conditions);
+
             if (m_main.IsStation_S)
             {
-                conditionS = new object[] { ResourceCulture.GetValue("FinalCheckResult"), ResourceCulture.GetValue("BarCode"),
-                ResourceCulture.GetValue("Surface"),ResourceCulture.GetValue("LwmCheck"),ResourceCulture.GetValue("StoreTime")};
-                cmbSelectCondition.Items.AddRange(conditionS);
-
                 cmbQCResult.Items.AddRange(surfaceStringS);
             }
             else
             {
                 dgvLookBoard.Columns["colWeldDepth"].HeaderText = ResourceCulture.GetValue("WeldDepth") + "(mm)";
 
-                conditionL = new object[] { ResourceCulture.GetValue("FinalCheckResult"), ResourceCulture.GetValue("BarCode"),
-                ResourceCulture.GetValue("Surface"),ResourceCulture.GetValue("LwmCheck"),ResourceCulture.GetValue("StoreTime")};
-                cmbSelectCondition.Items.AddRange(conditionL);
-
                 cmbQCResult.Items.AddRange(surfaceStringL);
             }
             cmbQCResult.SelectedIndex = cmbSelectCondition.SelectedIndex = 0;
 
+            dgvLookBoard.Columns["colWorkNo"].HeaderText = ResourceCulture.GetValue("WorkNo");
             dgvLookBoard.Columns["colPNo"].HeaderText = ResourceCulture.GetValue("BarCode");
             dgvLookBoard.Columns["colCheckResult"].HeaderText = ResourceCulture.GetValue("FinalResult");
             dgvLookBoard.Columns["colCoaxiality"].HeaderText = ResourceCulture.GetValue("Coaxiality") + "(mm)";
+            dgvLookBoard.Columns["colCoaxUp"].HeaderText = ResourceCulture.GetValue("CoaxUp") + "(mm)";
+            dgvLookBoard.Columns["colCoaxDown"].HeaderText = ResourceCulture.GetValue("CoaxDown") + "(mm)";
             dgvLookBoard.Columns["colSurface"].HeaderText = ResourceCulture.GetValue("Surface");
             dgvLookBoard.Columns["colLwmCheck"].HeaderText = ResourceCulture.GetValue("LwmResult");
             dgvLookBoard.Columns["colWeldPower"].HeaderText = ResourceCulture.GetValue("WeldPower") + "(W)";
             dgvLookBoard.Columns["colWeldSpeed"].HeaderText = ResourceCulture.GetValue("WeldSpeed") + "(°/s)";
-            dgvLookBoard.Columns["colPressure"].HeaderText = ResourceCulture.GetValue("Pressure") + "(MPa)";
+
+            if (m_main.IsStation_S) dgvLookBoard.Columns["colPressure"].HeaderText = ResourceCulture.GetValue("ChuckClamp") + "(MPa)";
+            else dgvLookBoard.Columns["colPressure"].HeaderText = ResourceCulture.GetValue("WorkpiecePressure") + "(MPa)";
+
             dgvLookBoard.Columns["colFlow"].HeaderText = ResourceCulture.GetValue("ProtectFlow") + "(L/min)";
+            dgvLookBoard.Columns["colFlowUp"].HeaderText = ResourceCulture.GetValue("ProtectFlowUp") + "(L/min)";
+            dgvLookBoard.Columns["colFlowDown"].HeaderText = ResourceCulture.GetValue("ProtectFlowDown") + "(L/min)";
             dgvLookBoard.Columns["colXPos"].HeaderText = ResourceCulture.GetValue("WeldXPos") + "(mm)";
             dgvLookBoard.Columns["colYPos"].HeaderText = ResourceCulture.GetValue("WeldYPos") + "(mm)";
             dgvLookBoard.Columns["colZPos"].HeaderText = ResourceCulture.GetValue("WeldZPos") + "(mm)";
@@ -307,35 +329,34 @@ namespace MES.UserControls
             e.Handled = true;
         }
 
-        //条件改变
+        //查询条件改变
         private void cmbSelectCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
             string trem = cmbSelectCondition.SelectedItem.ToString();
 
             switch (trem)
             {
-                case "入库时间":
-                case "StoreTime":
-                    timeCheckStart.Visible = true;
-                    timeCheckEnd.Visible = true;
-                    label6.Visible = true;
-                    txtQCResult.Visible = false;
-                    cmbQCResult.Visible = false;
-                    break;
-                case "检测结果":
+                //case "上线时间":
+                //case "StoreTime":
+                //    timeCheckStart.Visible = true;
+                //    label6.Visible = true;
+                //    timeCheckEnd.Visible = true;
+
+                //    txtQCResult.Visible = false;
+                //    cmbQCResult.Visible = false;
+                //    break;
+                case "状态":
                 case "FinalResult":
                 case "LWM检测":
                 case "LwmCheck":
                     cmbQCResult.Items.Clear();
                     cmbQCResult.Items.AddRange(lwmStrings);
                     cmbQCResult.SelectedIndex = 0;
-                    timeCheckStart.Visible = false;
-                    timeCheckEnd.Visible = false;
-                    label6.Visible = false;
+
                     txtQCResult.Visible = false;
                     cmbQCResult.Visible = true;
                     break;
-                case "表面成型":
+                case "焊缝质量":
                 case "Surface":
                     cmbQCResult.Items.Clear();
 
@@ -363,27 +384,11 @@ namespace MES.UserControls
                     }
 
                     cmbQCResult.SelectedIndex = 0;
-                    timeCheckStart.Visible = false;
-                    timeCheckEnd.Visible = false;
-                    label6.Visible = false;
-                    txtQCResult.Visible = false;
-                    cmbQCResult.Visible = true;
-                    break;
-                case "同心度":
-                case "Coaxiality":
-                    cmbQCResult.Items.Clear();
-                    cmbQCResult.Items.AddRange(coaxialStrings);
-                    cmbQCResult.SelectedIndex = 0;
-                    timeCheckStart.Visible = false;
-                    timeCheckEnd.Visible = false;
-                    label6.Visible = false;
+
                     txtQCResult.Visible = false;
                     cmbQCResult.Visible = true;
                     break;
                 default:
-                    timeCheckStart.Visible = false;
-                    timeCheckEnd.Visible = false;
-                    label6.Visible = false;
                     txtQCResult.Visible = true;
                     cmbQCResult.Visible = false;
                     break;
@@ -404,17 +409,10 @@ namespace MES.UserControls
             //});
         }
 
-        /// <summary>
-        /// 条件判断
-        /// </summary>
-        /// <returns></returns>
+        // 查询条件判断 返回sql
         private bool ConditionJudge()
         {
-            bool judge = true;
-
-            //TimeSpan start = new TimeSpan(System.DateTime.Now.Ticks);
-
-            if (!m_main.CheckDbConnected()) return false;
+            if (!m_main.CheckDbState()) return false;
 
             if (cmbSelectCondition.SelectedIndex < 0)
             {
@@ -422,11 +420,21 @@ namespace MES.UserControls
                 return false;
             }
 
+            DateTime starTime = timeCheckStart.Value;
+            DateTime endTime = timeCheckEnd.Value;
+
+            if (starTime > endTime)
+            {
+                MessageBox.Show("起始时间不能大于终止时间！");
+                return false;
+            }
+
+            string storeTime = "' and StorageTime between '" + starTime + "' and '" + endTime.AddDays(1) + "' ";
             string condition = cmbSelectCondition.SelectedItem.ToString();
             string value = string.Empty;
 
-            if (condition.Equals("检测结果") || condition.Equals("FinalResult")
-                || condition.Equals("表面成型") || condition.Equals("Surface")
+            if (condition.Equals("状态") || condition.Equals("FinalResult")
+                || condition.Equals("焊缝质量") || condition.Equals("Surface")
                 || condition.Equals("同心度") || condition.Equals("Coaxiality")
                 || condition.Equals("LWM检测") || condition.Equals("LwmCheck"))
             {
@@ -450,78 +458,66 @@ namespace MES.UserControls
                 value = txtQCResult.Text;
             }
 
-            sqlByCondition = string.Empty;
+            m_sqlByCondition = string.Empty;
+            m_sqlByConditionSB = new StringBuilder();
+            m_conditionExtraSB = new StringBuilder();
 
             switch (condition)
             {
-                case "条码":
+                //case "工单号":
+                //case "WorkNo":
+                //    sqlByCondition = "select " + m_dbColunmsNames + " from Product where WorkNo='" + value + "'" + storeTime;
+                //    m_conditionExtra = "WorkNo='" + value + "'" + storeTime;
+                //    break;
+                case "过程条码":
                 case "BarCode":
-                    sqlByCondition = "select * from product where PNo = '" + value + "'";
-                    m_conditionExtra = "PNo = '" + value + "'";
-                    break;
-                case "Coaxiality":
-                case "同心度"://"A:0.7~1.0", "B:0.6~0.7", "C:1.0~1.3", "D:0.8~0.9" 
-                    if (value.Contains("A"))
-                    {
-                        value = "between 0.8 and 0.9";
-                    }
-                    else if (value.Contains("B"))
-                    {
-                        value = "between 0.7 and 1.0";
-                    }
-                    else if (value.Contains("C"))
-                    {
-                        value = "between 0.6 and 0.7";
-                    }
-                    else if (value.Contains("D"))
-                    {
-                        value = "between 1.0 and 1.3";
-                    }
-                    sqlByCondition = "select * from product where Coaxiality " + value;
-                    m_conditionExtra = "Coaxiality " + value;
+                    //m_sqlByCondition = "select " + m_dbColunmsNames + " from product where PNo='" + value + "'" + storeTime;
+                    //m_conditionExtra = "PNo='" + value + "'" + storeTime;
 
+                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where PNo='").Append(value).Append(storeTime);
+                    m_conditionExtraSB.Append("PNo = '").Append(value).Append(storeTime);
                     break;
-                case "表面成型":
+                case "焊缝质量":
                 case "Surface":
-                    sqlByCondition = "select * from product where Surface = '" + value + "'";
-                    m_conditionExtra = "Surface = '" + value + "'";
+                    //m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where Surface='" + value + "'" + storeTime;
+                    //m_conditionExtra = "Surface='" + value + "'" + storeTime;
 
+                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where Surface='").Append(value).Append(storeTime);
+                    m_conditionExtraSB.Append("Surface='").Append(value).Append(storeTime);
                     break;
-                case "检测结果":
+                case "状态":
                 case "FinalResult":
-                    sqlByCondition = "select * from product where QCResult = '" + value + "'";
-                    m_conditionExtra = "QCResult = '" + value + "'";
+                    //m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where QCResult='" + value + "'" + storeTime;
+                    //m_conditionExtra = "QCResult='" + value + "'" + storeTime;
 
+                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where QCResult='").Append(value).Append(storeTime);
+                    m_conditionExtraSB.Append("QCResult='").Append(value).Append(storeTime);
                     break;
                 case "LWM检测":
                 case "LwmCheck":
-                    sqlByCondition = "select * from product where LwmCheck = '" + value + "'";
-                    m_conditionExtra = "LwmCheck = '" + value + "'";
+                    //m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where LwmCheck='" + value + "'" + storeTime;
+                    //m_conditionExtra = "LwmCheck='" + value + "'" + storeTime;
 
+                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where LwmCheck='").Append(value).Append(storeTime);
+                    m_conditionExtraSB.Append("LwmCheck='").Append(value).Append(storeTime);
                     break;
-                case "入库时间":
-                case "StoreTime":
-                    DateTime starTime = timeCheckStart.Value;
-                    DateTime endTime = timeCheckEnd.Value;
-
-                    if (starTime > endTime)
-                    {
-                        MessageBox.Show("起始时间不能大于终止时间！");
-                        break;
-                    }
-
-                    sqlByCondition = "select * from product where StorageTime between '" + starTime + "' and '" + endTime + "' ";
-                    m_conditionExtra = "StorageTime between '" + starTime + "' and '" + endTime + "' ";
-                    break;
+                //case "上线时间":
+                //case "StoreTime":
+                //    sqlByCondition = "select " + m_dbColunmsNames + "  from product where StorageTime between '" + starTime + "' and '" + endTime + "' ";
+                //    m_conditionExtra = "StorageTime between '" + starTime + "' and '" + endTime + "' ";
+                //    break;
                 default:
                     break;
             }
+
+            m_sqlByCondition = m_sqlByConditionSB.ToString();
+            m_conditionExtra = m_conditionExtraSB.ToString();
 
             //TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
             //TimeSpan use = start.Subtract(end).Duration();
             //Console.WriteLine("判断耗时：" + use.TotalMilliseconds.ToString("0.000") + "s");
 
-            return judge;
+            return true;
         }
 
         /// <summary>
@@ -530,7 +526,7 @@ namespace MES.UserControls
         /// <param name="sql"></param>
         private void UpdateLookBoard(string sql)
         {
-            string sqlCount = String.Format("select count(*) from ({0}) t", sql);
+            string sqlCount = String.Format("select count(1) from ({0}) t", sql);
 
             AllCount = m_main.DbTool.GetTableCount(sqlCount); //m_productTable.Rows.Count;//更新pagecount
 
@@ -559,7 +555,7 @@ namespace MES.UserControls
 
             m_main.AddTips("正在查询数据，请稍等...", false);
 
-            UpdateLookBoard(sqlByCondition);
+            UpdateLookBoard(m_sqlByCondition);
 
             if (m_productTable == null || m_productTable.Rows.Count < 1)
             {
@@ -573,14 +569,13 @@ namespace MES.UserControls
 
             endTime = new TimeSpan(DateTime.Now.Ticks);
             countTime = startTime.Subtract(endTime).Duration();
-            Console.WriteLine("Query总耗时：" + countTime.TotalSeconds + "s");
-            m_main.AddTips("查询成功，耗时：" + countTime.TotalSeconds.ToString("0.000") + "s", false);
+            Debug.WriteLine("Query总耗时：" + countTime.TotalSeconds.ToString("0.000") + "s");
+            m_main.AddTips("查询成功!", false);
         }
 
-        //导出Excel
         private void btnOutExcel_Click(object sender, EventArgs e)
         {
-            ButtonOutExcel(sqlByCondition);
+            ButtonOutExcel(m_sqlByCondition);
         }
 
         private void ButtonOutExcel(string sqlSelectFinal)
@@ -610,6 +605,7 @@ namespace MES.UserControls
             }
         }
 
+        //导出Excel
         /// <summary>
         /// 导出CSV文件
         /// </summary>
@@ -619,25 +615,21 @@ namespace MES.UserControls
             try
             {
                 startTime = new TimeSpan(System.DateTime.Now.Ticks);
-
-                #region FileStream 超高速导出，无法设置样式
-
                 FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                 StreamWriter sw = new StreamWriter(fs, Encoding.Default);//Encoding.GetEncoding("UTF-8")
-
                 for (int col = 1; col < ExcelProductTable.Columns.Count; col++)
                 {
-                    //string colName = ExcelProductTable.Columns[col].ColumnName + ",";
-                    string headName = dgvLookBoard.Columns[col].HeaderText + ",";
+                    string colName = ExcelProductTable.Columns[col].ColumnName;
+                    string headName = dgvLookBoard.Columns[col].HeaderText;
 
-                    if (headName.Contains("产品类型") || headName.Contains("PType")) continue;
-                    if (m_main.IsStation_S) if (headName.Contains("焊缝高度差(mm)") || headName.Contains("WeldDepth(mm)")) continue;
+                    if (headName.Contains("ManualCheck") || headName.Contains("人工干预") ||
+                        headName.Contains("WorkNo") || headName.Contains("工单号") ||
+                        headName.Contains("ID"))
+                        continue;
+                    if (m_main.IsStation_S)
+                        if (headName.Contains("WeldDepth") || headName.Contains("焊缝高度差")) continue;
 
-                    sw.Write(headName);
-                    //if (col < 1)
-                    //{
-                    //    sw.Write(m_productTable.Columns[col].ColumnName + ",");//产品编号
-                    //}
+                    sw.Write(headName + ",");
                 }
 
                 sw.WriteLine(String.Empty);
@@ -647,15 +639,17 @@ namespace MES.UserControls
                     //sw.Write((row + 1).ToString() + ",");
                     for (int col = 1; col < ExcelProductTable.Columns.Count; col++)
                     {
-                        //string str = String.Format("\t{0}", ExcelProductTable.Rows[row][col]);
-
-                        string headName = dgvLookBoard.Columns[col].HeaderText;
+                        string headName = ExcelProductTable.Columns[col].ColumnName;
 
                         //不导出产品类型列
-                        if (headName.Contains("产品类型") || headName.Contains("PType")/*col == 17*/) continue;
-                        if (m_main.IsStation_S) if (headName.Contains("焊缝高度差(mm)") || headName.Contains("WeldDepth(mm)")) continue;
+                        if (headName.Contains(("ManualCheck")) || headName.Contains(("WorkNo")) ||
+                            headName.Contains("ID"))
+                            continue;
+                        if (m_main.IsStation_S)
+                            if (headName.Contains("WeldDepth")) continue;
 
-                        sw.Write(String.Format("\t{0}", ExcelProductTable.Rows[row][col]) + ",");
+                        string value = String.Format("\t{0}", ExcelProductTable.Rows[row][col]);
+                        sw.Write(String.Format("\t{0}", value) + ",");
                     }
                     sw.Write("\n");
                 }
@@ -663,14 +657,12 @@ namespace MES.UserControls
                 sw.Close();
                 fs.Close();
 
-                #endregion
-
                 endTime = new TimeSpan(DateTime.Now.Ticks);
                 countTime = startTime.Subtract(endTime).Duration();
 
                 MessageBox.Show(ResourceCulture.GetValue("OutExcelOK"));
-                //Console.WriteLine("操作耗时:" + countTime.TotalSeconds + " s"); //TotalMilliseconds.ToString();
-                m_main.AddTips(string.Format("导出成功，耗时:{0} s", countTime.TotalSeconds.ToString("0.000")), false);
+                Debug.WriteLine("导出耗时:" + countTime.TotalSeconds.ToString("0.000") + " s");
+                m_main.AddTips("导出成功!", false);
             }
             catch (Exception ex)
             {
@@ -691,9 +683,6 @@ namespace MES.UserControls
 
             if (curCell != null)
             {
-                //int curIndex = dgvLookBoard.CurrentRow.Index;
-                //int rowIndex = curCell.RowIndex;
-
                 int colIndex = curCell.ColumnIndex;
                 string colName = dgvLookBoard.Columns[colIndex].HeaderText;
                 if (colName.Equals("人工干预") || colName.Equals("ManualCheck"))
@@ -701,11 +690,9 @@ namespace MES.UserControls
                     bool boo = dgvLookBoard.SelectedCells.IsReadOnly;
                 }
 
-                object obj2 = dgvLookBoard.SelectedCells[1].Value;
-
-                object obj3 = dgvLookBoard.SelectedCells[16].Value;
-
-                object obj4 = dgvLookBoard.SelectedCells[2].Value;
+                object obj2 = dgvLookBoard.SelectedCells[2].Value;
+                object obj4 = dgvLookBoard.SelectedCells[3].Value;
+                object obj3 = dgvLookBoard.SelectedCells[17].Value;
 
                 string pno = string.Empty;
                 string manual = string.Empty;
@@ -773,19 +760,19 @@ namespace MES.UserControls
             }
         }
 
-        //分页显示数据
+        //分页显示
         private void ShowPage(int Inum, int pageSize)
         {
             sqlPage = string.Empty;
 
             if (Remain != 0 && Inum == PageCount)
             {
-                sqlPage = "select top " + Remain + " * from Product where Id not in (select top " + Convert.ToInt32(cmbPageSize.SelectedItem) * (Inum - 1)
+                sqlPage = "select top " + Remain + m_dbColunmsNames + "  from Product where Id not in (Select top " + Convert.ToInt32(cmbPageSize.SelectedItem) * (Inum - 1)
                           + " Id from Product where " + m_conditionExtra + " order by StorageTime desc )" + " and " + m_conditionExtra + " order by StorageTime desc";
             }
             else
             {
-                sqlPage = "select top " + pageSize + " * from Product where Id not in (select top " + pageSize * (Inum - 1)
+                sqlPage = "select top " + pageSize + m_dbColunmsNames + "  from Product where Id not in (select top " + pageSize * (Inum - 1)
                           + " Id from Product where " + m_conditionExtra + " order by StorageTime desc )" + " and " + m_conditionExtra + " order by StorageTime desc";
             }
 
@@ -911,7 +898,7 @@ namespace MES.UserControls
             }
             catch (Exception ex)
             {
-                m_main.LogNetProgramer.WriteError("异常", "追溯系统更新异常-->" + ex.Message);
+                m_main.LogNetProgramer.WriteError("异常", "追溯系统更新时异常-->" + ex.Message);
             }
         }
 

@@ -19,8 +19,6 @@ namespace MES.UserControls
 
         private DBTool m_tool;
 
-        private int m_timeSleep = 1000;//采集时间间隔
-
         private bool m_isThreadRun;
 
         private OpcUaClient m_opcUaClient;
@@ -54,10 +52,6 @@ namespace MES.UserControls
         private double m_XPos, m_YPos, m_ZPos, m_RPos, m_press, m_flow, m_weldPower;
 
         private int m_speed, m_time;
-
-        private Thread t_updateWeldParam = null;
-
-        private Thread t_collectThread = null;
 
         private bool m_startSave = false;//是否开始保存数据
 
@@ -144,26 +138,15 @@ namespace MES.UserControls
 
         private void Init()
         {
-            if (m_culture == 1)
-            {
-                if (m_main.IsStation_S)
-                {
-                    labPressName.Text = "卡盘夹紧力";
-                }
-                else
-                {
-                    labPressName.Text = "工件压紧力";
-                }
-            }
             m_tool = m_main.DbTool;
             m_opcUaClient = m_main.OpcUaClient;
 
-            t_collectThread = new Thread(Collecting);
+            Thread t_collectThread = new Thread(Collecting);
             t_collectThread.IsBackground = true;
             t_collectThread.Start();
             m_isThreadRun = true;
 
-            t_updateWeldParam = new Thread(UpdateDbData);
+            Thread t_updateWeldParam = new Thread(UpdateDbData);
             t_updateWeldParam.IsBackground = true;
             t_updateWeldParam.Start();
 
@@ -200,8 +183,6 @@ namespace MES.UserControls
             while (m_isThreadRun && b_windowShow)
             {
                 if (!m_isThreadRun || m_opcUaClient == null || !m_opcUaClient.Connected) break;
-
-                Thread.Sleep(m_timeSleep);
 
                 try
                 {
@@ -258,8 +239,7 @@ namespace MES.UserControls
                     //SendReadSign(1);
                     //m_main.AddTips("数据采集并保存成功！");
                 }
-
-                Thread.Sleep(50);
+                Thread.Sleep(1000);
             }
         }
 

@@ -565,7 +565,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(951, 575);
+            this.ClientSize = new System.Drawing.Size(944, 575);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.numWeldPressureUp);
             this.Controls.Add(this.label3);

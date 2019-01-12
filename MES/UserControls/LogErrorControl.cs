@@ -18,9 +18,7 @@ namespace ProductManage.UserControls
         private FormMain m_main;
 
         private DBTool m_dbTool = null;
-
-        private string m_selectValue = string.Empty;
-
+        
         private DateTime m_startTime, m_endTime;
 
         private string[] methodsCH = new string[] { "日志结果", "发生时间", "处理时间", "内容关键字" };
@@ -30,12 +28,6 @@ namespace ProductManage.UserControls
         private string[] m_resultCH = new string[] { "已处理", "未处理" };
 
         private string[] m_resultEN = new string[] { "Handled", "Untreated" };
-
-        private DateTime NowTime = DateTime.Now;
-
-        private string m_logContent = string.Empty;
-
-        private string m_logResult = string.Empty;
 
         private Logs m_currentLog;
 
@@ -49,15 +41,9 @@ namespace ProductManage.UserControls
 
         private int m_culture = 1;//默认中文
 
-        private Thread t_alarmThread = null;
-
-        private Thread t_saveAlarmLog = null;
-
         private bool b_saveAlarmLog = false;
 
         private OpcUaClient m_opcUaClient = null;
-
-        private string s_alarmlog = "ns=3;s=\"WeldPara\".\"Alarmlog\"";
 
         private int AlarmNo = 0;
 
@@ -99,9 +85,9 @@ namespace ProductManage.UserControls
         {
             m_dbColunmNames = "Id,LogNo,LogContent,LogResult,HappenTime,DealTime";
 
-            timeCheckStart.Value = timeCheckEnd.Value = NowTime;
+            timeCheckStart.Value = timeCheckEnd.Value = DateTime.Now;
 
-            timeRecord.Value = timeDealTime.Value = NowTime;
+            timeRecord.Value = timeDealTime.Value = DateTime.Now;
         }
 
         private void M_main_WindowStateEvent(object obj, MES.Core.MyEvent e)
@@ -112,12 +98,12 @@ namespace ProductManage.UserControls
         private void InitThreads()
         {
             //报警内容存入数据库
-            t_saveAlarmLog = new Thread(SaveAlarmLog);
+            Thread t_saveAlarmLog = new Thread(SaveAlarmLog);
             t_saveAlarmLog.IsBackground = true;
             t_saveAlarmLog.Start();
 
             //报警日志实时监控
-            t_alarmThread = new Thread(AlarmMonitor);
+            Thread t_alarmThread = new Thread(AlarmMonitor);
             t_alarmThread.IsBackground = true;
             t_alarmThread.Start();
 
@@ -131,7 +117,7 @@ namespace ProductManage.UserControls
                 {
                     if (m_opcUaClient != null && m_opcUaClient.Connected)
                     {
-                        AlarmNo = m_opcUaClient.ReadNode<int>(s_alarmlog);
+                        AlarmNo = m_opcUaClient.ReadNode<int>("ns=3;s=\"WeldPara\".\"Alarmlog\"");
                         if (AlarmNo != 0)
                         {
                             if (AlarmNo != AlarmNoLast)
@@ -191,6 +177,7 @@ namespace ProductManage.UserControls
                         m_main.LogNetProgramer.WriteError("异常", "保存报警内容异常--->" + ex.Message);
                     }
                 }
+                Thread.Sleep(500);
             }
         }
 

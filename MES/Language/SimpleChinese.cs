@@ -30,7 +30,7 @@ namespace ProductManage.Language
 
         public override string Coaxiality => "同心度";
 
-        public override string Surface => "表面成型";
+        public override string Surface => "焊缝质量";
 
         public override string Online => "在线";
 
@@ -90,7 +90,7 @@ namespace ProductManage.Language
 
         public override string ProductType => "产品类型";
 
-        public override string StoreTime => "入库时间";
+        public override string StoreTime => "上线时间";
 
         public override string EachPageNum => "每页条数";
 

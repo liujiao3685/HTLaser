@@ -39,6 +39,7 @@
             this.toolParamSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMuduleSet = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSpotRecord = new System.Windows.Forms.ToolStripMenuItem();
+            this.通讯监控ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolChinese = new System.Windows.Forms.ToolStripMenuItem();
             this.toolEnglish = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,7 +55,7 @@
             this.btnLogSystem = new HslCommunication.Controls.UserButton();
             this.btnTraceSystem = new HslCommunication.Controls.UserButton();
             this.grbMonitorOnline = new System.Windows.Forms.GroupBox();
-            this.btnLwmCheck = new HslCommunication.Controls.UserButton();
+            this.txtLwmCheck = new HslCommunication.Controls.UserButton();
             this.labLwmCheck = new System.Windows.Forms.Label();
             this.lanternState = new HslCommunication.Controls.UserLantern();
             this.txtCoaxility = new HslCommunication.Controls.UserButton();
@@ -66,7 +67,8 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.exeIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.timerGC = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.grbMonitorOnline.SuspendLayout();
@@ -86,6 +88,7 @@
             this.toolParamSetting,
             this.toolMuduleSet,
             this.toolSpotRecord,
+            this.通讯监控ToolStripMenuItem,
             this.toolLanguage,
             this.testToolStripMenuItem,
             this.点检中心ToolStripMenuItem});
@@ -151,6 +154,14 @@
             this.toolSpotRecord.Size = new System.Drawing.Size(100, 29);
             this.toolSpotRecord.Text = "&点检记录";
             this.toolSpotRecord.Click += new System.EventHandler(this.点检记录ToolStripMenuItem_Click);
+            // 
+            // 通讯监控ToolStripMenuItem
+            // 
+            this.通讯监控ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 11F);
+            this.通讯监控ToolStripMenuItem.Name = "通讯监控ToolStripMenuItem";
+            this.通讯监控ToolStripMenuItem.Size = new System.Drawing.Size(100, 29);
+            this.通讯监控ToolStripMenuItem.Text = "&通讯监控";
+            this.通讯监控ToolStripMenuItem.Click += new System.EventHandler(this.通讯监控ToolStripMenuItem_Click);
             // 
             // toolLanguage
             // 
@@ -229,7 +240,7 @@
             // txtBarCode
             // 
             this.txtBarCode.Font = new System.Drawing.Font("Tahoma", 20F);
-            this.txtBarCode.Location = new System.Drawing.Point(131, 27);
+            this.txtBarCode.Location = new System.Drawing.Point(168, 28);
             this.txtBarCode.Name = "txtBarCode";
             this.txtBarCode.Size = new System.Drawing.Size(297, 48);
             this.txtBarCode.TabIndex = 0;
@@ -239,11 +250,11 @@
             // 
             this.labBarCode.AutoSize = true;
             this.labBarCode.Font = new System.Drawing.Font("Tahoma", 20F);
-            this.labBarCode.Location = new System.Drawing.Point(15, 31);
+            this.labBarCode.Location = new System.Drawing.Point(3, 31);
             this.labBarCode.Name = "labBarCode";
-            this.labBarCode.Size = new System.Drawing.Size(98, 41);
+            this.labBarCode.Size = new System.Drawing.Size(166, 41);
             this.labBarCode.TabIndex = 39;
-            this.labBarCode.Text = "条码:";
+            this.labBarCode.Text = "过程条码:";
             // 
             // panelBox
             // 
@@ -300,7 +311,7 @@
             // 
             // grbMonitorOnline
             // 
-            this.grbMonitorOnline.Controls.Add(this.btnLwmCheck);
+            this.grbMonitorOnline.Controls.Add(this.txtLwmCheck);
             this.grbMonitorOnline.Controls.Add(this.labLwmCheck);
             this.grbMonitorOnline.Controls.Add(this.lanternState);
             this.grbMonitorOnline.Controls.Add(this.txtCoaxility);
@@ -317,18 +328,18 @@
             this.grbMonitorOnline.TabStop = false;
             this.grbMonitorOnline.Text = "实时监控";
             // 
-            // btnLwmCheck
+            // txtLwmCheck
             // 
-            this.btnLwmCheck.BackColor = System.Drawing.Color.Transparent;
-            this.btnLwmCheck.CustomerInformation = "";
-            this.btnLwmCheck.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
-            this.btnLwmCheck.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Bold);
-            this.btnLwmCheck.Location = new System.Drawing.Point(53, 354);
-            this.btnLwmCheck.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
-            this.btnLwmCheck.Name = "btnLwmCheck";
-            this.btnLwmCheck.Size = new System.Drawing.Size(178, 48);
-            this.btnLwmCheck.TabIndex = 9;
-            this.btnLwmCheck.UIText = "";
+            this.txtLwmCheck.BackColor = System.Drawing.Color.Transparent;
+            this.txtLwmCheck.CustomerInformation = "";
+            this.txtLwmCheck.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
+            this.txtLwmCheck.Font = new System.Drawing.Font("微软雅黑", 15F, System.Drawing.FontStyle.Bold);
+            this.txtLwmCheck.Location = new System.Drawing.Point(53, 354);
+            this.txtLwmCheck.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
+            this.txtLwmCheck.Name = "txtLwmCheck";
+            this.txtLwmCheck.Size = new System.Drawing.Size(178, 48);
+            this.txtLwmCheck.TabIndex = 9;
+            this.txtLwmCheck.UIText = "";
             // 
             // labLwmCheck
             // 
@@ -342,6 +353,7 @@
             // lanternState
             // 
             this.lanternState.BackColor = System.Drawing.Color.Transparent;
+            this.lanternState.LanternBackground = System.Drawing.Color.Gray;
             this.lanternState.Location = new System.Drawing.Point(75, 471);
             this.lanternState.Margin = new System.Windows.Forms.Padding(7, 8, 7, 8);
             this.lanternState.Name = "lanternState";
@@ -382,7 +394,7 @@
             this.labState.Name = "labState";
             this.labState.Size = new System.Drawing.Size(63, 30);
             this.labState.TabIndex = 2;
-            this.labState.Text = "在线";
+            this.labState.Text = "离线";
             // 
             // labSurface
             // 
@@ -391,7 +403,7 @@
             this.labSurface.Name = "labSurface";
             this.labSurface.Size = new System.Drawing.Size(113, 30);
             this.labSurface.TabIndex = 1;
-            this.labSurface.Text = "表面成型";
+            this.labSurface.Text = "焊缝质量";
             // 
             // labCoax
             // 
@@ -444,12 +456,18 @@
             this.panel1.Size = new System.Drawing.Size(1356, 99);
             this.panel1.TabIndex = 0;
             // 
-            // notifyIcon1
+            // exeIcon
             // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            this.exeIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("exeIcon.Icon")));
+            this.exeIcon.Text = "notifyIcon1";
+            this.exeIcon.Visible = true;
+            this.exeIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // timerGC
+            // 
+            this.timerGC.Enabled = true;
+            this.timerGC.Interval = 2000;
+            this.timerGC.Tick += new System.EventHandler(this.timerGC_Tick);
             // 
             // FormMain
             // 
@@ -518,13 +536,15 @@
         private System.Windows.Forms.ToolStripMenuItem toolChinese;
         private System.Windows.Forms.ToolStripMenuItem toolEnglish;
         private System.Windows.Forms.ToolStripMenuItem 点检中心ToolStripMenuItem;
-        private HslCommunication.Controls.UserButton btnLwmCheck;
+        private HslCommunication.Controls.UserButton txtLwmCheck;
         private System.Windows.Forms.Label labLwmCheck;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolStripMenuItem toolSpotRecord;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.NotifyIcon exeIcon;
+        private System.Windows.Forms.Timer timerGC;
+        private System.Windows.Forms.ToolStripMenuItem 通讯监控ToolStripMenuItem;
     }
 }
 

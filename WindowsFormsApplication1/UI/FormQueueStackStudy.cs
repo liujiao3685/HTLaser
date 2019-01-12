@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -117,5 +118,11 @@ namespace WindowsFormsApplication1.UI
             label2.Text += "\r\nCount:" + stack.Count.ToString();
         }
 
+        private void button7_Click(object sender, System.EventArgs e)
+        {
+           // 格式字符串只能是“D”、“d”、“N”、“n”、“P”、“p”、“B”、“b”、“X”或“x”。 出现了
+
+            txtGuid.Text = Guid.NewGuid().ToString("D");
+        }
     }
 }

@@ -102,7 +102,7 @@
             // 
             // columnHeader7
             // 
-            this.columnHeader7.Text = "表面成型";
+            this.columnHeader7.Text = "焊缝质量";
             // 
             // columnHeader11
             // 

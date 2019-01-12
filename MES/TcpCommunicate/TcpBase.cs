@@ -10,22 +10,8 @@ namespace ProductManage.TcpCommunicate
 {
     public class TcpBase
     {
-        public string IP { set; get; }
-
-        public int Port { set; get; }
-
-        public Socket Socket { set; get; }
-
-        public IPEndPoint IPEndPoint { set; get; }
-
-        public bool IsAsyncTcp = false;
-
-        public bool IsClienTcp = false;
-
         public TcpBase()
         {
-            Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint = new IPEndPoint(IPAddress.Parse(IP), Port);
         }
 
         public bool SafeClose(Socket socket)
@@ -38,8 +24,9 @@ namespace ProductManage.TcpCommunicate
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
                 socket.Dispose();
+                socket = null;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

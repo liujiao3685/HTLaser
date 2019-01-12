@@ -99,6 +99,10 @@ namespace ProductManage.PLC
             "ns=3;s=\"WeldPara\".\"WeldPower\"",
             "ns=3;s=\"WeldPara\".\"Pressure\"",
             "ns=3;s=\"WeldPara\".\"Flow\"",
+
+            "ns=3;s=\"WeldPara\".\"FlowUp\"",
+            "ns=3;s=\"WeldPara\".\"FlowDown\"",
+
             "ns=3;s=\"WeldPara\".\"WeldSpeed\"",
             "ns=3;s=\"WeldPara\".\"WeldTime\"",
             "ns=3;s=\"WeldPara\".\"BarCodeCircle3\"",
@@ -119,6 +123,10 @@ namespace ProductManage.PLC
             "ns=3;s=\"WeldPara\".\"WeldPower\"",
             "ns=3;s=\"WeldPara\".\"Pressure\"",
             "ns=3;s=\"WeldPara\".\"Flow\"",
+
+            "ns=3;s=\"WeldPara\".\"FlowUp\"",
+            "ns=3;s=\"WeldPara\".\"FlowDown\"",
+
             "ns=3;s=\"WeldPara\".\"WeldSpeed\"",
             "ns=3;s=\"WeldPara\".\"WeldTime\"",
             "ns=3;s=\"WeldPara\".\"BarCodeWeld\"",

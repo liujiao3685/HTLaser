@@ -10,6 +10,11 @@ namespace MES.Entity
         public int Id { set; get; }
 
         /// <summary>
+        /// 工单号
+        /// </summary>
+        public string WorkNo { set; get; }
+
+        /// <summary>
         /// 产品编号
         /// </summary>
         public string PNo { set; get; }
@@ -30,7 +35,17 @@ namespace MES.Entity
         public double Coaxiality { set; get; }
 
         /// <summary>
-        /// 表面成型
+        /// 同心度上限
+        /// </summary>
+        public double CoaxUp { set; get; }
+
+        /// <summary>
+        /// 同心度下限
+        /// </summary>
+        public double CoaxDown { set; get; }
+
+        /// <summary>
+        /// 焊缝质量
         /// </summary>
         public string Surface { set; get; }
 
@@ -58,11 +73,6 @@ namespace MES.Entity
         /// 焊接时间 Float
         /// </summary>
         public int WeldTime { set; get; }
-
-        /// <summary>
-        /// 坐标轴
-        /// </summary>
-        //public string XYZRPos { set; get; }
 
         /// <summary>
         /// 坐标X
@@ -95,12 +105,22 @@ namespace MES.Entity
         public double Flow { set; get; }
 
         /// <summary>
+        /// 保护气流量上限
+        /// </summary>
+        public double FlowUp { set; get; }
+
+        /// <summary>
+        /// 保护气流量下限
+        /// </summary>
+        public double FlowDown { set; get; }
+
+        /// <summary>
         /// 最终检测结果（Pass/Ng）
         /// </summary>
         public string QCResult { set; get; }
 
         /// <summary>
-        /// 入库时间
+        /// 上线时间
         /// </summary>
         public DateTime StorageTime { set; get; }
 
@@ -111,17 +131,7 @@ namespace MES.Entity
 
         public Product()
         {
-            Id = 1;
-            PNo = "PNO001";
-            Surface = "表面平滑";
-            WeldPower = 4000;
-            WeldSpeed = 40;
-            WeldTime = 0;
-            LwmCheck = "合格";
-            Pressure = 1.0;
-            Flow = 1.0;
-            QCResult = "Pass";
-            ManualCheck = String.Empty;
+
         }
 
     }

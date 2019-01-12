@@ -25,12 +25,13 @@ namespace MES
 
         static void Main()
         {
+            //1.1.0
+            //HslControls.Authorization.SetAuthorizationCode("1557360d-6de4-445c-b669-dee903f02d4a");
+
             //Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
 
-            bool isCreateNew;
-
+            //bool isCreateNew;
             //Mutex mutex = new Mutex(true, Application.ProductName, out isCreateNew);
-
             //if (isCreateNew)
             //{
 
@@ -44,7 +45,6 @@ namespace MES
                     // 此处显示原先的窗口需要一定的时间，不然无法显示
                     ShowWindowAsync(p.MainWindowHandle, 9);
                     SetForegroundWindow(p.MainWindowHandle);
-                    //System.Threading.Thread.Sleep(10);
                     Application.Exit(); // 关闭当前的应用程序
                     return;
                 }

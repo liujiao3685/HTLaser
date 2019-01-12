@@ -116,7 +116,7 @@ namespace HslCommunication.LogNet
     /// <summary>
     /// 记录日志结果
     /// </summary>
-    public enum MessageResult
+    public enum MessageResult 
     {
         /// <summary>
         /// 日志结果正常

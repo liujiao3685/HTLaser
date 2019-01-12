@@ -7,7 +7,7 @@ namespace MES.DAL
     public class DBHelper
     {
         //数据库连接字符
-        private static string DataBaseConnectStr = AppSetting.GetConnectString();
+        private static string DataBaseConnectStr = AppSetting.GetDbConnectString();
 
         private SqlConnection m_sqlCon;
 
@@ -16,6 +16,11 @@ namespace MES.DAL
         public DBHelper()
         {
 
+        }
+
+        public DBHelper(string dbConnectString)
+        {
+            DataBaseConnectStr = dbConnectString;
         }
 
         public static DBHelper Instance
@@ -42,7 +47,7 @@ namespace MES.DAL
                         m_sqlCon.Open();
                     }
                     else
-                    { 
+                    {
                         Program.LogNet.WriteError("异常", "获取数据库连接字符失败!");
                         return null;
                     }
@@ -57,5 +62,26 @@ namespace MES.DAL
             }
         }
 
+        public bool Open()
+        {
+            try
+            {
+                if (DataBaseConnectStr != String.Empty)
+                {
+                    m_sqlCon = new SqlConnection(DataBaseConnectStr);
+                    m_sqlCon.Open();
+                }
+                else
+                {
+                    Program.LogNet.WriteError("异常", "获取数据库连接字符失败!");
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -45,9 +45,7 @@ namespace MES
                 SetAppSettingValue("Language", lang.ToString());
                 return true;
             }
-#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
-            catch (Exception ex)
-#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
+            catch
             {
                 return false;
             }
@@ -69,9 +67,7 @@ namespace MES
                 ConfigurationManager.RefreshSection("appSettings");
                 return true;
             }
-#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
             catch (Exception ex)
-#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
             {
                 return false;
             }
@@ -88,13 +84,30 @@ namespace MES
             {
                 val = Convert.ToInt32(ConfigurationManager.AppSettings["Language"]);
             }
-#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
             catch (Exception ex)
-#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
             {
                 return 1;
             }
             return val;
+        }
+
+        /// <summary>
+        /// 获取LWMIP
+        /// </summary>
+        /// <returns></returns>
+        public static string GetLwmIP()
+        {
+            string value = string.Empty;
+
+            try
+            {
+                value = ConfigurationManager.AppSettings["LwmIP"];
+            }
+            catch (Exception ex)
+            {
+                value = string.Empty;
+            }
+            return value;
         }
 
         /// <summary>
@@ -109,9 +122,7 @@ namespace MES
             {
                 value = ConfigurationManager.AppSettings["ScanIP"];
             }
-#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
             catch (Exception ex)
-#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
             {
                 value = string.Empty;
             }
@@ -308,21 +319,18 @@ namespace MES
         /// 获取数据库连接字符
         /// </summary>
         /// <returns></returns>
-        public static string GetConnectString()
+        public static string GetDbConnectString()
         {
             string value = string.Empty;
             try
             {
                 value = ConfigurationManager.ConnectionStrings["MyDatabase"].ToString();
             }
-#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
             catch (Exception ex)
-#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
             {
                 return string.Empty;
             }
             return value;
         }
-
     }
 }

@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WindowsFormsApplication1</RootNamespace>
-    <AssemblyName>WindowsFormsApplication1</AssemblyName>
+    <AssemblyName>TestApplication</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -66,6 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonLibs\HslControls.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\CommonLibs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=8.0.13.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\CommonLibs\MySql.Data.dll</HintPath>
@@ -112,10 +115,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppSetting.cs" />
+    <Compile Include="Core\ExeHelper.cs" />
     <Compile Include="DAL\DBHelper.cs" />
     <Compile Include="DAL\DBTool.cs" />
     <Compile Include="DAL\MySQLHelper.cs" />
     <Compile Include="DAL\OracleHelper.cs" />
+    <Compile Include="DAL\SqlHelper.cs" />
     <Compile Include="Entity\Arc.cs" />
     <Compile Include="Entity\User.cs" />
     <Compile Include="FormMain.cs">
@@ -124,6 +130,8 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Log\Log.cs" />
+    <Compile Include="Log\LogHelper.cs" />
     <Compile Include="Properties\Resource.en-US.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -135,11 +143,29 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ResourceCulture.cs" />
+    <Compile Include="UI\FormAutoUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormAutoUpdate.Designer.cs">
+      <DependentUpon>FormAutoUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FormDevStudy.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\FormDevStudy.Designer.cs">
       <DependentUpon>FormDevStudy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormGenerateGridColumns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormGenerateGridColumns.Designer.cs">
+      <DependentUpon>FormGenerateGridColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\FormGuid.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FormGuid.Designer.cs">
+      <DependentUpon>FormGuid.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\FormMySqlStudy.cs">
       <SubType>Form</SubType>
@@ -159,10 +185,10 @@
     <Compile Include="UI\FormQueueStackStudy.Designer.cs">
       <DependentUpon>FormQueueStackStudy.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\LogSystemControl.cs">
+    <Compile Include="Controls\LogSystemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\LogSystemControl.Designer.cs">
+    <Compile Include="Controls\LogSystemControl.Designer.cs">
       <DependentUpon>LogSystemControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\HslCurveForm.cs">
@@ -200,7 +226,6 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resource.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.en-US.Designer.cs</LastGenOutput>
@@ -209,8 +234,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormAutoUpdate.resx">
+      <DependentUpon>FormAutoUpdate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FormDevStudy.resx">
       <DependentUpon>FormDevStudy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormGenerateGridColumns.resx">
+      <DependentUpon>FormGenerateGridColumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\FormGuid.resx">
+      <DependentUpon>FormGuid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\FormMySqlStudy.resx">
       <DependentUpon>FormMySqlStudy.cs</DependentUpon>
@@ -243,9 +277,10 @@
     <EmbeddedResource Include="UI\TxtRWForm.resx">
       <DependentUpon>TxtRWForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\LogSystemControl.resx">
+    <EmbeddedResource Include="Controls\LogSystemControl.resx">
       <DependentUpon>LogSystemControl.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Configs\S7Clients.ini" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

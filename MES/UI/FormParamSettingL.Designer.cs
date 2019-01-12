@@ -274,7 +274,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "FormParamSettingL";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "参数配置";
             this.Load += new System.EventHandler(this.FormParamSettingL_Load);
             this.grbL.ResumeLayout(false);

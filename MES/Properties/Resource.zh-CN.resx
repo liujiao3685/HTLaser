@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BarCode" xml:space="preserve">
-    <value>条码</value>
+    <value>过程条码</value>
   </data>
   <data name="Chinese" xml:space="preserve">
     <value>中文</value>
@@ -166,7 +166,7 @@
     <value>同心度</value>
   </data>
   <data name="Surface" xml:space="preserve">
-    <value>表面成型</value>
+    <value>焊缝质量</value>
   </data>
   <data name="Tips" xml:space="preserve">
     <value>提示：</value>
@@ -223,7 +223,7 @@
     <value>员工编号</value>
   </data>
   <data name="FinalResult" xml:space="preserve">
-    <value>综合检测结果</value>
+    <value>状态</value>
   </data>
   <data name="HappenTime" xml:space="preserve">
     <value>发生时间</value>
@@ -361,7 +361,7 @@
     <value>第</value>
   </data>
   <data name="WorkpiecePressure" xml:space="preserve">
-    <value>工件压紧力</value>
+    <value>压紧力</value>
   </data>
   <data name="Handled" xml:space="preserve">
     <value>已处理</value>
@@ -382,7 +382,7 @@
     <value>压力值</value>
   </data>
   <data name="StoreTime" xml:space="preserve">
-    <value>入库时间</value>
+    <value>上线时间</value>
   </data>
   <data name="WeldFlow" xml:space="preserve">
     <value>流量值</value>
@@ -394,7 +394,7 @@
     <value>更新</value>
   </data>
   <data name="FinalCheckResult" xml:space="preserve">
-    <value>检测结果</value>
+    <value>状态</value>
   </data>
   <data name="Radius" xml:space="preserve">
     <value>半径值</value>
@@ -662,5 +662,14 @@
   </data>
   <data name="WeldPressMoreLimit" xml:space="preserve">
     <value>焊接压力下限不能大于上限！</value>
+  </data>
+  <data name="WorkNo" xml:space="preserve">
+    <value>工单号</value>
+  </data>
+  <data name="ProtectFlowDown" xml:space="preserve">
+    <value>保护气流量下限</value>
+  </data>
+  <data name="ProtectFlowUp" xml:space="preserve">
+    <value>保护气流量上限</value>
   </data>
 </root>
