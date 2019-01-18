@@ -35,7 +35,7 @@ namespace MES.DAL
         /// <param name="ng"></param>
         public void GetTableCountByProcedure(out string sum, out string pass, out string ng)
         {
-            sw.Start();
+            sw.Restart();
             SqlCommand cmd = null;
             try
             {
@@ -73,7 +73,6 @@ namespace MES.DAL
 
             sw.Stop();
             Console.WriteLine("GetTableCountByProcedure耗时：" + sw.Elapsed.ToString());
-
         }
 
         /// <summary>

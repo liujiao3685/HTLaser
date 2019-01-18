@@ -106,7 +106,7 @@ namespace ProductManage.UI
             cmbSelectCondition.Items.Clear();
             cmbResult.Items.Clear();
 
-            conditions = new string[] { ResourceCulture.GetValue("SpotUser"), ResourceCulture.GetValue("SpotResult"),ResourceCulture.GetValue("SpotTime") };
+            conditions = new string[] { ResourceCulture.GetValue("SpotUser"), ResourceCulture.GetValue("SpotResult"), ResourceCulture.GetValue("SpotTime") };
             cmbSelectCondition.Items.AddRange(conditions);
 
             results = new string[] { ResourceCulture.GetValue("Success"), ResourceCulture.GetValue("Fail") };
@@ -335,6 +335,8 @@ namespace ProductManage.UI
         //查询
         private void btnSelect_Click(object sender, EventArgs e)
         {
+            if (!DBHelper.Instance.Open()) return;
+
             if (!ConditionJudge()) return;
 
             UpdateLookBoard(sqlByCondition);
@@ -342,8 +344,6 @@ namespace ProductManage.UI
 
         private bool ConditionJudge()
         {
-            if (!m_main.CheckDbState()) return false;
-
             if (cmbSelectCondition.SelectedIndex < 0)
             {
                 MessageBox.Show(ResourceCulture.GetValue("PleaseChoseMethod"));

@@ -36,7 +36,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(483, 114);
+            this.btnOK.Location = new System.Drawing.Point(206, 110);
             this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(100, 29);
@@ -48,7 +48,7 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(351, 114);
+            this.btnCancel.Location = new System.Drawing.Point(351, 110);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 29);
@@ -63,7 +63,7 @@
             this.txtValue.Margin = new System.Windows.Forms.Padding(4);
             this.txtValue.Name = "txtValue";
             this.txtValue.PasswordChar = '*';
-            this.txtValue.Size = new System.Drawing.Size(553, 25);
+            this.txtValue.Size = new System.Drawing.Size(421, 25);
             this.txtValue.TabIndex = 4;
             // 
             // label1
@@ -75,18 +75,18 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "退出密码";
             // 
-            // FormWithPwd
+            // FormQuitWithPwd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 167);
+            this.ClientSize = new System.Drawing.Size(515, 162);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.txtValue);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormWithPwd";
+            this.Name = "FormQuitWithPwd";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormWithPwd";
             this.Load += new System.EventHandler(this.FormWithPwd_Load);

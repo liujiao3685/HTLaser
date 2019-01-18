@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using MES.DAL;
 using MES.Entity;
 using MES.UI;
-using HslCommunication.Profinet.Siemens;
 using HslCommunication.LogNet;
 using HslCommunication.BasicFramework;
 using MES.Core;
@@ -31,7 +30,6 @@ using System.Collections;
 using ProductManage.PLC;
 using ProductManage.Vision;
 using System.Runtime.InteropServices;
-using ProductManage.Scanner;
 using ProductManage.Lwm;
 
 namespace MES
@@ -58,6 +56,7 @@ namespace MES
         public ILogNet LogNetProgramer;
 
         public OpcUaClient OpcUaClient;
+        public OpcUaTool.OpcUaClient OpcUaTool;
         public string OpcServiceUrl = "opc.tcp://192.168.0.75:4840";
 
         public int DeviceState = 2;
@@ -70,22 +69,19 @@ namespace MES
 
         #region 私有变量
 
-
         private SoftAuthorize m_softAuthorize = null;
 
         private Timer m_selfCheckTimer;
 
         private string CurrentBarCode = string.Empty;
 
-        private VisionLJ7000 m_visionLj7080;
-
         private int m_scanErrorCount = 0;//扫码错误次数记录
 
-        private Socket m_socketScan = null;
+        public Socket m_socketScan = null;
 
         private bool m_scanRun = false;//是否开启扫码线程
 
-        private Socket m_socketLwm = null;//LWM监听Socket
+        public Socket m_socketLwm = null;//LWM监听Socket
 
         private SpotCheckForm m_spotCheckForm;
 
@@ -166,11 +162,12 @@ namespace MES
 
             if (IsStation_S)
             {
+                ScanIP = "192.168.0.78";
                 //toolParamSetting.Visible = false;
             }
             else
             {
-
+                ScanIP = "192.168.0.88";
             }
 
             //设定按字体来缩放控件  
@@ -193,11 +190,6 @@ namespace MES
             Thread t_monitorState = new Thread(MonitorState);
             t_monitorState.IsBackground = true;
             t_monitorState.Start();
-
-            //OPC LWM检测监听线程
-            //Thread t_lwmThread = new Thread(GetLwmDataFromPlc);
-            //t_lwmThread.IsBackground = true;
-            //t_lwmThread.Start();
 
             //监听扫描仪线程
             Thread t_scanThread = new Thread(StartScanThread);
@@ -252,13 +244,10 @@ namespace MES
 
         public bool CheckPlcState()
         {
-            if (OpcUaClient == null || OpenPlc() ||
-                !OpcUaClient.Connected || !b_opcState)
+            if (OpcUaClient == null || !OpcUaClient.Connected)
             {
-                AddTips("PLC连接断开，请检查网络连接！", true);
                 return false;
             }
-            AddTips("PLC重新建立连接！", false);
             return true;
         }
 
@@ -266,10 +255,8 @@ namespace MES
         {
             if (!DBHelper.Instance.Open())
             {
-                AddTips("数据库连接断开，请检查网络连接！", true);
                 return false;
             }
-            AddTips("数据库重新建立连接！", false);
             return true;
         }
 
@@ -422,7 +409,7 @@ namespace MES
             catch (Exception ex)
             {
                 m_errorCount++;
-                if (m_errorCount > 50)
+                if (m_errorCount > 0)
                 {
                     m_errorCount = 0;
                     LogNetProgramer.WriteError("异常", "PLC连接失败：" + ex.Message);
@@ -512,7 +499,6 @@ namespace MES
                     m_socketLwm.Send(Encoding.ASCII.GetBytes(barcode));
                     b_sendLwmDataSuccess = true;
                     LwmHelper.GetInstance().SafeClose(m_socketLwm);
-                    //TcpSafeClose(m_socketLwm);
                 }
                 catch (Exception ex)
                 {
@@ -527,82 +513,7 @@ namespace MES
             }
         }
 
-        /// <summary>
-        /// 读取 PLC LWM检测结果
-        /// </summary>
-        private void GetLwmDataFromPlc()
-        {
-            while (IsWindowShow)
-            {
-                try
-                {
-                    //接收lwm开始采集指令
-                    bool collect = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_LwmSign);
-
-                    if (collect)
-                    {
-                        int result = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_LwmCheck);
-
-                        if (result == 1)
-                        {
-                            b_lwmResult = true;
-                            txtLwmCheck.UIText = "OK";
-                            txtLwmCheck.OriginalColor = Color.Lime;
-                        }
-                        else if (result == 2)
-                        {
-                            b_lwmResult = false;
-                            txtLwmCheck.UIText = "NG";
-                            txtLwmCheck.OriginalColor = Color.Red;
-                        }
-                        else
-                        {
-                            txtLwmCheck.UIText = "LwmResult:0";
-                            txtLwmCheck.OriginalColor = Color.OrangeRed;
-                        }
-
-                        OpcUaClient.WriteNode(PlcHelper.OPC_DB_LwmCheck, 0);
-                        //OpcUaClient.WriteNode(s_lwmSign, false);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    AddTips(ResourceCulture.GetValue("PLCConnectException"), true);
-                    LogNetProgramer.WriteError("异常", "LWM检测结果读取异常--->" + ex.Message);
-                }
-
-                Thread.Sleep(500);
-            }
-        }
-
-
         #endregion
-
-
-        public bool TcpSafeClose(Socket socket)
-        {
-            if (socket == null) return false;
-            if (!socket.Connected) return false;
-
-            try
-            {
-                socket.Shutdown(SocketShutdown.Both);
-
-                socket.Close();
-                socket.Dispose();
-                socket = null;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                m_errorCount++;
-                if (m_errorCount > 10)
-                {
-                    LogNetProgramer.WriteError("异常", "TCP通讯关闭异常：" + ex.Message);
-                }
-                return false;
-            }
-        }
 
 
         #region 扫描仪相关
@@ -611,15 +522,6 @@ namespace MES
         {
             try
             {
-                if (IsStation_S)
-                {
-                    ScanIP = "192.168.0.78";
-                }
-                else
-                {
-                    ScanIP = "192.168.0.88";
-                }
-
                 m_socketScan = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ScanIP), 9004);
 
@@ -629,13 +531,15 @@ namespace MES
                 }
 
                 //开启监听线程
-                m_scanRun = true;
+                m_scanRun = m_socketScan.Connected;
 
                 AddTips("扫描仪SR-751连接成功！", false);
             }
             catch (Exception ex)
             {
                 m_scanRun = false;
+                m_socketScan?.Dispose();
+                m_socketScan = null;
                 AddTips("扫描仪SR-751连接失败,请检查网络连接！", true);
                 LogNetProgramer.WriteDebug("扫描仪连接异常：" + ex.Message);
             }
@@ -655,30 +559,41 @@ namespace MES
             {
                 try
                 {
+                    //循环获取PLC产品到位信号 (注意，上位机只负责获取PLC信号，不做扫码控制，此控制由plc触发扫码)
                     m_scanPlcSign = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_StartScan);
                 }
                 catch (Exception ex)
                 {
+                    //获取条码失败：plc通讯异常
                     AddTips(ResourceCulture.GetValue("PLCConnectException"), true);
+                    m_errorCount++;
+                    if (m_errorCount > 25)
+                    {
+                        m_errorCount = 0;
+                        LogNetProgramer.WriteError("异常", "获取PLC扫码信号异常:" + ex.Message);
+                    }
                     b_scanSuccess = false;
                 }
 
-                if (m_scanPlcSign && m_socketScan.Connected == true)
+                //产品到位信号为 true 时 才开始去获取条码
+                if (m_scanPlcSign)
                 {
+                    if (!m_socketScan.Connected) OpenScanSocket();
                     scanData = new byte[1024];
 
                     int len = m_socketScan.Receive(scanData);
                     if (len == 0)
                     {
-                        ScanCallBack(2);
+                        //获取条码失败：无码
+                        ScanCallBack(2);//此函数表示：发送扫码结果给PLC，1表示成功，2表示失败
                         b_scanSuccess = false;
-                        //break;
                     }
                     else
                     {
                         b_scanSuccess = true;
                     }
 
+                    //获取条码成功：开始解析条码，解析后将解析结果、条码发送至PLC
                     if (b_scanSuccess)
                     {
                         string barCode = Encoding.UTF8.GetString(scanData, 0, len);
@@ -692,6 +607,7 @@ namespace MES
                             //判断回车
                             if (scanData[len - 1] == 13)
                             {
+                                //解析条码
                                 MonitorBarCode(CurrentBarCode);
                                 txtBarCode.Text = string.Empty;
                             }
@@ -700,8 +616,118 @@ namespace MES
                     }
                 }
 
-                Thread.Sleep(500);
+                Thread.Sleep(800);
             }
+        }
+
+        //手动输入条码
+        private void txtFirstScan_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            string barCode = txtBarCode.Text.Trim();
+
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                CurrentBarCode = barCode;
+
+                MonitorBarCode(CurrentBarCode);
+                txtBarCode.Text = string.Empty;
+            }
+        }
+
+        //发送条码检测结果
+        private void MonitorBarCode(string barCode)
+        {
+            if (String.IsNullOrEmpty(barCode)/* || barCode.Length > 15*/)
+            {
+                ScanCallBack(2);
+                m_scanErrorCount++;
+                txtBarCode.Text = string.Empty;
+                AddTips(ResourceCulture.GetValue("InvalidBarCode") + barCode, true);
+                return;
+            }
+
+            if (barCode.Contains("ERROR") || barCode.Contains("error"))//错误条码
+            {
+                ScanCallBack(2);
+                m_scanErrorCount++;
+                txtBarCode.Text = string.Empty;
+                AddTips(ResourceCulture.GetValue("ErrorBarCode") + barCode, true);
+                return;
+            }
+
+            ScanCallBack(1);
+
+            CurrentBarCode = barCode;
+
+            int rs = IsStorage(CurrentBarCode);
+            if (rs != 3)
+            {
+                if (IsStation_S)
+                {
+                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_BarCode, "OP20-" + CurrentBarCode);
+                }
+                else
+                {
+                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_BarCode, "OP70-" + CurrentBarCode);
+                }
+
+                OnBarCodeChange(new MyEvent() { BarCode = CurrentBarCode });
+
+                AddTips(ResourceCulture.GetValue("BarCodeTips") + CurrentBarCode, false);
+            }
+        }
+
+        /// <summary>
+        /// 扫码结果反馈
+        /// </summary>
+        /// <param name="type">1、不存在，2、存在，3、异常</param>
+        /// <returns></returns>
+        public bool ScanCallBack(int type)
+        {
+            bool result;
+            try
+            {
+                result = OpcUaClient.WriteNode(PlcHelper.OPC_DB_ScanCallBack, type);
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                LogNetProgramer.WriteError("异常", ex.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 产品是否入库
+        /// </summary>
+        /// <param name="barCode"></param>
+        /// <returns>产品是否入库</returns>
+        public int IsStorage(string barCode)
+        {
+            string ifexist = "select PNo from Product where PNo = '" + barCode + "'";
+
+            int rs = 0;
+            int exist = DbTool.IsExist(ifexist);
+            if (exist == 1)//存在
+            {
+                rs = 1;
+            }
+            else if (exist == 2)//不存在
+            {
+                string sql = "INSERT INTO Product(PNo,StorageTime) Values('" + barCode + "','" + DateTime.Now + "')";
+                int c = DbTool.ModifyTable(sql);
+                if (c > 0)
+                {
+                    rs = 2;
+                }
+                else
+                {
+                    rs = 3;
+                    AddTips(barCode + "产品入库失败！", true);
+                }
+            }
+            return rs;
         }
 
 
@@ -732,13 +758,8 @@ namespace MES
                     if (CheckPlcState())
                     {
                         bool order = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCode);
-                        if (order)
-                        {
-                            m_lwmCode = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
-                            SendLwmBarcode(m_lwmCode);
-                            if (b_sendLwmDataSuccess) OpcUaClient.WriteNode(PlcHelper.OPC_DB_SendLwmCode, false);
-                            else AddTips("发送LWM条码失败！", true);
-                        }
+
+                        SendCodeByPlc(order);
 
                         int start = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_CcdOrder);
                         if (start == 1)
@@ -785,12 +806,12 @@ namespace MES
                 FlowUp = Math.Round(Convert.ToDouble(objs[7]), 3);
                 FlowDown = Math.Round(Convert.ToDouble(objs[8]), 3);
 
-                avgSpeed = Convert.ToInt32(objs[7]);
-                m_weldTime = Math.Round(Convert.ToDouble(objs[8]), 3);
-                CurrentBarCode = objs[9].ToString();
-                CoaxialityS = Math.Round(Convert.ToDouble(objs[10]), 3);
-                m_surface = Convert.ToInt32(objs[11]);
-                m_lwmResult = Convert.ToInt32(objs[12]);
+                avgSpeed = Convert.ToInt32(objs[9]);
+                m_weldTime = Math.Round(Convert.ToDouble(objs[10]), 3);
+                CurrentBarCode = objs[11].ToString();
+                CoaxialityS = Math.Round(Convert.ToDouble(objs[12]), 3);
+                m_surface = Convert.ToInt32(objs[13]);
+                m_lwmResult = Convert.ToInt32(objs[14]);
             }
         }
 
@@ -815,7 +836,7 @@ namespace MES
                     txtSurface.OriginalColor = Color.Red;
                     b_surfaceCheck = false;
                 }
-                else if (m_surface == 4 || !TypeCoaxiality(CoaxialityS))
+                else if (m_surface == 4 || !TypeCoaxialityIsOk(CoaxialityS))
                 {
                     m_surfaceType = "同心度NG";
                     txtSurface.UIText = "NG";
@@ -899,14 +920,15 @@ namespace MES
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = false });
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataFail") + "BarCode：" + CurrentBarCode, true);
 
-                                LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow + "avgPressure:" + avgPressure +
-                                    "CoaxialityS：" + CoaxialityS + "avgSpeed：" + avgSpeed + "m_weldTimeS：" + m_weldTime);
+                                LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow
+                                    + "avgFlowup：" + FlowUp + "avgFlowdown：" + FlowDown + "avgPressure:" + avgPressure +
+                                   "avgHeight：" + avgHeight + "avgCoax：" + avgCoax + "avgSpeed：" + avgSpeed + "m_weldTimeL：" + m_weldTime);
                             }
                             b_startModifyS = !b_startModifyS;
                         }
                         else
                         {
-                            AddTips(ResourceCulture.GetValue("SaveWeldDataFailNoBarcode"), true);
+                            AddTips(ResourceCulture.GetValue("SaveWeldDataFailNoBarcode") + "BarCode：" + CurrentBarCode, true);
                         }
                     }
                     catch (Exception ex)
@@ -929,7 +951,7 @@ namespace MES
         /// </summary>
         /// <param name="coa"></param>
         /// <returns></returns>
-        private bool TypeCoaxiality(double coa)
+        private bool TypeCoaxialityIsOk(double coa)
         {
             bool res = true;
             if (IsStation_S)
@@ -1201,123 +1223,6 @@ namespace MES
 
 
 
-        //手动输入条码
-        private void txtFirstScan_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            string barCode = txtBarCode.Text.Trim();
-
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                CurrentBarCode = barCode;
-
-                MonitorBarCode(CurrentBarCode);
-                txtBarCode.Text = string.Empty;
-            }
-        }
-
-        //发送条码检测结果
-        private void MonitorBarCode(string barCode)
-        {
-            if (m_scanErrorCount >= 2)//如果扫码失败次数大于2次
-            {
-                m_scanErrorCount = 0;
-                return;
-            }
-
-            if (String.IsNullOrEmpty(barCode)/* || barCode.Length > 15*/)
-            {
-                ScanCallBack(2);
-                m_scanErrorCount++;
-                txtBarCode.Text = string.Empty;
-                AddTips(ResourceCulture.GetValue("InvalidBarCode") + barCode, true);
-                return;
-            }
-
-            if (barCode.Contains("ERROR") || barCode.Contains("error"))
-            {
-                ScanCallBack(2);
-                m_scanErrorCount++;
-                txtBarCode.Text = string.Empty;
-                AddTips(ResourceCulture.GetValue("ErrorBarCode") + barCode, true);
-                return;
-            }
-
-            ScanCallBack(1);
-
-            CurrentBarCode = barCode;
-
-            int rs = IsStorage(CurrentBarCode);
-            if (rs != 3)
-            {
-                if (IsStation_S)
-                {
-                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_BarCode, "OP20-" + CurrentBarCode);
-                }
-                else
-                {
-                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_BarCode, "OP70-" + CurrentBarCode);
-                }
-
-                OnBarCodeChange(new MyEvent() { BarCode = CurrentBarCode });
-
-                AddTips(ResourceCulture.GetValue("BarCodeTips") + CurrentBarCode, false);
-            }
-        }
-
-        /// <summary>
-        /// 扫码结果反馈
-        /// </summary>
-        /// <param name="type">1、不存在，2、存在，3、异常</param>
-        /// <returns></returns>
-        public bool ScanCallBack(int type)
-        {
-            bool result;
-            try
-            {
-                result = OpcUaClient.WriteNode(PlcHelper.OPC_DB_ScanCallBack, type);
-            }
-            catch (Exception ex)
-            {
-                result = false;
-                LogNetProgramer.WriteError("异常", ex.Message);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// 产品是否入库
-        /// </summary>
-        /// <param name="barCode"></param>
-        /// <returns>产品是否入库</returns>
-        public int IsStorage(string barCode)
-        {
-            string ifexist = "select PNo from Product where PNo = '" + barCode + "'";
-
-            int rs = 0;
-            int exist = DbTool.IsExist(ifexist);
-            if (exist == 1)//存在
-            {
-                rs = 1;
-            }
-            else if (exist == 2)//不存在
-            {
-                string sql = "INSERT INTO Product(PNo,StorageTime) Values('" + barCode + "','" + DateTime.Now + "')";
-                int c = DbTool.ModifyTable(sql);
-                if (c > 0)
-                {
-                    rs = 2;
-                }
-                else
-                {
-                    rs = 3;
-                    AddTips(barCode + "产品入库失败！", true);
-                }
-            }
-            return rs;
-        }
-
-
         #region 内存回收
         [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize")]
         public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
@@ -1339,15 +1244,10 @@ namespace MES
         #region 大环相关
 
         private int _currentDeviceId = 0;
-
         private LJV7IF_MEASURE_DATA[] measureData = new LJV7IF_MEASURE_DATA[NativeMethods.MeasurementDataCount];
 
         private float heightData = float.NaN;//每次采样的高度差
-
         private float coaxData = float.NaN;//每次采样的同心度
-
-        private int m_weldOrder = 0;//焊接指令
-
         private int count = 0;//采样次数
 
         private float sumHeight = 0;//高度差和
@@ -1375,18 +1275,13 @@ namespace MES
                 {
                     if (CheckPlcState())
                     {
-                        m_weldOrder = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_VisionOrder);//PLC是否发送焊接指令
+                        int m_weldOrder = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_VisionOrder);//PLC是否发送焊接指令
 
-                        bool order = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCode);
-                        if (order)
-                        {
-                            m_lwmCode = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
-                            SendLwmBarcode(m_lwmCode);
-                            if (b_sendLwmDataSuccess) OpcUaClient.WriteNode(PlcHelper.OPC_DB_SendLwmCode, false);
-                            else AddTips("发送LWM条码失败！", true);
-                        }
+                        bool sendLwmCodeSign = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCode);//PLC 发送 是否发送条码给LWM信号
 
-                        AnalysisVisionData();
+                        SendCodeByPlc(sendLwmCodeSign);
+
+                        AnalysisVisionData(m_weldOrder);
                     }
                 }
                 catch (Exception ex)
@@ -1395,11 +1290,32 @@ namespace MES
                     if (m_errorCount > 5)
                     {
                         m_errorCount = 0;
-                        LogNetProgramer.WriteError("异常", "OPC视觉通讯异常：" + ex.Message);
+                        LogNetProgramer.WriteError("异常", "MonitorVisionData：" + ex.Message);
                     }
                     //AddTips(ResourceCulture.GetValue("PLCConnectException"), true);
                 }
                 Thread.Sleep(300);
+            }
+        }
+
+        private void SendCodeByPlc(bool order)
+        {
+            if (order)
+            {
+                m_lwmCode = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
+                //LogNetProgramer.WriteDebug("SendLwmCode: " + order + " LwmCode: " + m_lwmCode);
+                SendLwmBarcode(m_lwmCode);
+                //LogNetProgramer.WriteDebug("LWM条码发送成功！");
+
+                if (b_sendLwmDataSuccess)
+                {
+                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_SendLwmCode, false);
+                }
+                else
+                {
+                    //LogNetProgramer.WriteDebug("LWM条码发送失败！");
+                    AddTips("发送LWM条码失败！", true);
+                }
             }
         }
 
@@ -1413,13 +1329,13 @@ namespace MES
             return -1;
         }
 
-        private void AnalysisVisionData()
+        private void AnalysisVisionData(int order)
         {
-            if (m_weldOrder == 1 && VisionLJ7000.Instance.Connected)//开始焊接
+            if (order == 1 && VisionLJ7000.Instance.Connected)//开始焊接
             {
                 int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
-
                 //rc == (int)Rc.Ok
+
                 heightData = VisionValidCheck(measureData[0]);
                 coaxData = VisionValidCheck(measureData[1]);
 
@@ -1432,20 +1348,28 @@ namespace MES
                 }
             }
 
-            if (m_weldOrder == 2)//停止焊接
+            if (order == 2)//停止焊接
             {
                 avgHeight = (float)Math.Round(Convert.ToDouble(sumHeight / count), 3);
                 avgCoax = (float)Math.Round(Convert.ToDouble(sumCoax / count), 3);
 
                 int type = SortVisionType(avgHeight, avgCoax);
 
-                //发送测试结果给PLC，1、OK 其他NG
+                //发送检测结果给PLC，1、OK 其他NG（4代表同心度NG，3代表焊缝NG,2扫码NG）
                 OpcUaClient.WriteNode(PlcHelper.OPC_DB_VisionResult, type);
 
+            }
+
+            if (order == 3)//采集焊接结果
+            {
                 CollectWeldDataL();
 
+                TypeLwmResult();
+
+                //复位Order 0
                 OpcUaClient.WriteNode(PlcHelper.OPC_DB_VisionOrder, 0);
                 count = 0;
+                order = 0;
 
                 if (DeviceState != 2) b_startModifyL = true;
             }
@@ -1469,11 +1393,12 @@ namespace MES
                 FlowUp = Math.Round(Convert.ToDouble(objs[7]), 3);
                 FlowDown = Math.Round(Convert.ToDouble(objs[8]), 3);
 
-                avgSpeed = Convert.ToInt32(objs[7]);
-                m_weldTime = Math.Round(Convert.ToDouble(objs[8]), 3);
-                CurrentBarCode = objs[9].ToString();
-                m_lwmResult = Convert.ToInt32(objs[10]);
+                avgSpeed = Convert.ToInt32(objs[9]);
+                m_weldTime = Math.Round(Convert.ToDouble(objs[10]), 3);
+                CurrentBarCode = objs[11].ToString();
+                m_lwmResult = Convert.ToInt32(objs[12]);
             }
+
         }
 
         /// <summary>
@@ -1490,19 +1415,6 @@ namespace MES
         /// <returns></returns>
         private int SortVisionType(float height, float coax)
         {
-            if (m_lwmResult == 1)
-            {
-                b_lwmResult = true;
-                txtLwmCheck.UIText = "OK";
-                txtLwmCheck.OriginalColor = Color.Lime;
-            }
-            else if (m_lwmResult == 2)
-            {
-                b_lwmResult = false;
-                txtLwmCheck.UIText = "NG";
-                txtLwmCheck.OriginalColor = Color.Red;
-            }
-
             if (height < 0 || height > 10 || float.IsNaN(height))//非数字无效值
             {
                 avgHeight = (float)HfUp + ((float)random.NextDouble() * 1000) / 1000;
@@ -1548,6 +1460,22 @@ namespace MES
             }
         }
 
+        private void TypeLwmResult()
+        {
+            if (m_lwmResult == 1)
+            {
+                b_lwmResult = true;
+                txtLwmCheck.UIText = "OK";
+                txtLwmCheck.OriginalColor = Color.Lime;
+            }
+            else if (m_lwmResult == 2)
+            {
+                b_lwmResult = false;
+                txtLwmCheck.UIText = "NG";
+                txtLwmCheck.OriginalColor = Color.Red;
+            }
+        }
+
         //大环数据更新
         private void ModifyLargeData()
         {
@@ -1555,8 +1483,9 @@ namespace MES
             {
                 if (b_startModifyL)
                 {
-                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown,Pressure=@press,WeldDepth=@depth,WeldTime=@time," +
-                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,CoaxUp=@coaxUp,CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
+                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown," +
+                        "Pressure=@press,WeldDepth=@depth,WeldTime=@time,XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,CoaxUp=@coaxUp," +
+                        "CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
 
                     if (b_visionCheck && b_lwmResult) b_qcResult = true;
                     else b_qcResult = false;
@@ -1607,14 +1536,15 @@ namespace MES
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataFail") + "BarCode：" + CurrentBarCode, true);
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = false });
 
-                                LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow + "avgPressure:" + avgPressure +
+                                LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow
+                                    + "avgFlowup：" + FlowUp + "avgFlowdown：" + FlowDown + "avgPressure:" + avgPressure +
                                    "avgHeight：" + avgHeight + "avgCoax：" + avgCoax + "avgSpeed：" + avgSpeed + "m_weldTimeL：" + m_weldTime);
                             }
                             b_startModifyL = !b_startModifyL;
                         }
                         else
                         {
-                            AddTips(ResourceCulture.GetValue("SaveWeldDataFailNoBarcode"), true);
+                            AddTips(ResourceCulture.GetValue("SaveWeldDataFailNoBarcode") + "BarCode：" + CurrentBarCode, true);
                         }
 
                     }
@@ -1624,7 +1554,7 @@ namespace MES
                         if (m_errorCount > 5)
                         {
                             m_errorCount = 0;
-                            LogNetProgramer.WriteError("异常", "大环检测结果保存失败：" + ex.Message);
+                            LogNetProgramer.WriteError("异常", "ModifyLargeData：" + ex.Message);
                         }
                     }
                 }
@@ -1649,7 +1579,9 @@ namespace MES
             avgPressure = 0;
 
             count = 0;
-            m_weldOrder = 0;
+            txtCoaxility.Text = String.Empty;
+            txtSurface.Text = String.Empty;
+            txtLwmCheck.Text = String.Empty;
         }
 
         #endregion
@@ -1933,6 +1865,7 @@ namespace MES
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            /*
             if (WindowState == FormWindowState.Minimized)
             {
                 //还原窗体
@@ -1946,17 +1879,18 @@ namespace MES
 
                 //托盘图标隐藏
                 //notifyIcon1.Visible = false;
-            }
+            }*/
         }
 
         private void FormMain_SizeChanged(object sender, EventArgs e)
         {
+            /*
             //判断窗体是否为最小化
             if (WindowState == FormWindowState.Minimized)
             {
                 //ShowInTaskbar = false;
                 exeIcon.Visible = true;
-            }
+            }*/
         }
 
         //垃圾定时回收

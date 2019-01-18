@@ -460,7 +460,6 @@
             // 
             this.exeIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("exeIcon.Icon")));
             this.exeIcon.Text = "notifyIcon1";
-            this.exeIcon.Visible = true;
             this.exeIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
             // timerGC

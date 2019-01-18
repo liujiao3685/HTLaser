@@ -253,7 +253,7 @@ namespace MES.UserControls
             // 
             this.labX.AutoSize = true;
             this.labX.Font = new System.Drawing.Font("Tahoma", 15F);
-            this.labX.Location = new System.Drawing.Point(92, 219);
+            this.labX.Location = new System.Drawing.Point(92, 220);
             this.labX.Name = "labX";
             this.labX.Size = new System.Drawing.Size(119, 30);
             this.labX.TabIndex = 4;

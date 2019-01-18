@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -59,17 +60,23 @@ namespace ProductManage.UI
         private void TimerMonitor_Tick(object sender, EventArgs e)
         {
             CheckDbState();
-            CheckPlcState();
             CheckLwmState();
             CheckScanState();
+            CheckPlcState();
             if (!IsStation_S) CheckVisionState();
         }
 
+        Stopwatch sw = new Stopwatch();
         public bool CheckVisionState()
         {
-            if (VisionLJ7000.Instance.OpenVision())
+            sw.Restart();
+            if (!VisionLJ7000.Instance.OpenVision())
             {
                 lanVisionState.LanternBackground = Color.Gray;
+
+                sw.Stop();
+                Console.WriteLine("CheckVisionState：" + sw.Elapsed.ToString());
+                sw.Reset();
                 return false;
             }
             lanVisionState.LanternBackground = Color.LimeGreen;
@@ -78,11 +85,14 @@ namespace ProductManage.UI
 
         public bool CheckScanState()
         {
-            KeyenceSR751.Ip = main.ScanIP;
-            KeyenceSR751.Port = 9004;
-            if (!KeyenceSR751.GetInstance().Open())
+            sw.Restart();
+            KeyenceSR751.ScanIp = main.ScanIP;
+            KeyenceSR751.ScanPort = 9004;
+            if (!main.m_socketScan.Connected)  //if (!KeyenceSR751.GetInstance().Open(20))
             {
                 lanScanState.LanternBackground = Color.Gray;
+                sw.Stop();
+                Console.WriteLine("CheckScanState：" + sw.Elapsed.ToString());
                 return false;
             }
             lanScanState.LanternBackground = Color.LimeGreen;
@@ -91,7 +101,7 @@ namespace ProductManage.UI
 
         public bool CheckLwmState()
         {
-            if (!LwmHelper.GetInstance().Open())
+            if (!LwmHelper.GetInstance().Open(20))//if (!main.m_socketLwm.Connected)  
             {
                 lanLwmState.LanternBackground = Color.Gray;
                 return false;
@@ -102,9 +112,12 @@ namespace ProductManage.UI
 
         public bool CheckDbState()
         {
+            sw.Restart();
             if (!DBHelper.Instance.Open())
             {
                 lanDbState.LanternBackground = Color.Gray;
+                sw.Stop();
+                Console.WriteLine("CheckDbState：" + sw.Elapsed.ToString());
                 return false;
             }
             lanDbState.LanternBackground = Color.LimeGreen;
@@ -113,7 +126,7 @@ namespace ProductManage.UI
 
         public bool CheckPlcState()
         {
-            if (!main.CheckPlcState())
+            if (!main.OpcUaClient.Connected)
             {
                 lanPlcState.LanternBackground = Color.Gray;
                 return false;
@@ -129,8 +142,6 @@ namespace ProductManage.UI
 
         private void DisposeAll()
         {
-            LwmHelper.GetInstance().SafeClose(LwmHelper.GetInstance().LwmSocket);
-            KeyenceSR751.GetInstance().SafeClose(KeyenceSR751.GetInstance().ScanSocket);
             Dispose();
             Close();
         }

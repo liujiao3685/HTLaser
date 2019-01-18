@@ -9,6 +9,7 @@ using MES.Core;
 using MES.UI;
 using System.IO;
 using ProductManage.Language.MyLanguageTool;
+using MES.DAL;
 
 namespace MES.UserControls
 {
@@ -412,8 +413,6 @@ namespace MES.UserControls
         // 查询条件判断 返回sql
         private bool ConditionJudge()
         {
-            if (!m_main.CheckDbState()) return false;
-
             if (cmbSelectCondition.SelectedIndex < 0)
             {
                 MessageBox.Show(ResourceCulture.GetValue("PleaseChoseMethod"));
@@ -551,6 +550,7 @@ namespace MES.UserControls
         {
             startTime = new TimeSpan(DateTime.Now.Ticks);
 
+            if (!DBHelper.Instance.Open()) return;
             if (!ConditionJudge()) return;
 
             m_main.AddTips("正在查询数据，请稍等...", false);

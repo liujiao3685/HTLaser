@@ -68,12 +68,16 @@ namespace ProductManage.Vision
             ethernetConfig.wPortNo = VisionPort;
             try
             {
-                int rc = NativeMethods.LJV7IF_EthernetOpen(_currentDeviceId, ref ethernetConfig);
+                int rc = NativeMethods.LJV7IF_EthernetOpen(_currentDeviceId, ref ethernetConfig);//连接延迟10S
                 if (rc == (int)Rc.Ok)
                 {
                     _deviceData[_currentDeviceId].Status = DeviceStatus.Ethernet;
                     _deviceData[_currentDeviceId].EthernetConfig = ethernetConfig;
                     m_connnectState = boo = true;
+                }
+                else
+                {
+                    m_connnectState = boo = false;
                 }
                 //else
                 //{
@@ -101,7 +105,7 @@ namespace ProductManage.Vision
 
         private SendCommand _sendCommand = SendCommand.GetMeasurementValue;
 
-        private int _currentDeviceId;
+        private int _currentDeviceId = 0;
 
         private List<MeasureData> _measureDatas = new List<MeasureData>();
 
