@@ -196,6 +196,54 @@ namespace ProductManage.Vision
             return m_allDatas;
         }
 
+        public static float ValidData(LJV7IF_MEASURE_DATA data)
+        {
+            if (data.byDataInfo == (int)LJV7IF_MEASURE_DATA_INFO.LJV7IF_MEASURE_DATA_INFO_VALID
+                  && data.byJudge == (int)LJV7IF_JUDGE_RESULT.LJV7IF_JUDGE_RESULT_GO)
+            {
+                return data.fValue;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        ///oredr=1 开始焊接采集视觉结果
+        ///float[3] heightSum,coaxSum,count
+        /// </summary>
+        /// <returns></returns>
+        public float[] VisionDataSum()
+        {
+            int count = 0;
+            float[] datas = new float[3];
+            int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
+            //rc == (int)Rc.Ok
+
+            heightData = ValidData(measureData[0]);
+            coaxData = ValidData(measureData[1]);
+
+            if (heightData != -1 && coaxData != -1)
+            {
+                datas[0] += heightData;
+                datas[1] += coaxData;
+                count++;
+            }
+            datas[2] = count;
+            return datas;
+        }
+
+        /// <summary>
+        /// order=2 计算平均值
+        /// </summary>
+        /// <param name="sums"></param>
+        /// <returns></returns>
+        public float[] VisionDataAvg(float[] sums)
+        {
+            float[] avgs = new float[2];
+            avgs[0] = (float)Math.Round(Convert.ToDouble(sums[0] / sums[2]), 3);
+            avgs[1] = (float)Math.Round(Convert.ToDouble(sums[1] / sums[2]), 3);
+
+            return avgs;
+        }
 
     }
 }

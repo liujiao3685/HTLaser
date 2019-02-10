@@ -1,4 +1,5 @@
-﻿using ProductManage.TcpCommunicate;
+﻿using HslCommunication.Core.Net;
+using ProductManage.TcpCommunicate;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -25,7 +26,6 @@ namespace ProductManage.Lwm
                     lwm = new LwmHelper();
                 }
             }
-
             return lwm;
         }
 
@@ -36,6 +36,91 @@ namespace ProductManage.Lwm
         public LwmHelper()
         {
 
+        }
+
+        /// <summary>
+        /// 根据报文ID读取数据
+        /// </summary>
+        /// <param name="telegramID"></param>
+        /// <returns></returns>
+        public LwmData ReceiveByTelegram(int telegramID)
+        {
+            return ReceiveByTelegram(BitConverter.GetBytes(telegramID));
+        }
+
+        public LwmData ReceiveByTelegram(byte[] telegramID)
+        {
+            if (!IsConn) Open(LwmIp, LwmPort);
+
+            LwmData lwmData = new LwmData();
+            byte[] temp = new byte[1024];
+            int offset = 0;
+            LwmSocket.Receive(temp);
+            lwmData.TelegramId = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.Statue = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.Length = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+
+            byte[] datas = new byte[lwmData.Length];
+            lwmData.ProgramNo = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.ConfigId = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.ConfigVersion = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.TotalResult = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.MoreResult = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            offset += 32;// reserved
+            lwmData.ErrorSignOutput = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.MeasurementID = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+            lwmData.CommentLength = BitConverter.ToInt32(temp, offset);
+            offset += 32;
+
+            for (int i = 0; i < 80; i++)
+            {
+                lwmData.Comment[i] = BitConverter.ToChar(temp, offset + i);
+            }
+            offset += 80;
+
+            for (int i = 0; i < 6; i++)
+            {
+                lwmData.LwmDataTime[i] = BitConverter.ToInt16(temp, offset + i);
+            }
+
+
+
+            return lwmData;
+        }
+
+        /// <summary>
+        /// 发送报文ID
+        /// </summary>
+        /// <param name="telegramID"></param>
+        /// <returns></returns>
+        public bool SendTelegramId(int telegramID)
+        {
+            return SendTelegramId(BitConverter.GetBytes(telegramID));
+        }
+
+        public bool SendTelegramId(byte[] telegramID)
+        {
+            try
+            {
+                if (!IsConn) Open(LwmIp, LwmPort);
+
+                LwmSocket.Send(telegramID);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool Open(int timeout)
@@ -66,7 +151,7 @@ namespace ProductManage.Lwm
             try
             {
                 LwmSocket = ar.AsyncState as Socket;
-                if(LwmSocket != null)
+                if (LwmSocket != null)
                 {
                     LwmSocket.EndConnect(ar);
                     IsConn = true;
@@ -83,22 +168,27 @@ namespace ProductManage.Lwm
             }
         }
 
-        public bool Open()
+        public bool Open(string ip, int port)
+        {
+            return Open(LwmSocket, ip, port);
+        }
+
+        public bool Open(Socket socket, string ip, int port)
         {
             try
             {
-                LwmSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(LwmIp), LwmPort);
-                LwmSocket.Connect(endPoint);
-
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+                socket.Connect(endPoint);
+                IsConn = true;
                 return true;
             }
             catch (Exception)
             {
+                IsConn = false;
                 return false;
             }
         }
-
 
         public byte[] Read()
         {
@@ -121,6 +211,7 @@ namespace ProductManage.Lwm
 
         public bool Close()
         {
+            IsConn = false;
             return base.SafeClose(LwmSocket);
         }
 

@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace ProductManage.Lwm
 {
-    public struct FunctionCmd
+    public class LwmCmd
+    {
+
+    }
+
+    /// <summary>
+    /// 报文ID
+    /// </summary>
+    public struct TelegramID
     {
         /// <summary>
         /// Close TCP/IP connection (socket)
@@ -39,9 +47,5 @@ namespace ProductManage.Lwm
         public int LastMeasurementValues => 0x00120300;
 
 
-    }
-
-    public class LwmCmd
-    {
     }
 }

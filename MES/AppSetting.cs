@@ -324,7 +324,7 @@ namespace MES
             string value = string.Empty;
             try
             {
-                value = ConfigurationManager.ConnectionStrings["MyDatabase"].ToString();
+                value = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
             }
             catch (Exception ex)
             {

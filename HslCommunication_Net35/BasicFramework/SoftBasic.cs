@@ -16,6 +16,56 @@ namespace HslCommunication.BasicFramework
     /// </summary>
     public class SoftBasic
     {
+
+        #region 软件权限检测
+
+        /// <summary>
+        /// 检测软件是否授权
+        /// </summary>
+        public static void CheckSoftAuthorize()
+        {
+            SoftAuthorize m_softAuthorize = new SoftAuthorize();
+
+            //方式一
+            m_softAuthorize.FileSavePath = Application.StartupPath + @"\Authorize.sys"; //存储激活码文件，存储加密
+            m_softAuthorize.LoadByFile();
+
+            // 检测激活码是否正确，没有文件，或激活码错误都算作激活失败
+            if (!m_softAuthorize.IsAuthorizeSuccess(AuthorizeEncrypted))
+            {
+                //显示注册窗口
+                using (FormAuthorize form = new FormAuthorize(m_softAuthorize, "请填写注册码！", AuthorizeEncrypted))
+                {
+                    if (form.ShowDialog() != DialogResult.OK)
+                    {
+                        //授权失败，退出应用程序
+                        Application.Exit();
+                    }
+                }
+            }
+
+            //方式二 :直接进行判断授权码
+            //if (!m_softAuthorize.CheckAuthorize("4408B6C4F17EF79B0210F997771C1E5FBA75748F5DD9DD3C59B9E69FCE05DAF5", AuthorizeEncrypted))
+            //{
+            //    //授权失败！
+            //    Application.Exit();
+            //}
+        }
+
+        /// <summary>
+        /// 自定义加密算法，传入原始数据，返回加密结果
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <returns>加密结果</returns>
+        public static string AuthorizeEncrypted(string origin)
+        {
+            //使用了组件支持的DES对称加密技术
+            string license = SoftSecurity.MD5Encrypt(origin, "CSTLASER");
+            return license;
+        }
+
+        #endregion
+
         #region MD5码计算块
 
 

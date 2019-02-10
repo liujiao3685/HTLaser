@@ -1,6 +1,7 @@
 ﻿using ProductManage.TcpCommunicate;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,14 +13,14 @@ namespace ProductManage.Scanner
 {
     public class KeyenceSR751 : TcpBase
     {
-        public static string ScanIp = "192.168.0.78";
+        public static string ScanIp = ConfigurationManager.AppSettings["ScanIP"].ToString(); //"192.168.0.78";
 
         public static int ScanPort = 9004;
 
         public Socket ScanSocket;
 
         private static readonly object myLock = new object();
-        private static KeyenceSR751 sR751;
+        private static KeyenceSR751 sR751 = null;
         public static KeyenceSR751 GetInstance()
         {
             if (sR751 == null)
@@ -34,14 +35,25 @@ namespace ProductManage.Scanner
 
         public KeyenceSR751()
         {
+
         }
 
         public KeyenceSR751(string ip, int port)
         {
             ScanIp = ip;
             ScanPort = port;
+            Open(20);
         }
 
+        public bool IsConnection()
+        {
+            if (ScanSocket != null && ScanSocket.Connected)
+            {
+                IsConn = true;
+            }
+            IsConn = false;
+            return IsConn;
+        }
 
         /// <summary>
         /// 打开扫码枪连接
@@ -101,16 +113,18 @@ namespace ProductManage.Scanner
                 ScanSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ScanIp), ScanPort);
                 ScanSocket.Connect(endPoint);
+                IsConn = true;
             }
             catch (Exception ex)
             {
-                return false;
+                IsConn = false;
             }
-            return true;
+            return IsConn;
         }
 
         public bool Close()
         {
+            IsConn = false;
             return SafeClose(ScanSocket);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
@@ -7,7 +8,7 @@ namespace MES.DAL
     public class DBHelper
     {
         //数据库连接字符
-        private static string DataBaseConnectStr = AppSetting.GetDbConnectString();
+        private static string SqlServerConnectionStr = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
 
         private SqlConnection m_sqlCon;
 
@@ -20,7 +21,7 @@ namespace MES.DAL
 
         public DBHelper(string dbConnectString)
         {
-            DataBaseConnectStr = dbConnectString;
+            SqlServerConnectionStr = dbConnectString;
         }
 
         public static DBHelper Instance
@@ -35,15 +36,24 @@ namespace MES.DAL
             }
         }
 
+        public bool IsConnection()
+        {
+            if (m_sqlCon == null || m_sqlCon.State == System.Data.ConnectionState.Closed)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public SqlConnection GetConnection()
         {
             try
             {
                 if (m_sqlCon == null)
                 {
-                    if (DataBaseConnectStr != String.Empty)
+                    if (SqlServerConnectionStr != String.Empty)
                     {
-                        m_sqlCon = new SqlConnection(DataBaseConnectStr);
+                        m_sqlCon = new SqlConnection(SqlServerConnectionStr);
                         m_sqlCon.Open();
                     }
                     else
@@ -66,9 +76,9 @@ namespace MES.DAL
         {
             try
             {
-                if (DataBaseConnectStr != String.Empty)
+                if (SqlServerConnectionStr != String.Empty)
                 {
-                    m_sqlCon = new SqlConnection(DataBaseConnectStr);
+                    m_sqlCon = new SqlConnection(SqlServerConnectionStr);
                     m_sqlCon.Open();
                 }
                 else
@@ -77,7 +87,7 @@ namespace MES.DAL
                     return false;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }

@@ -90,9 +90,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HslCommunication, Version=5.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="HslCommunication, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\HslCommunication.dll</HintPath>
+      <HintPath>bin\Release\HslCommunication.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -130,6 +130,7 @@
     <Compile Include="Core\Alarm.cs" />
     <Compile Include="IDAL\IDbBase.cs" />
     <Compile Include="Lwm\LwmCmd.cs" />
+    <Compile Include="Lwm\LwmData.cs" />
     <Compile Include="Lwm\LwmHelper.cs" />
     <Compile Include="Lwm\OperateResult.cs" />
     <Compile Include="Scanner\KeyenceSR751.cs" />
@@ -137,12 +138,11 @@
     <Compile Include="TcpCommunicate\MyTcpServer.cs" />
     <Compile Include="TcpCommunicate\StateObject.cs" />
     <Compile Include="TcpCommunicate\StateOneBase.cs" />
-    <Compile Include="PLC\WeldHelper.cs" />
+    <Compile Include="PLC\CollectHelper.cs" />
     <Compile Include="Core\WindowsMessage.cs" />
     <Compile Include="Core\XmlHelperBase.cs" />
     <Compile Include="DAL\DbUserHelper.cs" />
     <Compile Include="Core\MyEvent.cs" />
-    <Compile Include="Core\Types.cs" />
     <Compile Include="Core\UpdateProgress.cs" />
     <Compile Include="Core\XmlModuleHelper.cs" />
     <Compile Include="DAL\DBHelper.cs" />
@@ -170,94 +170,94 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="TcpCommunicate\TcpBase.cs" />
-    <Compile Include="UI\FormCheckAuth.cs">
+    <Compile Include="Forms\FormCheckAuth.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormCheckAuth.Designer.cs">
+    <Compile Include="Forms\FormCheckAuth.Designer.cs">
       <DependentUpon>FormCheckAuth.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormParamSetting.cs">
+    <Compile Include="Forms\FormParamSetting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormParamSetting.Designer.cs">
+    <Compile Include="Forms\FormParamSetting.Designer.cs">
       <DependentUpon>FormParamSetting.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormParamSettingL.cs">
+    <Compile Include="Forms\FormParamSettingL.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormParamSettingL.Designer.cs">
+    <Compile Include="Forms\FormParamSettingL.Designer.cs">
       <DependentUpon>FormParamSettingL.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormQuitWait.cs">
+    <Compile Include="Forms\FormQuitWait.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormQuitWait.Designer.cs">
+    <Compile Include="Forms\FormQuitWait.Designer.cs">
       <DependentUpon>FormQuitWait.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormSpotDatas.cs">
+    <Compile Include="Forms\FormSpotDatas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormSpotDatas.Designer.cs">
+    <Compile Include="Forms\FormSpotDatas.Designer.cs">
       <DependentUpon>FormSpotDatas.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormQuitWithPwd.cs">
+    <Compile Include="Forms\FormQuitWithPwd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormQuitWithPwd.Designer.cs">
+    <Compile Include="Forms\FormQuitWithPwd.Designer.cs">
       <DependentUpon>FormQuitWithPwd.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\FormMonitor.cs">
+    <Compile Include="Forms\FormMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\FormMonitor.Designer.cs">
+    <Compile Include="Forms\FormMonitor.Designer.cs">
       <DependentUpon>FormMonitor.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\OMCSForm.cs">
+    <Compile Include="Forms\OMCSForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\OMCSForm.Designer.cs">
+    <Compile Include="Forms\OMCSForm.Designer.cs">
       <DependentUpon>OMCSForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ChoseRightsForm.cs">
+    <Compile Include="Forms\ChoseRightsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\ChoseRightsForm.Designer.cs">
+    <Compile Include="Forms\ChoseRightsForm.Designer.cs">
       <DependentUpon>ChoseRightsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\LoginForm.cs">
+    <Compile Include="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\LoginForm.Designer.cs">
+    <Compile Include="Forms\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ManualCheckForm.cs">
+    <Compile Include="Forms\ManualCheckForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\ManualCheckForm.Designer.cs">
+    <Compile Include="Forms\ManualCheckForm.Designer.cs">
       <DependentUpon>ManualCheckForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\QueryForm.cs">
+    <Compile Include="Forms\QueryForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\QueryForm.Designer.cs">
+    <Compile Include="Forms\QueryForm.Designer.cs">
       <DependentUpon>QueryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\SelfCheckWarmForm.cs">
+    <Compile Include="Forms\SelfCheckWarmForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\SelfCheckWarmForm.Designer.cs">
+    <Compile Include="Forms\SelfCheckWarmForm.Designer.cs">
       <DependentUpon>SelfCheckWarmForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\SpotCheckForm.cs">
+    <Compile Include="Forms\SpotCheckForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\SpotCheckForm.Designer.cs">
+    <Compile Include="Forms\SpotCheckForm.Designer.cs">
       <DependentUpon>SpotCheckForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\WeldingModuleForm.cs">
+    <Compile Include="Forms\WeldingModuleForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\WeldingModuleForm.Designer.cs">
+    <Compile Include="Forms\WeldingModuleForm.Designer.cs">
       <DependentUpon>WeldingModuleForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CollectingSystem.cs">
@@ -350,49 +350,49 @@
     <EmbeddedResource Include="Properties\Resource.en-US.resx" />
     <EmbeddedResource Include="Properties\Resource.zh-CN.resx" />
     <EmbeddedResource Include="Properties\Resources.resx" />
-    <EmbeddedResource Include="UI\FormCheckAuth.resx">
+    <EmbeddedResource Include="Forms\FormCheckAuth.resx">
       <DependentUpon>FormCheckAuth.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormParamSetting.resx">
+    <EmbeddedResource Include="Forms\FormParamSetting.resx">
       <DependentUpon>FormParamSetting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormParamSettingL.resx">
+    <EmbeddedResource Include="Forms\FormParamSettingL.resx">
       <DependentUpon>FormParamSettingL.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormQuitWait.resx">
+    <EmbeddedResource Include="Forms\FormQuitWait.resx">
       <DependentUpon>FormQuitWait.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormSpotDatas.resx">
+    <EmbeddedResource Include="Forms\FormSpotDatas.resx">
       <DependentUpon>FormSpotDatas.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormQuitWithPwd.resx">
+    <EmbeddedResource Include="Forms\FormQuitWithPwd.resx">
       <DependentUpon>FormQuitWithPwd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\FormMonitor.resx">
+    <EmbeddedResource Include="Forms\FormMonitor.resx">
       <DependentUpon>FormMonitor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\OMCSForm.resx">
+    <EmbeddedResource Include="Forms\OMCSForm.resx">
       <DependentUpon>OMCSForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ChoseRightsForm.resx">
+    <EmbeddedResource Include="Forms\ChoseRightsForm.resx">
       <DependentUpon>ChoseRightsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\LoginForm.resx">
+    <EmbeddedResource Include="Forms\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ManualCheckForm.resx">
+    <EmbeddedResource Include="Forms\ManualCheckForm.resx">
       <DependentUpon>ManualCheckForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\QueryForm.resx">
+    <EmbeddedResource Include="Forms\QueryForm.resx">
       <DependentUpon>QueryForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\SelfCheckWarmForm.resx">
+    <EmbeddedResource Include="Forms\SelfCheckWarmForm.resx">
       <DependentUpon>SelfCheckWarmForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\SpotCheckForm.resx">
+    <EmbeddedResource Include="Forms\SpotCheckForm.resx">
       <DependentUpon>SpotCheckForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\WeldingModuleForm.resx">
+    <EmbeddedResource Include="Forms\WeldingModuleForm.resx">
       <DependentUpon>WeldingModuleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CollectingSystem.resx">
@@ -470,9 +470,21 @@
     <Content Include="Img\UserInterfaceEditor_5845.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonLibrary\CommonLibrary.csproj">
+      <Project>{3ef1910a-71ee-4a20-88df-ab5e0e8f3e88}</Project>
+      <Name>CommonLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{30FFB1EF-D3D1-4F68-B697-C4930CF69565}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpcUaTool\OpcUaTool.csproj">
       <Project>{3cc8708d-77f4-4183-9f08-641ffe30ba21}</Project>
       <Name>OpcUaTool</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLServerDAL\SQLServerDAL.csproj">
+      <Project>{F65E82D4-8866-498B-8CF0-FB5EBC50CF17}</Project>
+      <Name>SQLServerDAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

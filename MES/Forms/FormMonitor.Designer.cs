@@ -49,7 +49,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label1.Location = new System.Drawing.Point(55, 43);
+            this.label1.Location = new System.Drawing.Point(68, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(150, 24);
             this.label1.TabIndex = 0;
@@ -59,7 +59,7 @@
             // 
             this.lanDbState.BackColor = System.Drawing.Color.Transparent;
             this.lanDbState.LanternBackground = System.Drawing.Color.Gray;
-            this.lanDbState.Location = new System.Drawing.Point(64, 85);
+            this.lanDbState.Location = new System.Drawing.Point(77, 81);
             this.lanDbState.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.lanDbState.Name = "lanDbState";
             this.lanDbState.Size = new System.Drawing.Size(129, 126);
@@ -69,7 +69,7 @@
             // 
             this.lanPlcState.BackColor = System.Drawing.Color.Transparent;
             this.lanPlcState.LanternBackground = System.Drawing.Color.Gray;
-            this.lanPlcState.Location = new System.Drawing.Point(289, 85);
+            this.lanPlcState.Location = new System.Drawing.Point(302, 81);
             this.lanPlcState.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
             this.lanPlcState.Name = "lanPlcState";
             this.lanPlcState.Size = new System.Drawing.Size(129, 126);
@@ -79,7 +79,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label2.Location = new System.Drawing.Point(293, 43);
+            this.label2.Location = new System.Drawing.Point(306, 39);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(123, 24);
             this.label2.TabIndex = 2;
@@ -89,7 +89,7 @@
             // 
             this.lanScanState.BackColor = System.Drawing.Color.Transparent;
             this.lanScanState.LanternBackground = System.Drawing.Color.Gray;
-            this.lanScanState.Location = new System.Drawing.Point(505, 85);
+            this.lanScanState.Location = new System.Drawing.Point(518, 81);
             this.lanScanState.Margin = new System.Windows.Forms.Padding(4, 11, 4, 11);
             this.lanScanState.Name = "lanScanState";
             this.lanScanState.Size = new System.Drawing.Size(129, 126);
@@ -99,7 +99,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label3.Location = new System.Drawing.Point(498, 43);
+            this.label3.Location = new System.Drawing.Point(511, 39);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(150, 24);
             this.label3.TabIndex = 4;
@@ -109,7 +109,7 @@
             // 
             this.lanLwmState.BackColor = System.Drawing.Color.Transparent;
             this.lanLwmState.LanternBackground = System.Drawing.Color.Gray;
-            this.lanLwmState.Location = new System.Drawing.Point(64, 302);
+            this.lanLwmState.Location = new System.Drawing.Point(77, 298);
             this.lanLwmState.Margin = new System.Windows.Forms.Padding(4, 15, 4, 15);
             this.lanLwmState.Name = "lanLwmState";
             this.lanLwmState.Size = new System.Drawing.Size(129, 126);
@@ -119,7 +119,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label4.Location = new System.Drawing.Point(60, 263);
+            this.label4.Location = new System.Drawing.Point(73, 259);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(133, 24);
             this.label4.TabIndex = 6;
@@ -129,7 +129,7 @@
             // 
             this.lanVisionState.BackColor = System.Drawing.Color.Transparent;
             this.lanVisionState.LanternBackground = System.Drawing.Color.Gray;
-            this.lanVisionState.Location = new System.Drawing.Point(289, 302);
+            this.lanVisionState.Location = new System.Drawing.Point(302, 298);
             this.lanVisionState.Margin = new System.Windows.Forms.Padding(4, 21, 4, 21);
             this.lanVisionState.Name = "lanVisionState";
             this.lanVisionState.Size = new System.Drawing.Size(129, 126);
@@ -139,7 +139,7 @@
             // 
             this.labVision.AutoSize = true;
             this.labVision.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labVision.Location = new System.Drawing.Point(279, 263);
+            this.labVision.Location = new System.Drawing.Point(292, 259);
             this.labVision.Name = "labVision";
             this.labVision.Size = new System.Drawing.Size(152, 24);
             this.labVision.TabIndex = 8;
@@ -150,7 +150,7 @@
             this.lab.AutoSize = true;
             this.lab.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Bold);
             this.lab.ForeColor = System.Drawing.Color.Black;
-            this.lab.Location = new System.Drawing.Point(34, 473);
+            this.lab.Location = new System.Drawing.Point(47, 469);
             this.lab.Name = "lab";
             this.lab.Size = new System.Drawing.Size(48, 30);
             this.lab.TabIndex = 10;
@@ -161,7 +161,7 @@
             this.labTips.AutoSize = true;
             this.labTips.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Bold);
             this.labTips.ForeColor = System.Drawing.Color.Red;
-            this.labTips.Location = new System.Drawing.Point(92, 468);
+            this.labTips.Location = new System.Drawing.Point(105, 464);
             this.labTips.Name = "labTips";
             this.labTips.Size = new System.Drawing.Size(42, 21);
             this.labTips.TabIndex = 11;

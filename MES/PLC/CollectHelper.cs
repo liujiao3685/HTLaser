@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace ProductManage.Core
 {
-    public class WeldHelper
+    public class CollectHelper
     {
         public static ArrayList CollectWeldData(OpcUaClient OpcUaClient, string[] Nodes)
         {

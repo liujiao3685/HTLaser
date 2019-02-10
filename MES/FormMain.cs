@@ -31,6 +31,11 @@ using ProductManage.PLC;
 using ProductManage.Vision;
 using System.Runtime.InteropServices;
 using ProductManage.Lwm;
+using System.IO;
+using System.Reflection;
+using System.Configuration;
+using Model;
+using SQLServerDAL;
 
 namespace MES
 {
@@ -64,12 +69,10 @@ namespace MES
         public XmlHelperBase XmlHelper;
         public Dictionary<string, string> SystemParamsDic;
         public DataTable UsersTable;
-        public string WorkNo { set; get; }
+
         #endregion
 
         #region 私有变量
-
-        private SoftAuthorize m_softAuthorize = null;
 
         private Timer m_selfCheckTimer;
 
@@ -120,7 +123,7 @@ namespace MES
             CultureChange();
         }
 
-        public int Test = 0;
+        public int Test = 1;
         public int UseLanguage = 1;
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -196,18 +199,6 @@ namespace MES
             t_scanThread.IsBackground = true;
             t_scanThread.Start();
 
-            //监听设备状态线程
-            //ThreadPool.QueueUserWorkItem((Delegate) =>
-            //{
-            //    MonitorState();
-            //}, null);
-            //Task t = new Task(() =>
-            //{
-            //    MonitorState();
-            //});
-            //t.Start();
-            //bool boo = t.IsCompleted;
-
             //采集同心度，表面质量，小环用
             if (IsStation_S)
             {
@@ -251,17 +242,7 @@ namespace MES
             return true;
         }
 
-        public bool CheckDbState()
-        {
-            if (!DBHelper.Instance.Open())
-            {
-                return false;
-            }
-            return true;
-        }
-
         #endregion
-
 
 
         #region 语言
@@ -489,7 +470,7 @@ namespace MES
             }
         }
 
-        private void SendLwmBarcode(string barcode)
+        private void SendBarcodeToLwm(string barcode)
         {
             if (!string.IsNullOrEmpty(barcode))
             {
@@ -497,6 +478,9 @@ namespace MES
                 {
                     if (m_socketLwm == null || !m_socketLwm.Connected) OpenLwmSocket();
                     m_socketLwm.Send(Encoding.ASCII.GetBytes(barcode));
+
+                    //string rec = DataFromLwm();
+
                     b_sendLwmDataSuccess = true;
                     LwmHelper.GetInstance().SafeClose(m_socketLwm);
                 }
@@ -511,6 +495,15 @@ namespace MES
                     }
                 }
             }
+        }
+
+        private string DataFromLwm()
+        {
+            byte[] rec = new byte[1024 * 1024];
+            if (m_socketLwm == null || !m_socketLwm.Connected) OpenLwmSocket();
+            m_socketLwm.Receive(rec);
+
+            return Encoding.ASCII.GetString(rec);
         }
 
         #endregion
@@ -600,7 +593,7 @@ namespace MES
                         int subIndex = barCode.IndexOfAny(chars);
 
                         barCode = barCode.Substring(0, subIndex);
-                        CurrentBarCode = barCode;
+                        CurrentBarCode = barCode.Replace("\r", "");
 
                         Invoke(new Action(() =>
                         {
@@ -791,7 +784,7 @@ namespace MES
         private void CollectWeldData()
         {
             objs.Clear();
-            objs = WeldHelper.CollectWeldData(OpcUaClient, PlcHelper.Nodes_S);
+            objs = CollectHelper.CollectWeldData(OpcUaClient, PlcHelper.Nodes_S);
 
             if (objs != null && objs.Count > 0)
             {
@@ -870,22 +863,23 @@ namespace MES
             {
                 if (b_startModifyS)
                 {
-                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown,Pressure=@press,WeldTime=@time," +
-                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coa,CoaxUp=@coaxUp,CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
-
                     if (b_surfaceCheck && b_coaCheckS && b_lwmResult) b_qcResult = true;
                     else b_qcResult = false;
 
                     try
                     {
+                        /**
+                     string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown,Pressure=@press,WeldTime=@time," +
+                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coa,CoaxUp=@coaxUp,CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
+                    
                         SqlParameter[] sqlParameters =
                         {
                             //new SqlParameter {ParameterName = "@workNo", SqlDbType = SqlDbType.Decimal, SqlValue = WorkNo},
                             new SqlParameter {ParameterName = "@power", SqlDbType = SqlDbType.Decimal, SqlValue = avgPower},
                             new SqlParameter {ParameterName = "@press", SqlDbType = SqlDbType.Decimal, SqlValue = avgPressure},
                             new SqlParameter {ParameterName = "@speed", SqlDbType = SqlDbType.Int, SqlValue = avgSpeed},
-                            new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
 
+                            new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
                             new SqlParameter {ParameterName = "@flowUp", SqlDbType = SqlDbType.Decimal, SqlValue = FlowUp},
                             new SqlParameter {ParameterName = "@flowDown", SqlDbType = SqlDbType.Decimal, SqlValue = FlowDown},
 
@@ -904,12 +898,16 @@ namespace MES
                             new SqlParameter {ParameterName = "@qcr", SqlDbType = SqlDbType.NVarChar, SqlValue = b_qcResult==true ? "OK":"NG"},
                             new SqlParameter {ParameterName = "@pno", SqlDbType = SqlDbType.NVarChar, SqlValue = CurrentBarCode}
                         };
+                        */
 
                         if (!string.IsNullOrEmpty(CurrentBarCode))
                         {
-                            int c = DbTool.ModifyTable(sql, sqlParameters);
+                            //int c = DbTool.ModifyTable(sql, sqlParameters);
+                            SaveWeldingDataDAL bll = new SaveWeldingDataDAL();
+                            ServiceResult result = bll.SaveWeldingDataS(avgPower, avgSpeed, avgFlow, FlowUp, FlowDown, avgPressure, m_weldTime, WeldXPos,
+                                WeldYPos, WeldZPos, WeldRPos, CoaxialityS, CoaxUpS, CoaxDownS, m_surfaceType, b_lwmResult, b_qcResult, CurrentBarCode);
 
-                            if (c > 0)
+                            if (result.IsSuccess) //if (c > 0)
                             {
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = true });
                                 WeldParamReset();
@@ -1051,57 +1049,6 @@ namespace MES
         #endregion
 
 
-
-        #region 软件权限检测
-
-        /// <summary>
-        /// 检测软件是否授权
-        /// </summary>
-        private void CheckSoftAuthorize()
-        {
-            m_softAuthorize = new SoftAuthorize();
-
-            //方式一
-            m_softAuthorize.FileSavePath = Application.StartupPath + @"\Authorize.sys"; //存储激活码文件，存储加密
-            m_softAuthorize.LoadByFile();
-
-            // 检测激活码是否正确，没有文件，或激活码错误都算作激活失败
-            if (!m_softAuthorize.IsAuthorizeSuccess(AuthorizeEncrypted))
-            {
-                //显示注册窗口
-                using (FormAuthorize form = new FormAuthorize(m_softAuthorize, "请联系华天世纪激光科技公司获取注册码！", AuthorizeEncrypted))
-                {
-                    if (form.ShowDialog() != DialogResult.OK)
-                    {
-                        //授权失败，退出应用程序
-                        Close();
-                    }
-                }
-            }
-
-            //方式二 :直接进行判断授权码
-            //if (!m_softAuthorize.CheckAuthorize("4408B6C4F17EF79B0210F997771C1E5FBA75748F5DD9DD3C59B9E69FCE05DAF5", AuthorizeEncrypted))
-            //{
-            //    //授权失败！
-            //    Close();
-            //}
-        }
-
-        /// <summary>
-        /// 自定义加密算法，传入原始数据，返回加密结果
-        /// </summary>
-        /// <param name="origin"></param>
-        /// <returns>加密结果</returns>
-        private string AuthorizeEncrypted(string origin)
-        {
-            //使用了组件支持的DES对称加密技术
-            string license = SoftSecurity.MD5Encrypt(origin, "CSTLASER");
-            return license;
-        }
-
-        #endregion
-
-
         public delegate void SetTips(string s, bool boo);
         public void AddTips(string v, bool error)
         {
@@ -1176,7 +1123,7 @@ namespace MES
 
         private bool Result = false;
 
-        public User CurrentUser = null;
+        public Entity.User CurrentUser = null;
 
         /// <summary>
         /// 检测当前登录用户权限
@@ -1243,9 +1190,6 @@ namespace MES
 
         #region 大环相关
 
-        private int _currentDeviceId = 0;
-        private LJV7IF_MEASURE_DATA[] measureData = new LJV7IF_MEASURE_DATA[NativeMethods.MeasurementDataCount];
-
         private float heightData = float.NaN;//每次采样的高度差
         private float coaxData = float.NaN;//每次采样的同心度
         private int count = 0;//采样次数
@@ -1263,6 +1207,8 @@ namespace MES
 
         //实际坐标-PLC
         private double WeldXPos, WeldYPos, WeldZPos, WeldRPos = 0;
+
+        private float[] visionDataSum, visionDataAvg;
 
         /// <summary>
         /// 3D数据采集
@@ -1303,8 +1249,8 @@ namespace MES
             if (order)
             {
                 m_lwmCode = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
-                //LogNetProgramer.WriteDebug("SendLwmCode: " + order + " LwmCode: " + m_lwmCode);
-                SendLwmBarcode(m_lwmCode);
+                //LogNetProgramer.WriteDebug("SendLwmCode:" + order + " LwmCode:" + m_lwmCode);
+                SendBarcodeToLwm(m_lwmCode);
                 //LogNetProgramer.WriteDebug("LWM条码发送成功！");
 
                 if (b_sendLwmDataSuccess)
@@ -1333,28 +1279,29 @@ namespace MES
         {
             if (order == 1 && VisionLJ7000.Instance.Connected)//开始焊接
             {
-                int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
-                //rc == (int)Rc.Ok
+                visionDataSum = VisionLJ7000.Instance.VisionDataSum();
 
-                heightData = VisionValidCheck(measureData[0]);
-                coaxData = VisionValidCheck(measureData[1]);
-
-                if (heightData != -1 && coaxData != -1)
-                {
-                    sumHeight += heightData;
-                    sumCoax += coaxData;
-
-                    count++;
-                }
+                //int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
+                ////rc == (int)Rc.Ok
+                //heightData = VisionValidCheck(measureData[0]);
+                //coaxData = VisionValidCheck(measureData[1]);
+                //if (heightData != -1 && coaxData != -1)
+                //{
+                //    sumHeight += heightData;
+                //    sumCoax += coaxData;
+                //    count++;
+                //}
             }
 
             if (order == 2)//停止焊接
             {
-                avgHeight = (float)Math.Round(Convert.ToDouble(sumHeight / count), 3);
-                avgCoax = (float)Math.Round(Convert.ToDouble(sumCoax / count), 3);
+                //avgHeight = (float)Math.Round(Convert.ToDouble(sumHeight / count), 3);
+                //avgCoax = (float)Math.Round(Convert.ToDouble(sumCoax / count), 3);
 
-                int type = SortVisionType(avgHeight, avgCoax);
+                VisionLJ7000.Instance.VisionDataAvg(visionDataSum);
+                int type = SortVisionType(visionDataSum[0], visionDataSum[1]);
 
+                //int type = SortVisionType(avgHeight, avgCoax);
                 //发送检测结果给PLC，1、OK 其他NG（4代表同心度NG，3代表焊缝NG,2扫码NG）
                 OpcUaClient.WriteNode(PlcHelper.OPC_DB_VisionResult, type);
 
@@ -1378,7 +1325,7 @@ namespace MES
         private void CollectWeldDataL()
         {
             objs.Clear();
-            objs = WeldHelper.CollectWeldData(OpcUaClient, PlcHelper.Nodes_L);
+            objs = CollectHelper.CollectWeldData(OpcUaClient, PlcHelper.Nodes_L);
 
             if (objs != null && objs.Count > 0)
             {
@@ -1483,15 +1430,16 @@ namespace MES
             {
                 if (b_startModifyL)
                 {
-                    string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown," +
-                        "Pressure=@press,WeldDepth=@depth,WeldTime=@time,XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,CoaxUp=@coaxUp," +
-                        "CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
-
                     if (b_visionCheck && b_lwmResult) b_qcResult = true;
                     else b_qcResult = false;
 
                     try
                     {
+                        /**
+                        string sql = "update Product set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,FlowUp=@flowUp,FlowDown=@flowDown," +
+                            "Pressure=@press,WeldDepth=@depth,WeldTime=@time,XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,CoaxUp=@coaxUp," +
+                            "CoaxDown=@coaxDown,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
+
                         SqlParameter[] sqlParameters =
                         {
                             //new SqlParameter {ParameterName = "@workNo", SqlDbType = SqlDbType.Decimal, SqlValue = WorkNo},
@@ -1519,14 +1467,18 @@ namespace MES
                             new SqlParameter {ParameterName = "@qcr", SqlDbType = SqlDbType.NVarChar, SqlValue = b_qcResult==true ? "OK":"NG"},
                             new SqlParameter {ParameterName = "@pno", SqlDbType = SqlDbType.NVarChar, SqlValue = CurrentBarCode}
                         };
+                        */
 
                         if (!string.IsNullOrEmpty(CurrentBarCode))
                         {
-                            int c = DbTool.ModifyTable(sql, sqlParameters);
-                            if (c > 0)
+                            //int c = DbTool.ModifyTable(sql, sqlParameters);
+                            SaveWeldingDataDAL bll = new SaveWeldingDataDAL();
+                            ServiceResult result = bll.SaveWeldingDataL(avgPower, avgSpeed, avgFlow, FlowUp, FlowDown, avgPressure, avgHeight, m_weldTime,
+                                WeldXPos, WeldYPos, WeldZPos, WeldRPos, CoaxialityS, CoaxUpS, CoaxDownS, m_surfaceType, b_lwmResult, b_qcResult, CurrentBarCode);
+
+                            if (result.IsSuccess) //if (c > 0)
                             {
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataOK"), false);
-
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = true });
 
                                 WeldParamReset();
@@ -1591,52 +1543,6 @@ namespace MES
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string sql = "update ProductTest set WeldPower=@power,WeldSpeed=@speed,Flow=@flow,Pressure=@press,WeldDepth=@depth,WeldTime=@time," +
-                        "XPos=@x,YPos=@y,ZPos=@z,RPos=@r,Coaxiality=@coax,Surface=@sur,LwmCheck=@lwm,QCResult=@qcr where PNo=@pno";
-
-            CurrentBarCode = "3";
-            avgCoax = avgHeight = (float)100.1235;
-            m_weldTime = WeldRPos = WeldZPos = WeldYPos = WeldXPos = avgPressure = avgFlow = avgPower = 111.2225;
-
-            SqlParameter[] sqlParameters =
-            {
-                    new SqlParameter {ParameterName = "@power", SqlDbType = SqlDbType.Decimal, SqlValue = avgPower},
-                    new SqlParameter {ParameterName = "@flow", SqlDbType = SqlDbType.Decimal, SqlValue = avgFlow},
-                    new SqlParameter {ParameterName = "@speed", SqlDbType = SqlDbType.Int, SqlValue = avgSpeed},
-                    new SqlParameter {ParameterName = "@press", SqlDbType = SqlDbType.Decimal, SqlValue = avgPressure},
-                    new SqlParameter {ParameterName = "@depth", SqlDbType = SqlDbType.Decimal, SqlValue = avgHeight},
-                    new SqlParameter {ParameterName = "@coax", SqlDbType = SqlDbType.Decimal, SqlValue = avgCoax},
-
-                    new SqlParameter {ParameterName = "@x", SqlDbType = SqlDbType.Decimal, SqlValue = WeldXPos},
-                    new SqlParameter {ParameterName = "@y", SqlDbType = SqlDbType.Decimal, SqlValue = WeldYPos},
-                    new SqlParameter {ParameterName = "@z", SqlDbType = SqlDbType.Decimal, SqlValue = WeldZPos},
-                    new SqlParameter {ParameterName = "@r", SqlDbType = SqlDbType.Decimal, SqlValue = WeldRPos},
-
-                    new SqlParameter {ParameterName = "@time", SqlDbType = SqlDbType.Decimal, SqlValue = m_weldTime},
-                    new SqlParameter {ParameterName = "@sur", SqlDbType = SqlDbType.NVarChar, SqlValue = m_surfaceCheckL},
-                    new SqlParameter {ParameterName = "@lwm", SqlDbType = SqlDbType.NVarChar, SqlValue = b_lwmResult==true ? "OK":"NG"},
-                    new SqlParameter {ParameterName = "@qcr", SqlDbType = SqlDbType.NVarChar, SqlValue = b_qcResult==true ? "OK":"NG"},
-                    new SqlParameter {ParameterName = "@pno", SqlDbType = SqlDbType.NVarChar, SqlValue = CurrentBarCode}
-                };
-
-            if (!String.IsNullOrEmpty(CurrentBarCode))
-            {
-                int c = DbTool.ModifyTable(sql, sqlParameters);
-
-            }
-        }
-
-        private void TestDb()
-        {
-            avgHeight = 10152.010499456795422363f / 3;
-            //float.TryParse(avgHeight.ToString("0.000"), out avgHeight);
-
-            //float f1 = 2.01049995422363f;
-            //string sf1 = f1.ToString("0.000");
-            //float.TryParse(sf1, out f1);
-
-            string sql = "update Product set WeldDepth = " + avgHeight + " where pno = '123456'; ";
-            int c = DbTool.ModifyTable(sql, null);
 
         }
 
@@ -1650,7 +1556,7 @@ namespace MES
 
             byte[] sendData = new byte[6] { 0x00, 0x14, 0x01, 0x00, 0x00, 0x04 };
 
-            SendLwmBarcode(CurrentBarCode);
+            SendBarcodeToLwm(CurrentBarCode);
 
             int length = 1024 * 1024;
             var state = new StateObject(length);
@@ -1912,6 +1818,16 @@ namespace MES
 
         private void 通讯监控ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //try
+            //{
+            //    string exeName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "MonitorDevice.exe");
+            //    Process process = Process.Start(exeName);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("异常：" + ex.Message);
+            //}
+
             FormMonitor form = new FormMonitor(this);
             form.ShowDialog();
         }
@@ -1991,30 +1907,24 @@ namespace MES
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //DialogResult result = MessageBox.Show("是否关闭应用程序？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //if (DialogResult.Yes == result)
+            //FormQuitWithPwd inputBox = new FormQuitWithPwd("请输入退出系统的确认密码:", "退出确认");
+            //DialogResult dr = inputBox.ShowDialog();
+            //if (dr == DialogResult.OK && inputBox.Value.Length > 0)
             //{
-            //    e.Cancel = false;
-
-            //using (FormQuitWait form = new FormQuitWait(() =>
-            //{
-            //    CloseCommunicate();
-            //}))
-            //{
-            //    form.ShowDialog();
-            //}
-
+            //    if (inputBox.Value == ConfigurationManager.AppSettings["QuitPwd"])
+            //    {
             exeIcon.Visible = false;
             IsWindowShow = false;
             OnWindowState(this, new MyEvent() { IsWindowShow = false });
 
             Dispose();
             Application.Exit();
-
-            //}
-            //else
-            //{
-            //    e.Cancel = true;
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("密码不正确!", "退出确认");
+            //        e.Cancel = true;
+            //    }
             //}
         }
 

@@ -1,20 +1,11 @@
 ﻿using MES;
 using MES.DAL;
-using OpcUaHelper;
 using ProductManage.Lwm;
 using ProductManage.Scanner;
 using ProductManage.Vision;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProductManage.UI
@@ -88,7 +79,7 @@ namespace ProductManage.UI
             sw.Restart();
             KeyenceSR751.ScanIp = main.ScanIP;
             KeyenceSR751.ScanPort = 9004;
-            if (!main.m_socketScan.Connected)  //if (!KeyenceSR751.GetInstance().Open(20))
+            if (main.m_socketScan == null || !main.m_socketScan.Connected)  //if (!KeyenceSR751.GetInstance().Open(20))
             {
                 lanScanState.LanternBackground = Color.Gray;
                 sw.Stop();
@@ -126,7 +117,7 @@ namespace ProductManage.UI
 
         public bool CheckPlcState()
         {
-            if (!main.OpcUaClient.Connected)
+            if (main.OpcUaClient == null || !main.OpcUaClient.Connected)
             {
                 lanPlcState.LanternBackground = Color.Gray;
                 return false;

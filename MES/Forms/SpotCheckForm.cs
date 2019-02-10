@@ -84,12 +84,26 @@ namespace MES.UI
 
         private void SpotCheck_Load(object sender, EventArgs e)
         {
+            try
+            {
+                DateTime sysTime = BasicFramework.SoftBasic.SelectSysTime();
+                if (!CheckUse(DateTime.Now, sysTime, 30))
+                {
+                    if (File.Exists(Application.StartupPath + @"\Authorize.sys")) File.Delete(Application.StartupPath + @"\Authorize.sys");
+                    BasicFramework.SoftBasic.CheckSoftAuthorize();
+                }
+            }
+            catch (Exception)
+            {
+                if (File.Exists(Application.StartupPath + @"\Authorize.sys")) File.Delete(Application.StartupPath + @"\Authorize.sys");
+                BasicFramework.SoftBasic.CheckSoftAuthorize();
+            }
+
             m_culture = AppSetting.GetLanguage();
             InitLanguage();
 
             m_dbColumnNames = "ID,EmpNo,Name,Password,Auth";
 
-            //CheckSoftAuthorize();
             m_main = new FormMain(this);
             m_dbTool = new DBTool();
 
@@ -101,10 +115,24 @@ namespace MES.UI
 
             InitData();
 
-            //GetModuleNames();
-
             if (AppSetting.GetTest() != 1) ResetFormData();
 
+        }
+
+        private bool CheckUse(DateTime now, DateTime sys, int days)
+        {
+            bool boo = false;
+            int timeSpace = Int32.MaxValue;
+
+            if (now.Year == sys.Year)
+            {
+                timeSpace = now.DayOfYear - sys.DayOfYear;
+                if (timeSpace < days)
+                {
+                    boo = true;
+                }
+            }
+            return boo;
         }
 
         private void ResetFormData()
@@ -133,7 +161,6 @@ namespace MES.UI
             numZ.Value = Convert.ToDecimal(WeldZ);
             numR.Value = Convert.ToDecimal(WeldR);
         }
-
 
         private void InitLanguage()
         {
@@ -257,57 +284,6 @@ namespace MES.UI
                 }
             }
         }
-
-
-
-        #region 软件权限检测
-
-        /// <summary>
-        /// 检测软件是否授权
-        /// </summary>
-        private void CheckSoftAuthorize()
-        {
-            m_softAuthorize = new SoftAuthorize();
-
-            //方式一
-            m_softAuthorize.FileSavePath = Application.StartupPath + @"\Authorize.sys"; //存储激活码文件，存储加密
-            m_softAuthorize.LoadByFile();
-
-            // 检测激活码是否正确，没有文件，或激活码错误都算作激活失败
-            if (!m_softAuthorize.IsAuthorizeSuccess(AuthorizeEncrypted))
-            {
-                //File.SetAttributes(m_softAuthorize.FileSavePath, FileAttributes.ReadOnly);
-                using (FormAuthorize form = new FormAuthorize(m_softAuthorize, "请联系华天世纪激光科技公司获取注册码！", AuthorizeEncrypted))
-                {
-                    if (form.ShowDialog() != DialogResult.OK)
-                    {
-                        Close();
-                    }
-                }
-            }
-
-            //方式二 :直接进行判断授权码
-            //if (!m_softAuthorize.CheckAuthorize("CC2A56387E05A1953ABCE666892B916617CA21808A35ABE1B7592DF20DB44CF6", AuthorizeEncrypted))
-            //{
-            //    Close();
-            //}
-        }
-
-        /// <summary>
-        /// 自定义加密算法，传入原始数据，返回加密结果
-        /// </summary>
-        /// <param name="origin"></param>
-        /// <returns>加密结果</returns>
-        private string AuthorizeEncrypted(string origin)
-        {
-            //使用了组件支持的DES对称加密技术
-            string license = SoftSecurity.MD5Encrypt(origin, "CSTLASER");
-            return license;
-        }
-
-        #endregion
-
-
 
         private void btnCreateModule_Click(object sender, EventArgs e)
         {

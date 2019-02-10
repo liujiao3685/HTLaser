@@ -10,6 +10,7 @@ using MES.UI;
 using System.IO;
 using ProductManage.Language.MyLanguageTool;
 using MES.DAL;
+using SQLServerDAL;
 
 namespace MES.UserControls
 {

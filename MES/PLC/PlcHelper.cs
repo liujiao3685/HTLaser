@@ -1,5 +1,7 @@
-﻿using System;
+﻿using OpcUaHelper;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +10,65 @@ namespace ProductManage.PLC
 {
     public class PlcHelper
     {
+        private static PlcHelper plcHelper = null;
+        private static readonly object Locker = new object();
+        public PlcHelper()
+        {
+            Open();
+        }
+        public static PlcHelper GetInstance()
+        {
+            if (plcHelper == null)
+            {
+                lock (Locker)
+                {
+                    plcHelper = new PlcHelper();
+                }
+            }
+            return plcHelper;
+        }
+
+        public static readonly string OpcServiceUrl = ConfigurationManager.AppSettings["PLC_OPC_Address"].ToString();
+
+        public OpcUaClient OpcUaClient = null;
+
+        public Boolean IsConnection()
+        {
+            if (OpcUaClient == null || !OpcUaClient.Connected)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool Open()
+        {
+            OpcUaClient = new OpcUaClient();
+            try
+            {
+                if (OpcUaClient == null || !OpcUaClient.Connected)
+                {
+                    OpcUaClient.ConnectServer(OpcServiceUrl);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool Close()
+        {
+            if (OpcUaClient != null && OpcUaClient.Connected)
+            {
+                OpcUaClient.Disconnect();
+                OpcUaClient = null;
+                return true;
+            }
+            return false;
+        }
+
         #region 通讯地址相关-单个
 
         /// <summary>
@@ -134,5 +195,6 @@ namespace ProductManage.PLC
         };
 
         #endregion
+
     }
 }

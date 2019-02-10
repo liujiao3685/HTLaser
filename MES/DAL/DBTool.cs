@@ -18,6 +18,23 @@ namespace MES.DAL
 
         private Stopwatch sw = new Stopwatch();
 
+        private readonly static object Locker = new object();
+        private static DBTool m_dbTool;
+        public static DBTool Instance
+        {
+            get
+            {
+                if (m_dbTool == null)
+                {
+                    lock (Locker)
+                    {
+                        m_dbTool = new DBTool();
+                    }
+                }
+                return m_dbTool;
+            }
+        }
+
         public DBTool()
         {
             m_sqlCon = helper.GetConnection();
@@ -67,8 +84,11 @@ namespace MES.DAL
                 sum = "0";//count
                 pass = "0";//pass
                 ng = "0";//ng 
-
                 Program.LogNet.WriteError("异常", "GetTableCountByProcedure--->" + ex.Message);
+            }
+            finally
+            {
+                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
             }
 
             sw.Stop();
@@ -83,19 +103,25 @@ namespace MES.DAL
         public int GetTableCount(string sql)
         {
             int count = 0;
+            SqlCommand cmd = null;
             try
             {
                 if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
 
-                SqlCommand cmd = new SqlCommand(sql, m_sqlCon);
+                cmd = new SqlCommand(sql, m_sqlCon);
 
                 count = Convert.ToInt32(cmd.ExecuteScalar());
 
             }
             catch (Exception ex)
             {
+                cmd = null;
                 count = -1;
                 Program.LogNet.WriteError("异常", "GetTableCount--->" + ex.Message);
+            }
+            finally
+            {
+                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
             }
 
             return count;
@@ -280,6 +306,7 @@ namespace MES.DAL
             {
                 reader?.Close();
                 cmd?.Dispose();
+                m_sqlCon.Close();
             }
             return type;
         }
@@ -361,6 +388,7 @@ namespace MES.DAL
             finally
             {
                 cmd?.Dispose();
+                m_sqlCon.Close();
                 cmd = null;
                 ps = null;
             }
@@ -449,16 +477,16 @@ namespace MES.DAL
 
                 return user;
             }
-#pragma warning disable CS0168 // 声明了变量“ex”，但从未使用过
-            catch (Exception ex)
-#pragma warning restore CS0168 // 声明了变量“ex”，但从未使用过
+            catch (Exception)
             {
+                cmd = null;
                 return null;
             }
             finally
             {
-                cmd.Parameters.Clear();
+                cmd = null;
                 reader.Close();
+                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
             }
         }
 
@@ -594,13 +622,14 @@ namespace MES.DAL
         /// <returns>Tabel</returns>
         public DataTable SelectTable(string sql)
         {
+            SqlCommand cmd = null;
             try
             {
                 //TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
 
                 if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
 
-                SqlCommand cmd = new SqlCommand(sql, m_sqlCon);
+                cmd = new SqlCommand(sql, m_sqlCon);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
 
                 DataSet ds = new DataSet();
@@ -619,7 +648,28 @@ namespace MES.DAL
             }
             catch (Exception ex)
             {
+                cmd = null;
                 Program.LogNet.WriteError("异常", "SelectTable--->" + ex.Message);
+                return null;
+            }
+            finally
+            {
+                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
+            }
+        }
+
+        public object SelectObject(string sql)
+        {
+            try
+            {
+                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+
+                SqlCommand cmd = new SqlCommand(sql, m_sqlCon);
+                return cmd.ExecuteScalar();
+            }
+            catch (Exception)
+            {
+                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
                 return null;
             }
         }
