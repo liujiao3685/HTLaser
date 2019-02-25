@@ -52,7 +52,9 @@ namespace WindowsFormsApplication1.UI
 
         private void userButton1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(txtPath.Text.Substring(3, 3));
+            MessageBox.Show(comboBox1.SelectedItem.ToString());
+
+            //MessageBox.Show(txtPath.Text.Substring(3, 3));
 
             //for (int i = 0; i < dates.Length; i++)
             //{
@@ -65,5 +67,9 @@ namespace WindowsFormsApplication1.UI
             //}
         }
 
+        private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using HslControls;
+using WindowsFormsApplication1.Forms;
 
 namespace WindowsFormsApplication1
 {
@@ -18,7 +19,7 @@ namespace WindowsFormsApplication1
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new UI.FormIniFile());
+            Application.Run(new FormCheckInternetState());
 
         }
     }

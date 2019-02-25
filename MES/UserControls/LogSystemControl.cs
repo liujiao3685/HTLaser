@@ -30,7 +30,7 @@ namespace MES.UserControls
             this.Font = new Font("Tahoma", 10F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(134)));
 
             m_formMain = main;
-            m_logNet = main.LogNetUser;
+            //m_logNet = main.LogNetUser;
         }
 
         private void LogSystem_Load(object sender, System.EventArgs e)
@@ -51,7 +51,7 @@ namespace MES.UserControls
         //日志等级改变
         private void cmbLogLv_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            m_logNet.SetMessageDegree(HslMessageDegree.INFO);
+            // m_logNet.SetMessageDegree(HslMessageDegree.INFO);
         }
 
         //手动写入日志
@@ -94,7 +94,7 @@ namespace MES.UserControls
         /// <param name="txt">日志内容</param>
         public void WriteLog(HslMessageDegree degree, string result, string txt)
         {
-            m_logNet.RecordMessage(degree, result, txt);
+            //m_logNet.RecordMessage(degree, result, txt);
         }
 
         private void btnLoadLogFile_Click(object sender, EventArgs e)
@@ -105,6 +105,7 @@ namespace MES.UserControls
         //加载日志
         private void LoadLog()
         {
+            /*
             if (File.Exists(m_formMain.UserLogName))
             {
                 using (StreamReader sr = new StreamReader(m_formMain.UserLogName, Encoding.UTF8))
@@ -122,12 +123,13 @@ namespace MES.UserControls
             else
             {
                 MessageBox.Show("未找到日志文件！");
-            }
+            }*/
         }
 
         //清空日志
         private void btnClearLogFile_Click(object sender, EventArgs e)
         {
+            /*
             if (!m_formMain.CheckUserAuth())
             {
                 return;
@@ -135,6 +137,7 @@ namespace MES.UserControls
 
             File.WriteAllBytes(m_formMain.UserLogName, new byte[0]);
             m_formMain.AddTips("清空成功！", false);
+            */
         }
     }
 }

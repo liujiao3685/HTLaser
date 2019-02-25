@@ -128,16 +128,13 @@
     <Compile Include="AppSetting.cs" />
     <Compile Include="BasicFramework\SoftBasic.cs" />
     <Compile Include="Core\Alarm.cs" />
+    <Compile Include="DAL\SqlHelper.cs" />
     <Compile Include="IDAL\IDbBase.cs" />
     <Compile Include="Lwm\LwmCmd.cs" />
     <Compile Include="Lwm\LwmData.cs" />
     <Compile Include="Lwm\LwmHelper.cs" />
     <Compile Include="Lwm\OperateResult.cs" />
     <Compile Include="Scanner\KeyenceSR751.cs" />
-    <Compile Include="TcpCommunicate\MyTcpClient.cs" />
-    <Compile Include="TcpCommunicate\MyTcpServer.cs" />
-    <Compile Include="TcpCommunicate\StateObject.cs" />
-    <Compile Include="TcpCommunicate\StateOneBase.cs" />
     <Compile Include="PLC\CollectHelper.cs" />
     <Compile Include="Core\WindowsMessage.cs" />
     <Compile Include="Core\XmlHelperBase.cs" />
@@ -169,7 +166,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
-    <Compile Include="TcpCommunicate\TcpBase.cs" />
     <Compile Include="Forms\FormCheckAuth.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,6 +256,11 @@
     <Compile Include="Forms\WeldingModuleForm.Designer.cs">
       <DependentUpon>WeldingModuleForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TcpCommunicate\MyTcpClient.cs" />
+    <Compile Include="TcpCommunicate\MyTcpServer.cs" />
+    <Compile Include="TcpCommunicate\StateObject.cs" />
+    <Compile Include="TcpCommunicate\StateOneBase.cs" />
+    <Compile Include="TcpCommunicate\TcpBase.cs" />
     <Compile Include="UserControls\CollectingSystem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -431,6 +432,9 @@
     <EmbeddedResource Include="Vision\ProfileForm.resx">
       <DependentUpon>ProfileForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Configs\FSS_opcconfig.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -463,7 +467,9 @@
     <Content Include="Dll\HslCommunication.dll" />
     <Content Include="Dll\HslControls.dll" />
     <Content Include="Resources\HTLOGO.ico" />
-    <Content Include="HTLOGO.ico" />
+    <Content Include="HTLOGO.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Img\ClassIcon.ico" />
     <Content Include="Img\RegistryEditor_5838.ico" />
     <Content Include="Img\SingleMessage_5727.ico" />

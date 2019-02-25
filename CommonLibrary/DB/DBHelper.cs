@@ -8,7 +8,7 @@ namespace CommonLibrary.DB
     public class DBHelper
     {
         //数据库连接字符
-        private static string SqlServerConnectionStr = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
+        public static string SqlServerConnectionStr = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
         //private static string SqlServerConnectionStr = "Data Source=127.0.0.1;Initial Catalog=ProductsDb;User Id=sa;Password=ht2018";
 
         private SqlConnection m_sqlCon;
@@ -80,6 +80,28 @@ namespace CommonLibrary.DB
                 if (SqlServerConnectionStr != String.Empty)
                 {
                     m_sqlCon = new SqlConnection(SqlServerConnectionStr);
+                    m_sqlCon.Open();
+                }
+                else
+                {
+                    //Program.LogNet.WriteError("异常", "获取数据库连接字符失败!");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool Open(string sqlConnect)
+        {
+            try
+            {
+                if (SqlServerConnectionStr != String.Empty)
+                {
+                    m_sqlCon = new SqlConnection(sqlConnect);
                     m_sqlCon.Open();
                 }
                 else

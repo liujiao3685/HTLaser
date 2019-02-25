@@ -47,16 +47,13 @@ namespace MES
     /// </summary>
     public partial class FormMain : Form
     {
-        #region 共有变量
+        #region 公有变量
 
         public string StationName = "S";
 
         public bool IsStation_S = true;
 
         public DBTool DbTool = null;
-
-        public ILogNet LogNetUser;
-        public string UserLogName = "用户日志.txt";
 
         public ILogNet LogNetProgramer;
 
@@ -69,6 +66,11 @@ namespace MES
         public XmlHelperBase XmlHelper;
         public Dictionary<string, string> SystemParamsDic;
         public DataTable UsersTable;
+
+        /// <summary>
+        /// 当前系统语言
+        /// </summary>
+        public int Culture = 1;
 
         #endregion
 
@@ -230,8 +232,7 @@ namespace MES
 
         }
 
-
-        #region CheckState
+        #region 检查PLC连接状态
 
         public bool CheckPlcState()
         {
@@ -244,8 +245,7 @@ namespace MES
 
         #endregion
 
-
-        #region 语言
+        #region 系统语言
 
         public void CultureChange()
         {
@@ -301,8 +301,6 @@ namespace MES
         }
 
         #endregion
-
-
 
         #region 加载系统参数
 
@@ -360,8 +358,6 @@ namespace MES
         }
 
         #endregion
-
-
 
         #region PLC相关
 
@@ -429,8 +425,6 @@ namespace MES
         }
 
         #endregion
-
-
 
         #region LWM相关
 
@@ -507,7 +501,6 @@ namespace MES
         }
 
         #endregion
-
 
         #region 扫描仪相关
 
@@ -726,7 +719,6 @@ namespace MES
 
         #endregion
 
-
         #region 小环相关
 
         private double CoaxialityS;
@@ -758,6 +750,8 @@ namespace MES
                         if (start == 1)
                         {
                             CollectWeldData();
+
+                            LogNetProgramer.WriteInfo(string.Format("接收到PLC采集指令！条码：{0}", CurrentBarCode));
 
                             UpdateCCDUI();
 
@@ -904,11 +898,13 @@ namespace MES
                         {
                             //int c = DbTool.ModifyTable(sql, sqlParameters);
                             SaveWeldingDataDAL bll = new SaveWeldingDataDAL();
-                            ServiceResult result = bll.SaveWeldingDataS(avgPower, avgSpeed, avgFlow, FlowUp, FlowDown, avgPressure, m_weldTime, WeldXPos,
-                                WeldYPos, WeldZPos, WeldRPos, CoaxialityS, CoaxUpS, CoaxDownS, m_surfaceType, b_lwmResult, b_qcResult, CurrentBarCode);
+                            ServiceResult result = bll.SaveWeldingDataS(avgPower, avgSpeed, avgFlow, avgPressure, m_weldTime, WeldXPos,
+                                WeldYPos, WeldZPos, WeldRPos, CoaxialityS, m_surfaceType, b_lwmResult, b_qcResult, CurrentBarCode);
 
                             if (result.IsSuccess) //if (c > 0)
                             {
+                                LogNetProgramer.WriteInfo(string.Format("焊接保存成功！条码：{0}", CurrentBarCode));
+
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = true });
                                 WeldParamReset();
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataOK"), false);
@@ -918,9 +914,8 @@ namespace MES
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = false });
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataFail") + "BarCode：" + CurrentBarCode, true);
 
-                                LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow
-                                    + "avgFlowup：" + FlowUp + "avgFlowdown：" + FlowDown + "avgPressure:" + avgPressure +
-                                   "avgHeight：" + avgHeight + "avgCoax：" + avgCoax + "avgSpeed：" + avgSpeed + "m_weldTimeL：" + m_weldTime);
+                                LogNetProgramer.WriteInfo(string.Format("焊接保存失败！条码：{0},焊接功率{1}，焊接流量{2}，焊接压力{3},焊接速度{4}",
+                                    CurrentBarCode, avgPower, avgFlow, avgPressure, avgSpeed));
                             }
                             b_startModifyS = !b_startModifyS;
                         }
@@ -973,35 +968,6 @@ namespace MES
 
         #endregion
 
-
-        /// <summary>
-        /// 初始化提醒检测模块
-        /// </summary>
-        private void InitWarnCheck()
-        {
-            int interval = AppSetting.GetCheckInterval();
-
-            if (interval < 1)
-            {
-                MessageBox.Show("自检间隔不能小于一小时！请重新配置后重启软件！");
-                return;
-            }
-
-            m_selfCheckTimer = new Timer();
-            m_selfCheckTimer.Tick += new EventHandler(SelfeCheck_Tick);
-            m_selfCheckTimer.Interval = 1 * 1000;// * 3600;
-            m_selfCheckTimer.Enabled = true;
-        }
-
-        private void SelfeCheck_Tick(object sender, EventArgs e)
-        {
-            //窗口提醒检测
-            SelfCheckWarmForm selfCheckWarmForm = new SelfCheckWarmForm(this);
-            selfCheckWarmForm.Show();
-        }
-
-
-
         #region 用户控件相关
 
         private CollectingSystem collecting;
@@ -1047,7 +1013,6 @@ namespace MES
         }
 
         #endregion
-
 
         public delegate void SetTips(string s, bool boo);
         public void AddTips(string v, bool error)
@@ -1118,7 +1083,6 @@ namespace MES
             }
         }
 
-
         #region 登录相关
 
         private bool Result = false;
@@ -1168,8 +1132,6 @@ namespace MES
 
         #endregion
 
-
-
         #region 内存回收
         [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize")]
         public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
@@ -1186,7 +1148,6 @@ namespace MES
             }
         }
         #endregion
-
 
         #region 大环相关
 
@@ -1279,6 +1240,8 @@ namespace MES
         {
             if (order == 1 && VisionLJ7000.Instance.Connected)//开始焊接
             {
+                LogNetProgramer.WriteInfo(String.Format("开始焊接！"));
+
                 visionDataSum = VisionLJ7000.Instance.VisionDataSum();
 
                 //int rc = NativeMethods.LJV7IF_GetMeasurementValue(_currentDeviceId, measureData);
@@ -1295,6 +1258,8 @@ namespace MES
 
             if (order == 2)//停止焊接
             {
+                LogNetProgramer.WriteInfo(String.Format("焊接完成！"));
+
                 //avgHeight = (float)Math.Round(Convert.ToDouble(sumHeight / count), 3);
                 //avgCoax = (float)Math.Round(Convert.ToDouble(sumCoax / count), 3);
 
@@ -1473,11 +1438,13 @@ namespace MES
                         {
                             //int c = DbTool.ModifyTable(sql, sqlParameters);
                             SaveWeldingDataDAL bll = new SaveWeldingDataDAL();
-                            ServiceResult result = bll.SaveWeldingDataL(avgPower, avgSpeed, avgFlow, FlowUp, FlowDown, avgPressure, avgHeight, m_weldTime,
-                                WeldXPos, WeldYPos, WeldZPos, WeldRPos, CoaxialityS, CoaxUpS, CoaxDownS, m_surfaceType, b_lwmResult, b_qcResult, CurrentBarCode);
+                            ServiceResult result = bll.SaveWeldingDataL(avgPower, avgSpeed, avgFlow, avgPressure, avgHeight, m_weldTime,
+                                WeldXPos, WeldYPos, WeldZPos, WeldRPos, CoaxialityS, m_surfaceType, b_lwmResult, b_qcResult, CurrentBarCode);
 
                             if (result.IsSuccess) //if (c > 0)
                             {
+                                LogNetProgramer.WriteInfo(String.Format("保存成功！条码：{0}", CurrentBarCode));
+
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataOK"), false);
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = true });
 
@@ -1488,9 +1455,8 @@ namespace MES
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataFail") + "BarCode：" + CurrentBarCode, true);
                                 OnWeldSuccess(this, new MyEvent() { WeldSuccess = false });
 
-                                LogNetProgramer.WriteInfo("CurrentBarCode：" + CurrentBarCode + "avgPower：" + avgPower + "avgFlow：" + avgFlow
-                                    + "avgFlowup：" + FlowUp + "avgFlowdown：" + FlowDown + "avgPressure:" + avgPressure +
-                                   "avgHeight：" + avgHeight + "avgCoax：" + avgCoax + "avgSpeed：" + avgSpeed + "m_weldTimeL：" + m_weldTime);
+                                LogNetProgramer.WriteInfo(string.Format("保存失败！条码：{0},焊接功率{1}，焊接流量{2}，焊接压力{3},焊接速度{4}",
+                                    CurrentBarCode, avgPower, avgFlow, avgPressure, avgSpeed));
                             }
                             b_startModifyL = !b_startModifyL;
                         }
@@ -1537,7 +1503,6 @@ namespace MES
         }
 
         #endregion
-
 
         #region 测试用
 
@@ -1616,28 +1581,10 @@ namespace MES
             }
         }
 
-        private byte[] AnalysicLwmData(byte[] barcode)
-        {
-            byte[] sendData = new byte[6 + barcode.Length];
-
-            //报文ID
-            sendData[0] = 0x00;
-            sendData[1] = 0x12;
-            sendData[2] = 0x01;
-            sendData[3] = 0x00;
-
-            sendData[4] = 0x00;//是否错误： 0 no error
-            sendData[5] = 0x04;//数据长度
-
-            barcode.CopyTo(sendData, 6);
-
-            return sendData;
-        }
-
         #endregion
 
+        #region 监控设备状态、上传
 
-        //实时监听设备状态
         private void MonitorState()
         {
             while (IsWindowShow)
@@ -1711,10 +1658,9 @@ namespace MES
             if (rs <= 0) LogNetProgramer.WriteError("更新设备状态失败：" + rs);
         }
 
-        /// <summary>
-        /// 当前系统语言
-        /// </summary>
-        public int Culture = 1;
+        #endregion
+
+        #region 事件相关
 
         public delegate void CultureChangeHandle(object obj, MyEvent e);
         public event CultureChangeHandle CultureChangeEvent;
@@ -1751,6 +1697,7 @@ namespace MES
             BarCodeChange?.Invoke(e);
         }
 
+        #endregion
 
         private void 点检中心ToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1818,18 +1765,18 @@ namespace MES
 
         private void 通讯监控ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    string exeName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "MonitorDevice.exe");
-            //    Process process = Process.Start(exeName);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("异常：" + ex.Message);
-            //}
+            try
+            {
+                string exeName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "MonitorDevice.exe");
+                Process process = Process.Start(exeName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("异常：" + ex.Message);
+            }
 
-            FormMonitor form = new FormMonitor(this);
-            form.ShowDialog();
+            //FormMonitor form = new FormMonitor(this);
+            //form.ShowDialog();
         }
 
         private void 点检记录ToolStripMenuItem_Click(object sender, EventArgs e)

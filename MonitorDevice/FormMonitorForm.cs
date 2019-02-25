@@ -3,6 +3,7 @@ using CommonLibrary.Lwm;
 using CommonLibrary.PLC;
 using CommonLibrary.Scanner;
 using CommonLibrary.Vision;
+using MES.DAL;
 using System;
 using System.Configuration;
 using System.Drawing;
@@ -34,18 +35,14 @@ namespace MonitorDevice
 
             if (IsStation_S) labVision.Visible = lanVisionState.Visible = !IsStation_S;
 
-            timerMonitor.Interval = 1000;
+            timerMonitor.Interval = 1500;
             timerMonitor.Tick += TimerMonitor_Tick;
             timerMonitor.Enabled = true;
         }
 
         private void TimerMonitor_Tick(object sender, EventArgs e)
         {
-            CheckDbState();
-            CheckLwmState();
-            CheckScanState();
             CheckPlcState();
-            if (!IsStation_S) CheckVisionState();
         }
 
         public bool CheckPlcState()
@@ -116,5 +113,28 @@ namespace MonitorDevice
             Close();
         }
 
+        private void timerDB_Tick(object sender, EventArgs e)
+        {
+            CheckDbState();
+            //CheckSMDState();
+        }
+
+        public bool CheckSMDState()
+        {
+            if (!SqlHelper.IsConnection(SqlHelper.SQLServerConnectionStringTPOS))
+            {
+                lanDbState.LanternBackground = Color.Gray;
+                return false;
+            }
+            lanDbState.LanternBackground = Color.LimeGreen;
+            return true;
+        }
+
+        private void timerTPOS_Tick(object sender, EventArgs e)
+        {
+            CheckScanState();
+            CheckLwmState();
+            if (!IsStation_S) CheckVisionState();
+        }
     }
 }

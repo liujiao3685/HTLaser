@@ -84,20 +84,7 @@ namespace MES.UI
 
         private void SpotCheck_Load(object sender, EventArgs e)
         {
-            try
-            {
-                DateTime sysTime = BasicFramework.SoftBasic.SelectSysTime();
-                if (!CheckUse(DateTime.Now, sysTime, 30))
-                {
-                    if (File.Exists(Application.StartupPath + @"\Authorize.sys")) File.Delete(Application.StartupPath + @"\Authorize.sys");
-                    BasicFramework.SoftBasic.CheckSoftAuthorize();
-                }
-            }
-            catch (Exception)
-            {
-                if (File.Exists(Application.StartupPath + @"\Authorize.sys")) File.Delete(Application.StartupPath + @"\Authorize.sys");
-                BasicFramework.SoftBasic.CheckSoftAuthorize();
-            }
+            //SoftUseCheck();
 
             m_culture = AppSetting.GetLanguage();
             InitLanguage();
@@ -117,6 +104,25 @@ namespace MES.UI
 
             if (AppSetting.GetTest() != 1) ResetFormData();
 
+        }
+
+        private void SoftUseCheck()
+        {
+            try
+            {
+                DateTime sysTime = BasicFramework.SoftBasic.SelectSysTime();
+                if (!CheckUse(DateTime.Now, sysTime, 30))
+                {
+                    if (File.Exists(Application.StartupPath + @"\Authorize.sys")) File.Delete(Application.StartupPath + @"\Authorize.sys");
+                    BasicFramework.SoftBasic.CheckSoftAuthorize();
+                }
+            }
+            catch (Exception ex)
+            {
+                Program.LogNet.WriteError("软件过期，无权限！");
+                if (File.Exists(Application.StartupPath + @"\Authorize.sys")) File.Delete(Application.StartupPath + @"\Authorize.sys");
+                BasicFramework.SoftBasic.CheckSoftAuthorize();
+            }
         }
 
         private bool CheckUse(DateTime now, DateTime sys, int days)

@@ -11,6 +11,7 @@ using System.IO;
 using ProductManage.Language.MyLanguageTool;
 using MES.DAL;
 using SQLServerDAL;
+using System.Threading.Tasks;
 
 namespace MES.UserControls
 {
@@ -147,8 +148,11 @@ namespace MES.UserControls
         //数据库查询字段
         private void initSqlStrings()
         {
-            m_dbColunmsNames = " ID,WorkNo,PNo,QCResult,Coaxiality,CoaxUp,CoaxDown,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed," +
-                "Pressure,Flow,FlowUp,FlowDown,XPos,YPos,ZPos,RPos,WeldTime,ManualCheck,StorageTime ";
+            //    m_dbColunmsNames = " ID,WorkNo,PNo,QCResult,Coaxiality,CoaxUp,CoaxDown,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed," +
+            //        "Pressure,Flow,FlowUp,FlowDown,XPos,YPos,ZPos,RPos,WeldTime,ManualCheck,StorageTime ";
+
+            m_dbColunmsNames = " ID,WorkNo,PNo,QCResult,Coaxiality,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed," +
+                "Pressure,Flow,XPos,YPos,ZPos,RPos,WeldTime,ManualCheck,StorageTime ";
 
             m_sqlByCondition = "select " + m_dbColunmsNames + "  from Product where QCResult is not null order by StorageTime desc";
 
@@ -224,8 +228,8 @@ namespace MES.UserControls
             dgvLookBoard.Columns["colPNo"].HeaderText = ResourceCulture.GetValue("BarCode");
             dgvLookBoard.Columns["colCheckResult"].HeaderText = ResourceCulture.GetValue("FinalResult");
             dgvLookBoard.Columns["colCoaxiality"].HeaderText = ResourceCulture.GetValue("Coaxiality") + "(mm)";
-            dgvLookBoard.Columns["colCoaxUp"].HeaderText = ResourceCulture.GetValue("CoaxUp") + "(mm)";
-            dgvLookBoard.Columns["colCoaxDown"].HeaderText = ResourceCulture.GetValue("CoaxDown") + "(mm)";
+            //dgvLookBoard.Columns["colCoaxUp"].HeaderText = ResourceCulture.GetValue("CoaxUp") + "(mm)";
+            //dgvLookBoard.Columns["colCoaxDown"].HeaderText = ResourceCulture.GetValue("CoaxDown") + "(mm)";
             dgvLookBoard.Columns["colSurface"].HeaderText = ResourceCulture.GetValue("Surface");
             dgvLookBoard.Columns["colLwmCheck"].HeaderText = ResourceCulture.GetValue("LwmResult");
             dgvLookBoard.Columns["colWeldPower"].HeaderText = ResourceCulture.GetValue("WeldPower") + "(W)";
@@ -235,8 +239,8 @@ namespace MES.UserControls
             else dgvLookBoard.Columns["colPressure"].HeaderText = ResourceCulture.GetValue("WorkpiecePressure") + "(MPa)";
 
             dgvLookBoard.Columns["colFlow"].HeaderText = ResourceCulture.GetValue("ProtectFlow") + "(L/min)";
-            dgvLookBoard.Columns["colFlowUp"].HeaderText = ResourceCulture.GetValue("ProtectFlowUp") + "(L/min)";
-            dgvLookBoard.Columns["colFlowDown"].HeaderText = ResourceCulture.GetValue("ProtectFlowDown") + "(L/min)";
+            //dgvLookBoard.Columns["colFlowUp"].HeaderText = ResourceCulture.GetValue("ProtectFlowUp") + "(L/min)";
+            //dgvLookBoard.Columns["colFlowDown"].HeaderText = ResourceCulture.GetValue("ProtectFlowDown") + "(L/min)";
             dgvLookBoard.Columns["colXPos"].HeaderText = ResourceCulture.GetValue("WeldXPos") + "(mm)";
             dgvLookBoard.Columns["colYPos"].HeaderText = ResourceCulture.GetValue("WeldYPos") + "(mm)";
             dgvLookBoard.Columns["colZPos"].HeaderText = ResourceCulture.GetValue("WeldZPos") + "(mm)";
@@ -400,14 +404,10 @@ namespace MES.UserControls
         //按钮查询
         private void btnSelectByTerm_Click(object sender, EventArgs e)
         {
-            //ThreadPool.QueueUserWorkItem(t =>
+            //Task.Factory.StartNew(() =>
             //{
-            //    Invoke(new Action(() =>
-            //    {
-
             Query();
 
-            //    }));
             //});
         }
 
@@ -592,17 +592,18 @@ namespace MES.UserControls
             saveFile.Title = "保存导出文件";
             saveFile.Filter = "导出数据文件(.csv) | *.csv";
             saveFile.FilterIndex = 1;
-            //saveFile.InitialDirectory = Application.StartupPath;
-            //saveFile.RestoreDirectory = true;
             if (saveFile.ShowDialog() == DialogResult.OK)
             {
                 m_main.AddTips("正在导出数据，请稍等...", false);
 
-                ThreadPool.QueueUserWorkItem((t =>
+                //ThreadPool.QueueUserWorkItem((t =>
+                //{
+                Task.Factory.StartNew(() =>
                 {
                     ExcelProductTable = m_main.DbTool.SelectTable(sqlSelectFinal);
                     SetCsvFile(saveFile.FileName);
-                }));
+                });
+                //}));
             }
         }
 

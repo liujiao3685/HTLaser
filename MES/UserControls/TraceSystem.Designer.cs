@@ -80,8 +80,6 @@
             this.colPNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCheckResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCoaxiality = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCoaxUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCoaxDown = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colWeldDepth = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSurface = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colLwmCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -89,8 +87,6 @@
             this.colWeldSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPressure = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colFlow = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFlowUp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFlowDown = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colXPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colYPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colZPos = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -430,8 +426,6 @@
             this.colPNo,
             this.colCheckResult,
             this.colCoaxiality,
-            this.colCoaxUp,
-            this.colCoaxDown,
             this.colWeldDepth,
             this.colSurface,
             this.colLwmCheck,
@@ -439,8 +433,6 @@
             this.colWeldSpeed,
             this.colPressure,
             this.colFlow,
-            this.colFlowUp,
-            this.colFlowDown,
             this.colXPos,
             this.colYPos,
             this.colZPos,
@@ -634,22 +626,6 @@
             this.colCoaxiality.ReadOnly = true;
             this.colCoaxiality.Width = 132;
             // 
-            // colCoaxUp
-            // 
-            this.colCoaxUp.DataPropertyName = "CoaxUp";
-            this.colCoaxUp.HeaderText = "同心度上限(mm)";
-            this.colCoaxUp.Name = "colCoaxUp";
-            this.colCoaxUp.ReadOnly = true;
-            this.colCoaxUp.Width = 166;
-            // 
-            // colCoaxDown
-            // 
-            this.colCoaxDown.DataPropertyName = "CoaxDown";
-            this.colCoaxDown.HeaderText = "同心度下限(mm)";
-            this.colCoaxDown.Name = "colCoaxDown";
-            this.colCoaxDown.ReadOnly = true;
-            this.colCoaxDown.Width = 166;
-            // 
             // colWeldDepth
             // 
             this.colWeldDepth.DataPropertyName = "WeldDepth";
@@ -717,22 +693,6 @@
             this.colFlow.Name = "colFlow";
             this.colFlow.ReadOnly = true;
             this.colFlow.Width = 180;
-            // 
-            // colFlowUp
-            // 
-            this.colFlowUp.DataPropertyName = "FlowUp";
-            this.colFlowUp.HeaderText = "保护气流量上限(L/min)";
-            this.colFlowUp.Name = "colFlowUp";
-            this.colFlowUp.ReadOnly = true;
-            this.colFlowUp.Width = 214;
-            // 
-            // colFlowDown
-            // 
-            this.colFlowDown.DataPropertyName = "FlowDown";
-            this.colFlowDown.HeaderText = "保护气流量下限(L/min)";
-            this.colFlowDown.Name = "colFlowDown";
-            this.colFlowDown.ReadOnly = true;
-            this.colFlowDown.Width = 214;
             // 
             // colXPos
             // 
@@ -874,8 +834,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colPNo;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCheckResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCoaxiality;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCoaxUp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colCoaxDown;
         private System.Windows.Forms.DataGridViewTextBoxColumn colWeldDepth;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSurface;
         private System.Windows.Forms.DataGridViewTextBoxColumn colLwmCheck;
@@ -883,8 +841,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colWeldSpeed;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPressure;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFlow;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colFlowUp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colFlowDown;
         private System.Windows.Forms.DataGridViewTextBoxColumn colXPos;
         private System.Windows.Forms.DataGridViewTextBoxColumn colYPos;
         private System.Windows.Forms.DataGridViewTextBoxColumn colZPos;
