@@ -1,5 +1,4 @@
-﻿using CommonLibrary.DB;
-using CommonLibrary.Lwm;
+﻿using CommonLibrary.Lwm;
 using CommonLibrary.PLC;
 using CommonLibrary.Scanner;
 using CommonLibrary.Vision;
@@ -69,7 +68,7 @@ namespace MonitorDevice
 
         public bool CheckDbState()
         {
-            if (!DBHelper.Instance.Open())
+            if (!MES.DAL.DBHelper.Instance.Open())
             {
                 lanDbState.LanternBackground = Color.Gray;
                 return false;
@@ -116,12 +115,12 @@ namespace MonitorDevice
         private void timerDB_Tick(object sender, EventArgs e)
         {
             CheckDbState();
-            //CheckSMDState();
+            CheckSMDState();
         }
 
         public bool CheckSMDState()
         {
-            if (!SqlHelper.IsConnection(SqlHelper.SQLServerConnectionStringTPOS))
+            if (!SQLServerDAL.SqlHelper.IsConnection(SqlHelper.SQLServerConnectionStringTPOS))
             {
                 lanDbState.LanternBackground = Color.Gray;
                 return false;

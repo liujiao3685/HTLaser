@@ -208,7 +208,9 @@ namespace ProductManage.Vision
 
         /// <summary>
         ///oredr=1 开始焊接采集视觉结果
-        ///float[3] heightSum,coaxSum,count
+        ///float[0] 焊缝高度差 和
+        ///float[1] 同心度 和
+        ///float[2] 采集次数
         /// </summary>
         /// <returns></returns>
         public float[] VisionDataSum()
@@ -233,6 +235,8 @@ namespace ProductManage.Vision
 
         /// <summary>
         /// order=2 计算平均值
+        /// avgs[0] 焊缝高度差 平均值
+        /// avgs[1] 同心度 平均值
         /// </summary>
         /// <param name="sums"></param>
         /// <returns></returns>

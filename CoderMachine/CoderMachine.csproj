@@ -36,9 +36,6 @@
     <ApplicationIcon>HTLOGO.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HslCommunication">
-      <HintPath>..\CommandLibs\HslCommunication.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -118,6 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="HTLOGO.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HslCommunication_Net35\PlcCommunication.csproj">
+      <Project>{d3710b78-1b32-4d53-9604-0451a795a2f5}</Project>
+      <Name>PlcCommunication</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

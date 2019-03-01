@@ -15,6 +15,15 @@ namespace BLL
 
         #region 成员方法
 
+        public ServiceResult SaveWeldingDataL(WeldingInfo weldingInfo)
+        {
+            return idal.SaveWeldingDataL(weldingInfo);
+        }
+        public ServiceResult SaveWeldingDataS(WeldingInfo weldingInfo)
+        {
+            return idal.SaveWeldingDataS(weldingInfo);
+        }
+
         public ServiceResult SaveWeldingDataL(double WeldPower, int WeldSpeed, double Flow, double FlowUp, double FlowDown, double Pressure,
            double WeldDepth, double WeldTime, double XPos, double YPos, double ZPos, double RPos, double Coaxiality, double CoaxUp, double CoaxDown,
            string Surface, bool LwmCheck, bool QCResult, string PNo)

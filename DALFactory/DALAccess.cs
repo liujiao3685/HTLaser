@@ -37,5 +37,21 @@ namespace DALFactory
             return (ISaveWeldingData)Assembly.Load(profilePath).CreateInstance(className);
         }
 
+        /// <summary>
+        /// 获取上一工位结果
+        /// </summary>
+        /// <returns></returns>
+        public static IFailSafe CreateFailSafe()
+        {
+            string className = profilePath + ".FailSafeDAL";
+            return (IFailSafe)Assembly.Load(profilePath).CreateInstance(className);
+        }
+
+        public static IAirBag CreateAirBag()
+        {
+            string className = profilePath + ".AirBagDAL";
+            return (IAirBag)Assembly.Load(profilePath).CreateInstance(className);
+        }
+
     }
 }

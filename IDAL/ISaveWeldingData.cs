@@ -9,6 +9,10 @@ namespace IDAL
 {
     public interface ISaveWeldingData
     {
+        ServiceResult SaveWeldingDataL(WeldingInfo WeldingInfo);
+
+        ServiceResult SaveWeldingDataS(WeldingInfo WeldingInfo);
+
         ServiceResult SaveWeldingDataS(double WeldPower, int WeldSpeed, double Flow, double FlowUp, double FlowDown, double Pressure,
             double WeldTime, double XPos, double YPos, double ZPos, double RPos, double Coaxiality, double CoaxUp, double CoaxDown,
             string Surface, bool LwmCheck, bool QCResult, string PNo);

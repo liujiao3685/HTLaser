@@ -95,7 +95,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1356, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(1458, 28);
             this.menuStrip1.TabIndex = 29;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -106,20 +106,20 @@
             this.toolCancel});
             this.toolLoginCenter.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.toolLoginCenter.Name = "toolLoginCenter";
-            this.toolLoginCenter.Size = new System.Drawing.Size(100, 29);
+            this.toolLoginCenter.Size = new System.Drawing.Size(81, 24);
             this.toolLoginCenter.Text = "&用户中心";
             // 
             // toolLogin
             // 
             this.toolLogin.Name = "toolLogin";
-            this.toolLogin.Size = new System.Drawing.Size(128, 30);
+            this.toolLogin.Size = new System.Drawing.Size(108, 24);
             this.toolLogin.Text = "&登录";
             this.toolLogin.Click += new System.EventHandler(this.登录ToolStripMenuItem1_Click);
             // 
             // toolCancel
             // 
             this.toolCancel.Name = "toolCancel";
-            this.toolCancel.Size = new System.Drawing.Size(128, 30);
+            this.toolCancel.Size = new System.Drawing.Size(108, 24);
             this.toolCancel.Text = "&注销";
             this.toolCancel.Click += new System.EventHandler(this.注销ToolStripMenuItem_Click);
             // 
@@ -127,7 +127,7 @@
             // 
             this.toolProtectCenter.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.toolProtectCenter.Name = "toolProtectCenter";
-            this.toolProtectCenter.Size = new System.Drawing.Size(100, 29);
+            this.toolProtectCenter.Size = new System.Drawing.Size(81, 24);
             this.toolProtectCenter.Text = "&维护中心";
             this.toolProtectCenter.Click += new System.EventHandler(this.维护中心ToolStripMenuItem_Click);
             // 
@@ -135,7 +135,7 @@
             // 
             this.toolParamSetting.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.toolParamSetting.Name = "toolParamSetting";
-            this.toolParamSetting.Size = new System.Drawing.Size(100, 29);
+            this.toolParamSetting.Size = new System.Drawing.Size(81, 24);
             this.toolParamSetting.Text = "&参数配置";
             this.toolParamSetting.Click += new System.EventHandler(this.参数配置ToolStripMenuItem_Click);
             // 
@@ -143,7 +143,7 @@
             // 
             this.toolMuduleSet.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.toolMuduleSet.Name = "toolMuduleSet";
-            this.toolMuduleSet.Size = new System.Drawing.Size(100, 29);
+            this.toolMuduleSet.Size = new System.Drawing.Size(81, 24);
             this.toolMuduleSet.Text = "&模板配置";
             this.toolMuduleSet.Click += new System.EventHandler(this.模板配置ToolStripMenuItem_Click);
             // 
@@ -151,7 +151,7 @@
             // 
             this.toolSpotRecord.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.toolSpotRecord.Name = "toolSpotRecord";
-            this.toolSpotRecord.Size = new System.Drawing.Size(100, 29);
+            this.toolSpotRecord.Size = new System.Drawing.Size(81, 24);
             this.toolSpotRecord.Text = "&点检记录";
             this.toolSpotRecord.Click += new System.EventHandler(this.点检记录ToolStripMenuItem_Click);
             // 
@@ -159,7 +159,7 @@
             // 
             this.通讯监控ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.通讯监控ToolStripMenuItem.Name = "通讯监控ToolStripMenuItem";
-            this.通讯监控ToolStripMenuItem.Size = new System.Drawing.Size(100, 29);
+            this.通讯监控ToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
             this.通讯监控ToolStripMenuItem.Text = "&通讯监控";
             this.通讯监控ToolStripMenuItem.Click += new System.EventHandler(this.通讯监控ToolStripMenuItem_Click);
             // 
@@ -170,20 +170,20 @@
             this.toolEnglish});
             this.toolLanguage.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.toolLanguage.Name = "toolLanguage";
-            this.toolLanguage.Size = new System.Drawing.Size(62, 29);
+            this.toolLanguage.Size = new System.Drawing.Size(51, 24);
             this.toolLanguage.Text = "&语言";
             // 
             // toolChinese
             // 
             this.toolChinese.Name = "toolChinese";
-            this.toolChinese.Size = new System.Drawing.Size(128, 30);
+            this.toolChinese.Size = new System.Drawing.Size(108, 24);
             this.toolChinese.Text = "中文";
             this.toolChinese.Click += new System.EventHandler(this.中文ToolStripMenuItem_Click);
             // 
             // toolEnglish
             // 
             this.toolEnglish.Name = "toolEnglish";
-            this.toolEnglish.Size = new System.Drawing.Size(128, 30);
+            this.toolEnglish.Size = new System.Drawing.Size(108, 24);
             this.toolEnglish.Text = "英语";
             this.toolEnglish.Click += new System.EventHandler(this.英语ToolStripMenuItem_Click);
             // 
@@ -191,7 +191,7 @@
             // 
             this.testToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(62, 29);
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(52, 24);
             this.testToolStripMenuItem.Text = "Test";
             this.testToolStripMenuItem.Visible = false;
             this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
@@ -200,7 +200,7 @@
             // 
             this.点检中心ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 11F);
             this.点检中心ToolStripMenuItem.Name = "点检中心ToolStripMenuItem";
-            this.点检中心ToolStripMenuItem.Size = new System.Drawing.Size(100, 29);
+            this.点检中心ToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
             this.点检中心ToolStripMenuItem.Text = "点检中心";
             this.点检中心ToolStripMenuItem.Visible = false;
             this.点检中心ToolStripMenuItem.Click += new System.EventHandler(this.点检中心ToolStripMenuItem_Click);
@@ -213,9 +213,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolCurrentUser,
             this.toolTips});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 768);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 783);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1356, 35);
+            this.statusStrip1.Size = new System.Drawing.Size(1458, 29);
             this.statusStrip1.TabIndex = 31;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -224,7 +224,7 @@
             this.toolCurrentUser.BackColor = System.Drawing.Color.Tomato;
             this.toolCurrentUser.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Bold);
             this.toolCurrentUser.Name = "toolCurrentUser";
-            this.toolCurrentUser.Size = new System.Drawing.Size(221, 30);
+            this.toolCurrentUser.Size = new System.Drawing.Size(178, 24);
             this.toolCurrentUser.Text = "当前用户：未登录";
             // 
             // toolTips
@@ -232,7 +232,7 @@
             this.toolTips.BackColor = System.Drawing.SystemColors.Control;
             this.toolTips.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Bold);
             this.toolTips.Name = "toolTips";
-            this.toolTips.Size = new System.Drawing.Size(1120, 30);
+            this.toolTips.Size = new System.Drawing.Size(1265, 24);
             this.toolTips.Spring = true;
             this.toolTips.Text = "提示：";
             this.toolTips.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -242,7 +242,7 @@
             this.txtBarCode.Font = new System.Drawing.Font("Tahoma", 20F);
             this.txtBarCode.Location = new System.Drawing.Point(168, 28);
             this.txtBarCode.Name = "txtBarCode";
-            this.txtBarCode.Size = new System.Drawing.Size(297, 48);
+            this.txtBarCode.Size = new System.Drawing.Size(297, 40);
             this.txtBarCode.TabIndex = 0;
             this.txtBarCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFirstScan_KeyPress);
             // 
@@ -252,7 +252,7 @@
             this.labBarCode.Font = new System.Drawing.Font("Tahoma", 20F);
             this.labBarCode.Location = new System.Drawing.Point(3, 31);
             this.labBarCode.Name = "labBarCode";
-            this.labBarCode.Size = new System.Drawing.Size(166, 41);
+            this.labBarCode.Size = new System.Drawing.Size(133, 33);
             this.labBarCode.TabIndex = 39;
             this.labBarCode.Text = "过程条码:";
             // 
@@ -262,7 +262,7 @@
             this.panelBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelBox.Location = new System.Drawing.Point(0, 0);
             this.panelBox.Name = "panelBox";
-            this.panelBox.Size = new System.Drawing.Size(1070, 636);
+            this.panelBox.Size = new System.Drawing.Size(1172, 656);
             this.panelBox.TabIndex = 41;
             // 
             // btnCollection
@@ -272,7 +272,7 @@
             this.btnCollection.CustomerInformation = "";
             this.btnCollection.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
             this.btnCollection.Font = new System.Drawing.Font("微软雅黑", 20F);
-            this.btnCollection.Location = new System.Drawing.Point(509, 12);
+            this.btnCollection.Location = new System.Drawing.Point(530, 12);
             this.btnCollection.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCollection.Name = "btnCollection";
             this.btnCollection.Size = new System.Drawing.Size(197, 75);
@@ -286,7 +286,7 @@
             this.btnLogSystem.CustomerInformation = "";
             this.btnLogSystem.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
             this.btnLogSystem.Font = new System.Drawing.Font("微软雅黑", 20F);
-            this.btnLogSystem.Location = new System.Drawing.Point(1073, 12);
+            this.btnLogSystem.Location = new System.Drawing.Point(1094, 12);
             this.btnLogSystem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnLogSystem.Name = "btnLogSystem";
             this.btnLogSystem.Size = new System.Drawing.Size(193, 75);
@@ -301,7 +301,7 @@
             this.btnTraceSystem.CustomerInformation = "";
             this.btnTraceSystem.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
             this.btnTraceSystem.Font = new System.Drawing.Font("微软雅黑", 20F);
-            this.btnTraceSystem.Location = new System.Drawing.Point(788, 12);
+            this.btnTraceSystem.Location = new System.Drawing.Point(809, 12);
             this.btnTraceSystem.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnTraceSystem.Name = "btnTraceSystem";
             this.btnTraceSystem.Size = new System.Drawing.Size(193, 75);
@@ -323,7 +323,7 @@
             this.grbMonitorOnline.Font = new System.Drawing.Font("Tahoma", 15F);
             this.grbMonitorOnline.Location = new System.Drawing.Point(0, 0);
             this.grbMonitorOnline.Name = "grbMonitorOnline";
-            this.grbMonitorOnline.Size = new System.Drawing.Size(286, 636);
+            this.grbMonitorOnline.Size = new System.Drawing.Size(286, 656);
             this.grbMonitorOnline.TabIndex = 42;
             this.grbMonitorOnline.TabStop = false;
             this.grbMonitorOnline.Text = "实时监控";
@@ -344,9 +344,10 @@
             // labLwmCheck
             // 
             this.labLwmCheck.AutoSize = true;
+            this.labLwmCheck.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Bold);
             this.labLwmCheck.Location = new System.Drawing.Point(87, 316);
             this.labLwmCheck.Name = "labLwmCheck";
-            this.labLwmCheck.Size = new System.Drawing.Size(117, 30);
+            this.labLwmCheck.Size = new System.Drawing.Size(102, 24);
             this.labLwmCheck.TabIndex = 8;
             this.labLwmCheck.Text = "LWM检测";
             // 
@@ -392,25 +393,27 @@
             this.labState.AutoSize = true;
             this.labState.Location = new System.Drawing.Point(107, 433);
             this.labState.Name = "labState";
-            this.labState.Size = new System.Drawing.Size(63, 30);
+            this.labState.Size = new System.Drawing.Size(50, 24);
             this.labState.TabIndex = 2;
             this.labState.Text = "离线";
             // 
             // labSurface
             // 
             this.labSurface.AutoSize = true;
+            this.labSurface.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Bold);
             this.labSurface.Location = new System.Drawing.Point(90, 189);
             this.labSurface.Name = "labSurface";
-            this.labSurface.Size = new System.Drawing.Size(113, 30);
+            this.labSurface.Size = new System.Drawing.Size(94, 24);
             this.labSurface.TabIndex = 1;
             this.labSurface.Text = "焊缝质量";
             // 
             // labCoax
             // 
             this.labCoax.AutoSize = true;
+            this.labCoax.Font = new System.Drawing.Font("Tahoma", 15F, System.Drawing.FontStyle.Bold);
             this.labCoax.Location = new System.Drawing.Point(98, 58);
             this.labCoax.Name = "labCoax";
-            this.labCoax.Size = new System.Drawing.Size(88, 30);
+            this.labCoax.Size = new System.Drawing.Size(73, 24);
             this.labCoax.TabIndex = 0;
             this.labCoax.Text = "同心度";
             // 
@@ -420,9 +423,9 @@
             this.panelParBox.Controls.Add(this.panel2);
             this.panelParBox.Controls.Add(this.panel1);
             this.panelParBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelParBox.Location = new System.Drawing.Point(0, 33);
+            this.panelParBox.Location = new System.Drawing.Point(0, 28);
             this.panelParBox.Name = "panelParBox";
-            this.panelParBox.Size = new System.Drawing.Size(1356, 735);
+            this.panelParBox.Size = new System.Drawing.Size(1458, 755);
             this.panelParBox.TabIndex = 43;
             // 
             // panel3
@@ -431,7 +434,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(286, 99);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1070, 636);
+            this.panel3.Size = new System.Drawing.Size(1172, 656);
             this.panel3.TabIndex = 43;
             // 
             // panel2
@@ -440,7 +443,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 99);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(286, 636);
+            this.panel2.Size = new System.Drawing.Size(286, 656);
             this.panel2.TabIndex = 42;
             // 
             // panel1
@@ -453,7 +456,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1356, 99);
+            this.panel1.Size = new System.Drawing.Size(1458, 99);
             this.panel1.TabIndex = 0;
             // 
             // exeIcon
@@ -470,11 +473,11 @@
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1356, 803);
+            this.ClientSize = new System.Drawing.Size(1458, 812);
             this.Controls.Add(this.panelParBox);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);

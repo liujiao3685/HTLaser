@@ -37,6 +37,11 @@ namespace MES.DAL
 
         public DBTool()
         {
+            Open();
+        }
+
+        private void Open()
+        {
             m_sqlCon = helper.GetConnection();
             if (m_sqlCon != null && m_sqlCon.State != ConnectionState.Open)
             {
@@ -52,12 +57,14 @@ namespace MES.DAL
         /// <param name="ng"></param>
         public void GetTableCountByProcedure(out string sum, out string pass, out string ng)
         {
-            sw.Restart();
-            SqlCommand cmd = null;
             try
             {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
-                cmd = new SqlCommand("exec GetTypeCount @sum output, @pass output, @ng output; ", m_sqlCon);
+                if (m_sqlCon == null || m_sqlCon.State != ConnectionState.Open)
+                {
+                    m_sqlCon = helper.GetConnection();
+                }
+
+                SqlCommand cmd = new SqlCommand("EXEC GetTypeCount @sum output, @pass output, @ng output ", m_sqlCon);
 
                 cmd.Parameters.Add(new SqlParameter("@sum", SqlDbType.Int));
                 cmd.Parameters["@sum"].Direction = ParameterDirection.Output;
@@ -67,10 +74,6 @@ namespace MES.DAL
 
                 cmd.Parameters.Add(new SqlParameter("@ng", SqlDbType.Int));
                 cmd.Parameters["@ng"].Direction = ParameterDirection.Output;
-
-                //Cmd.Parameters.Add(new SqlParameter("@id", SqlDbType.Int));
-                //Cmd.Parameters["@id"].Value = id;   //参数
-                //Cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.ExecuteNonQuery();
 
@@ -84,15 +87,8 @@ namespace MES.DAL
                 sum = "0";//count
                 pass = "0";//pass
                 ng = "0";//ng 
-                Program.LogNet.WriteError("异常", "GetTableCountByProcedure--->" + ex.Message);
+                Program.LogNet.WriteError("异常", "获取产量异常：" + ex.Message);
             }
-            finally
-            {
-                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
-            }
-
-            sw.Stop();
-            Console.WriteLine("GetTableCountByProcedure耗时：" + sw.Elapsed.ToString());
         }
 
         /// <summary>
@@ -367,30 +363,26 @@ namespace MES.DAL
         public int ModifyTable(string sql, params SqlParameter[] ps)
         {
             int result = 0;
-            SqlCommand cmd = null;
             try
             {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+                //if (m_sqlCon == null || m_sqlCon.State != ConnectionState.Open)
+                //{
+                //    m_sqlCon = helper.GetConnection();
+                //}
 
-                cmd = m_sqlCon.CreateCommand();
-                PrepareCommand(cmd, m_sqlCon, null, CommandType.Text, sql, ps);
+                //SqlCommand cmd = m_sqlCon.CreateCommand();
+                //PrepareCommand(cmd, m_sqlCon, null, CommandType.Text, sql, ps);
+                //result = cmd.ExecuteNonQuery();
 
-                result = cmd.ExecuteNonQuery();
+                result = SqlHelper.ExecuteNonQuery(SqlHelper.SQLServerConnectionString, CommandType.Text, sql, ps);
 
                 return result;
             }
             catch (Exception ex)
             {
                 result = -1;
-                Program.LogNet.WriteError("异常", "ModifyTable-->" + ex.Message);
+                Program.LogNet.WriteError("异常", String.Format("ModifyTable-->SQL:{0} -- 异常信息：{1}", sql, ex.Message));
                 return result;
-            }
-            finally
-            {
-                cmd?.Dispose();
-                m_sqlCon.Close();
-                cmd = null;
-                ps = null;
             }
         }
 
@@ -622,39 +614,26 @@ namespace MES.DAL
         /// <returns>Tabel</returns>
         public DataTable SelectTable(string sql)
         {
-            SqlCommand cmd = null;
             try
             {
-                //TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+                if (m_sqlCon == null || m_sqlCon.State != ConnectionState.Open)
+                {
+                    m_sqlCon = helper.GetConnection();
+                }
 
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+                //SqlCommand cmd = new SqlCommand(sql, m_sqlCon);
+                //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                //DataSet ds = new DataSet();
+                //adapter.Fill(ds);
 
-                cmd = new SqlCommand(sql, m_sqlCon);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-
-                DataSet ds = new DataSet();
-                adapter.Fill(ds);
-
-                //TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
-                //TimeSpan use = start.Subtract(end).Duration();
-                //Console.WriteLine("DbTool_SelectTable：" + use.TotalSeconds.ToString("0.000") + "s");
-
-                //for (int i = 0; i < ds.Tables[0].Rows.Count - 1; i++)
-                //{
-                //    string strValue = ds.Tables[0].Rows[i]["ColName"].ToString();
-                //}
+                DataSet ds = SqlHelper.ExecuteDataset(SqlHelper.SQLServerConnectionString, CommandType.Text, m_sqlCon);
 
                 return ds.Tables[0];
             }
             catch (Exception ex)
             {
-                cmd = null;
-                Program.LogNet.WriteError("异常", "SelectTable--->" + ex.Message);
+                Program.LogNet.WriteError("异常", String.Format("SelectTable-->SQL:{0} -- 异常信息:{1}", sql, ex.Message));
                 return null;
-            }
-            finally
-            {
-                if (m_sqlCon.State == ConnectionState.Open) m_sqlCon.Close();
             }
         }
 

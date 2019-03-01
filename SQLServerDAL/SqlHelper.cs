@@ -39,7 +39,11 @@ namespace SQLServerDAL
     {
         //Database connection strings
         public static readonly string SQLServerConnectionString = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
-        //public static readonly string SQLServerConnectionString2 = ConfigurationManager.AppSettings["SQLServerConnectionString2"].ToString();
+
+        /// <summary>
+        /// 对接数据库
+        /// </summary>
+        public static readonly string SQLServerConnectionStringTPOS = "Data Source=18.7.0.150;Initial Catalog=CH18007_UAT;User Id=HTLaser;Password=HTLaser";
 
         #region private utility methods & constructors
         // Since this class provides only static methods, make the default constructor private to prevent 

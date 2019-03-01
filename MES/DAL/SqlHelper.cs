@@ -43,7 +43,7 @@ namespace MES.DAL
         /// <summary>
         /// 对接数据库
         /// </summary>
-        public static readonly string SQLServerConnectionStringTPOS = "Data Source=192.168.20.101;Initial Catalog=T180801;User Id=sa;Password=123456";
+        public static readonly string SQLServerConnectionStringTPOS = "Data Source=18.7.0.150;Initial Catalog=CH18007_UAT;User Id=HTLaser;Password=HTLaser";
 
         //public static readonly string SQLServerConnectionString2 = ConfigurationManager.AppSettings["SQLServerConnectionString2"].ToString();
 

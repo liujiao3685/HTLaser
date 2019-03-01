@@ -128,8 +128,10 @@
     <Compile Include="AppSetting.cs" />
     <Compile Include="BasicFramework\SoftBasic.cs" />
     <Compile Include="Core\Alarm.cs" />
+    <Compile Include="Core\AnalysisBarCode.cs" />
     <Compile Include="DAL\SqlHelper.cs" />
     <Compile Include="IDAL\IDbBase.cs" />
+    <Compile Include="Log\LogHelper.cs" />
     <Compile Include="Lwm\LwmCmd.cs" />
     <Compile Include="Lwm\LwmData.cs" />
     <Compile Include="Lwm\LwmHelper.cs" />
@@ -476,6 +478,10 @@
     <Content Include="Img\UserInterfaceEditor_5845.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{03598789-741A-4F50-A439-9936B9258CE3}</Project>
+      <Name>BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonLibrary\CommonLibrary.csproj">
       <Project>{3ef1910a-71ee-4a20-88df-ab5e0e8f3e88}</Project>
       <Name>CommonLibrary</Name>

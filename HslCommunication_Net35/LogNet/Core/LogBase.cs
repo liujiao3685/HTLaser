@@ -424,7 +424,7 @@ namespace HslCommunication.LogNet
             stringBuilder.Append("]");
 
             stringBuilder.Append(hslMessage.Time.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            stringBuilder.Append(" 结果:[");
+            stringBuilder.Append(" 结果[");
             //线程
             /*
             stringBuilder.Append(" thread:[");
@@ -437,8 +437,8 @@ namespace HslCommunication.LogNet
                 //stringBuilder.Append(" : ");
             }
 
-            stringBuilder.Append("] ");
-            stringBuilder.Append(" : ");
+            stringBuilder.Append("]");
+            stringBuilder.Append(": ");
 
             stringBuilder.Append(hslMessage.Text);
 

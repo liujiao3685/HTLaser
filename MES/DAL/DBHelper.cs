@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
@@ -10,7 +11,7 @@ namespace MES.DAL
         //数据库连接字符
         private static string SqlServerConnectionStr = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
 
-        private SqlConnection m_sqlCon;
+        private SqlConnection SqlConnection;
 
         private static DBHelper m_dbHelper;
 
@@ -38,7 +39,7 @@ namespace MES.DAL
 
         public bool IsConnection()
         {
-            if (m_sqlCon == null || m_sqlCon.State == System.Data.ConnectionState.Closed)
+            if (SqlConnection == null || SqlConnection.State == System.Data.ConnectionState.Closed)
             {
                 return false;
             }
@@ -49,12 +50,12 @@ namespace MES.DAL
         {
             try
             {
-                if (m_sqlCon == null)
+                if (SqlConnection == null)
                 {
                     if (SqlServerConnectionStr != String.Empty)
                     {
-                        m_sqlCon = new SqlConnection(SqlServerConnectionStr);
-                        m_sqlCon.Open();
+                        SqlConnection = new SqlConnection(SqlServerConnectionStr);
+                        SqlConnection.Open();
                     }
                     else
                     {
@@ -62,11 +63,14 @@ namespace MES.DAL
                         return null;
                     }
                 }
-                return m_sqlCon;
+                else if(SqlConnection.State != ConnectionState.Open)
+                {
+                    SqlConnection.Open();
+                }
+                return SqlConnection;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("数据库连接失败，请检查网络后重启软件！");
                 Program.LogNet.WriteError("异常", "数据库连接异常：" + ex.Message);
                 return null;
             }
@@ -78,8 +82,8 @@ namespace MES.DAL
             {
                 if (SqlServerConnectionStr != String.Empty)
                 {
-                    m_sqlCon = new SqlConnection(SqlServerConnectionStr);
-                    m_sqlCon.Open();
+                    SqlConnection = new SqlConnection(SqlServerConnectionStr);
+                    SqlConnection.Open();
                 }
                 else
                 {

@@ -12,6 +12,7 @@ using ProductManage.Language.MyLanguageTool;
 using MES.DAL;
 using SQLServerDAL;
 using System.Threading.Tasks;
+using ProductManage.Log;
 
 namespace MES.UserControls
 {
@@ -55,7 +56,7 @@ namespace MES.UserControls
 
         private object[] conditions = { "状态", "过程条码", "焊缝质量", "LWM检测" };
 
-        private Stopwatch sw = new Stopwatch();
+        private Stopwatch stopwatch = new Stopwatch();
 
         private TimeSpan startTime;
         private TimeSpan endTime;
@@ -90,16 +91,8 @@ namespace MES.UserControls
             m_culture = m_main.Culture;
             CultureChange();
             if (main.UseLanguage == 1) m_main.CultureChangeEvent += M_main_CultureChangeEvent;
-
             m_main.WeldSuccessEvent += M_main_WeldSuccessEvent;
 
-            //设定按字体来缩放控件  
-            this.AutoScaleMode = AutoScaleMode.Font;
-            //设定字体大小为12px       
-            this.Font = new Font("Tahoma", 10F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(134)));
-
-            dgvLookBoard.ColumnHeadersDefaultCellStyle.Font = new Font("Tahoma", 15F, FontStyle.Regular, GraphicsUnit.Pixel, 134);
-            dgvLookBoard.RowsDefaultCellStyle.Font = new Font("Tahoma", 15F, FontStyle.Regular, GraphicsUnit.Pixel, 134);
         }
 
         private void TraceSystem_Load(object sender, EventArgs e)
@@ -138,19 +131,24 @@ namespace MES.UserControls
         //样式设置
         private void initDGVStyle()
         {
+            //设定按字体来缩放控件  
+            this.AutoScaleMode = AutoScaleMode.Font;
+            //设定字体大小为12px       
+            this.Font = new Font("Tahoma", 10F, FontStyle.Regular, GraphicsUnit.Pixel, ((byte)(134)));
+
             //锁定列头不可排序
             foreach (DataGridViewColumn column in dgvLookBoard.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
+
+            dgvLookBoard.ColumnHeadersDefaultCellStyle.Font = new Font("Tahoma", 15F, FontStyle.Regular, GraphicsUnit.Pixel, 134);
+            dgvLookBoard.RowsDefaultCellStyle.Font = new Font("Tahoma", 15F, FontStyle.Regular, GraphicsUnit.Pixel, 134);
         }
 
         //数据库查询字段
         private void initSqlStrings()
         {
-            //    m_dbColunmsNames = " ID,WorkNo,PNo,QCResult,Coaxiality,CoaxUp,CoaxDown,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed," +
-            //        "Pressure,Flow,FlowUp,FlowDown,XPos,YPos,ZPos,RPos,WeldTime,ManualCheck,StorageTime ";
-
             m_dbColunmsNames = " ID,WorkNo,PNo,QCResult,Coaxiality,WeldDepth,Surface,LwmCheck,WeldPower,WeldSpeed," +
                 "Pressure,Flow,XPos,YPos,ZPos,RPos,WeldTime,ManualCheck,StorageTime ";
 
@@ -164,15 +162,18 @@ namespace MES.UserControls
             m_weldSuccess = e.WeldSuccess;
             if (m_weldSuccess)
             {
+                string sqlLast = "SELECT TOP 20 * FROM Product WHERE QCResult IS NOT NULL ORDER BY StorageTime DESC";
                 Invoke(new Action(() =>
                 {
-                    string sqlLast = " select top 20 * from Product where QCResult is not null order by StorageTime desc;";
-
                     m_productTable = m_main.DbTool.SelectTable(sqlLast);
 
                     if (m_productTable != null)
                     {
                         dgvLookBoard.DataSource = m_productTable;
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog("追溯系统", "m_productTable is null!");
                     }
 
                     Thread.Sleep(50);
@@ -181,6 +182,8 @@ namespace MES.UserControls
                 }));
             }
         }
+
+        #region 系统语言
 
         private void M_main_CultureChangeEvent(object obj, MyEvent e)
         {
@@ -270,23 +273,14 @@ namespace MES.UserControls
 
         }
 
-        private string count, pass, ng;
+        #endregion
 
         /// <summary>
         /// 更新产量UI
         /// </summary>
         private void UpdateProduction()
         {
-            /*
-            sw.Start();
-            string s_count = "select count(*) from product";
-            string count = m_main.DbTool.GetTableCount(s_count).ToString();
-            string pass = m_main.DbTool.GetTableCount("select count(*) from product where QCResult='OK'").ToString();
-            string ng = m_main.DbTool.GetTableCount("select count(*) from product where QCResult='NG'").ToString();
-            sw.Stop();
-            Console.WriteLine("GetTableCount总耗时：" + sw.Elapsed.ToString());
-            */
-
+            string count, pass, ng;
             m_main.DbTool.GetTableCountByProcedure(out count, out pass, out ng);
 
             txtSumPro.Text = count;
@@ -407,7 +401,6 @@ namespace MES.UserControls
             //Task.Factory.StartNew(() =>
             //{
             Query();
-
             //});
         }
 
@@ -464,42 +457,37 @@ namespace MES.UserControls
 
             switch (condition)
             {
-                //case "工单号":
-                //case "WorkNo":
-                //    sqlByCondition = "select " + m_dbColunmsNames + " from Product where WorkNo='" + value + "'" + storeTime;
-                //    m_conditionExtra = "WorkNo='" + value + "'" + storeTime;
-                //    break;
                 case "过程条码":
                 case "BarCode":
-                    //m_sqlByCondition = "select " + m_dbColunmsNames + " from product where PNo='" + value + "'" + storeTime;
-                    //m_conditionExtra = "PNo='" + value + "'" + storeTime;
+                    m_sqlByCondition = "select " + m_dbColunmsNames + " from product where PNo='" + value + "'" + storeTime;
+                    m_conditionExtra = "PNo='" + value + "'" + storeTime;
 
-                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where PNo='").Append(value).Append(storeTime);
-                    m_conditionExtraSB.Append("PNo = '").Append(value).Append(storeTime);
+                    //m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where PNo='").Append(value).Append(storeTime);
+                    //m_conditionExtraSB.Append("PNo = '").Append(value).Append(storeTime);
                     break;
                 case "焊缝质量":
                 case "Surface":
-                    //m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where Surface='" + value + "'" + storeTime;
-                    //m_conditionExtra = "Surface='" + value + "'" + storeTime;
+                    m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where Surface='" + value + "'" + storeTime;
+                    m_conditionExtra = "Surface='" + value + "'" + storeTime;
 
-                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where Surface='").Append(value).Append(storeTime);
-                    m_conditionExtraSB.Append("Surface='").Append(value).Append(storeTime);
+                    //m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where Surface='").Append(value).Append(storeTime);
+                    //m_conditionExtraSB.Append("Surface='").Append(value).Append(storeTime);
                     break;
                 case "状态":
                 case "FinalResult":
-                    //m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where QCResult='" + value + "'" + storeTime;
-                    //m_conditionExtra = "QCResult='" + value + "'" + storeTime;
+                    m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where QCResult='" + value + "'" + storeTime;
+                    m_conditionExtra = "QCResult='" + value + "'" + storeTime;
 
-                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where QCResult='").Append(value).Append(storeTime);
-                    m_conditionExtraSB.Append("QCResult='").Append(value).Append(storeTime);
+                    //m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where QCResult='").Append(value).Append(storeTime);
+                    //m_conditionExtraSB.Append("QCResult='").Append(value).Append(storeTime);
                     break;
                 case "LWM检测":
                 case "LwmCheck":
-                    //m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where LwmCheck='" + value + "'" + storeTime;
-                    //m_conditionExtra = "LwmCheck='" + value + "'" + storeTime;
+                    m_sqlByCondition = "select " + m_dbColunmsNames + "  from product where LwmCheck='" + value + "'" + storeTime;
+                    m_conditionExtra = "LwmCheck='" + value + "'" + storeTime;
 
-                    m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where LwmCheck='").Append(value).Append(storeTime);
-                    m_conditionExtraSB.Append("LwmCheck='").Append(value).Append(storeTime);
+                    //m_sqlByConditionSB.Append("select").Append(m_dbColunmsNames).Append(" from product where LwmCheck='").Append(value).Append(storeTime);
+                    //m_conditionExtraSB.Append("LwmCheck='").Append(value).Append(storeTime);
                     break;
                 //case "上线时间":
                 //case "StoreTime":
@@ -510,12 +498,8 @@ namespace MES.UserControls
                     break;
             }
 
-            m_sqlByCondition = m_sqlByConditionSB.ToString();
-            m_conditionExtra = m_conditionExtraSB.ToString();
-
-            //TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
-            //TimeSpan use = start.Subtract(end).Duration();
-            //Console.WriteLine("判断耗时：" + use.TotalMilliseconds.ToString("0.000") + "s");
+            //m_sqlByCondition = m_sqlByConditionSB.ToString();
+            //m_conditionExtra = m_conditionExtraSB.ToString();
 
             return true;
         }
@@ -524,11 +508,10 @@ namespace MES.UserControls
         /// 根据查询条件更新看板数据
         /// </summary>
         /// <param name="sql"></param>
-        private void UpdateLookBoard(string sql)
+        private void UpdateFaceUIByCondition(string sql)
         {
             string sqlCount = String.Format("select count(1) from ({0}) t", sql);
-
-            AllCount = m_main.DbTool.GetTableCount(sqlCount); //m_productTable.Rows.Count;//更新pagecount
+            AllCount = m_main.DbTool.GetTableCount(sqlCount);
 
             //更新总条数
             txtAllCount.Text = AllCount.ToString();
@@ -549,14 +532,14 @@ namespace MES.UserControls
         /// </summary>
         private void Query()
         {
-            startTime = new TimeSpan(DateTime.Now.Ticks);
+            stopwatch.Restart();
 
             if (!DBHelper.Instance.Open()) return;
             if (!ConditionJudge()) return;
 
             m_main.AddTips("正在查询数据，请稍等...", false);
 
-            UpdateLookBoard(m_sqlByCondition);
+            UpdateFaceUIByCondition(m_sqlByCondition);
 
             if (m_productTable == null || m_productTable.Rows.Count < 1)
             {
@@ -568,9 +551,8 @@ namespace MES.UserControls
 
             UpdateProduction();
 
-            endTime = new TimeSpan(DateTime.Now.Ticks);
-            countTime = startTime.Subtract(endTime).Duration();
-            Debug.WriteLine("Query总耗时：" + countTime.TotalSeconds.ToString("0.000") + "s");
+            stopwatch.Stop();
+            LogHelper.WriteLog("查询数据", "耗时 - " + stopwatch.Elapsed.TotalSeconds.ToString("0.000") + " s");
             m_main.AddTips("查询成功!", false);
         }
 
@@ -601,22 +583,18 @@ namespace MES.UserControls
                 Task.Factory.StartNew(() =>
                 {
                     ExcelProductTable = m_main.DbTool.SelectTable(sqlSelectFinal);
-                    SetCsvFile(saveFile.FileName);
+                    ExportExcel(saveFile.FileName);
                 });
                 //}));
             }
         }
 
         //导出Excel
-        /// <summary>
-        /// 导出CSV文件
-        /// </summary>
-        /// <param name="fileName"></param>
-        private void SetCsvFile(string fileName)
+        private void ExportExcel(string fileName)
         {
             try
             {
-                startTime = new TimeSpan(System.DateTime.Now.Ticks);
+                stopwatch.Restart();
                 FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
                 StreamWriter sw = new StreamWriter(fs, Encoding.Default);//Encoding.GetEncoding("UTF-8")
                 for (int col = 1; col < ExcelProductTable.Columns.Count; col++)
@@ -659,17 +637,16 @@ namespace MES.UserControls
                 sw.Close();
                 fs.Close();
 
-                endTime = new TimeSpan(DateTime.Now.Ticks);
-                countTime = startTime.Subtract(endTime).Duration();
+                stopwatch.Stop();
+                LogHelper.WriteLog("导出EXCEL", "耗时 - " + stopwatch.Elapsed.TotalSeconds.ToString("0.000") + " s");
 
                 MessageBox.Show(ResourceCulture.GetValue("OutExcelOK"));
-                Debug.WriteLine("导出耗时:" + countTime.TotalSeconds.ToString("0.000") + " s");
                 m_main.AddTips("导出成功!", false);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("导出失败，失败原因：" + ex.Message, "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                m_main.LogNetProgramer.WriteError("异常", "导出Excel失败---->" + ex.Message);
+                MessageBox.Show("导出失败，失败原因：" + ex.Message, "错误提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                LogHelper.WriteWarmLog("导出Excel失败---->" + ex.Message);
             }
         }
 
@@ -762,7 +739,8 @@ namespace MES.UserControls
             }
         }
 
-        //分页显示
+        #region 分页显示
+
         private void ShowPage(int Inum, int pageSize)
         {
             sqlPage = string.Empty;
@@ -921,5 +899,7 @@ namespace MES.UserControls
                 }
             }
         }
+        #endregion
+
     }
 }

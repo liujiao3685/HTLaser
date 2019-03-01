@@ -118,7 +118,7 @@ namespace ProductManage.PLC
         /// <summary>
         /// Lwm发送条码指令
         /// </summary>
-        public static readonly string OPC_DB_SendLwmCode = "ns=3;s=\"WeldPara\".\"SendLwmCode\"";
+        public static readonly string OPC_DB_SendLwmCodeOrder = "ns=3;s=\"WeldPara\".\"SendLwmCode\"";
 
         /// <summary>
         /// LWM结果指令
@@ -142,6 +142,16 @@ namespace ProductManage.PLC
         /// 提醒自检指令
         /// </summary>
         public static readonly string OPC_DB_WarnCheck = "ns=3;s=\"WeldPara\".\"WarnCheck\"";
+
+        /// <summary>
+        /// ST10工位结果
+        /// </summary>
+        public static readonly string OPC_ST10Result = "ns=3;s=\"WeldPara\".\"ST10Result\"";
+
+        /// <summary>
+        /// ST60工位结果
+        /// </summary>
+        public static readonly string OPC_ST60Result = "ns=3;s=\"WeldPara\".\"ST60Result\"";
 
 
         #endregion 

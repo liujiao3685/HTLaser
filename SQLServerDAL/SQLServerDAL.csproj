@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirBagDAL.cs" />
+    <Compile Include="FailSafeDAL.cs" />
     <Compile Include="LoginDAL.cs" />
     <Compile Include="OperateUserDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

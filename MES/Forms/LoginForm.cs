@@ -109,7 +109,6 @@ namespace MES.UI
             {
                 LoginSuccess();
                 isClose = false;
-                //MessageBox.Show("登录成功！");
                 Close();
             }
             else if (CurrentUser == null || CurrentUser.Password != m_password)
@@ -136,8 +135,15 @@ namespace MES.UI
         {
             if (isClose)
             {
-                OnLoginResult(this, new MyEvent() { LoginResult = false });
+                LoginFailed();
             }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            isClose = true;
+            LoginFailed();
+            Close();
         }
     }
 }

@@ -34,6 +34,7 @@
             this.labPassword = new System.Windows.Forms.Label();
             this.labName = new System.Windows.Forms.Label();
             this.btnOK = new HslCommunication.Controls.UserButton();
+            this.btnCancel = new HslCommunication.Controls.UserButton();
             this.SuspendLayout();
             // 
             // txtPassword
@@ -43,7 +44,7 @@
             this.txtPassword.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(187, 36);
+            this.txtPassword.Size = new System.Drawing.Size(187, 30);
             this.txtPassword.TabIndex = 1;
             // 
             // txtUserName
@@ -52,9 +53,8 @@
             this.txtUserName.Location = new System.Drawing.Point(168, 49);
             this.txtUserName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(187, 36);
+            this.txtUserName.Size = new System.Drawing.Size(187, 30);
             this.txtUserName.TabIndex = 0;
-            this.txtUserName.Text = "admin";
             // 
             // labPassword
             // 
@@ -63,7 +63,7 @@
             this.labPassword.Location = new System.Drawing.Point(50, 124);
             this.labPassword.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labPassword.Name = "labPassword";
-            this.labPassword.Size = new System.Drawing.Size(101, 29);
+            this.labPassword.Size = new System.Drawing.Size(79, 23);
             this.labPassword.TabIndex = 6;
             this.labPassword.Text = "密    码:";
             // 
@@ -74,7 +74,7 @@
             this.labName.Location = new System.Drawing.Point(50, 54);
             this.labName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labName.Name = "labName";
-            this.labName.Size = new System.Drawing.Size(101, 29);
+            this.labName.Size = new System.Drawing.Size(80, 23);
             this.labName.TabIndex = 5;
             this.labName.Text = "用户名 :";
             // 
@@ -84,7 +84,7 @@
             this.btnOK.CustomerInformation = "";
             this.btnOK.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
             this.btnOK.Font = new System.Drawing.Font("微软雅黑", 12F);
-            this.btnOK.Location = new System.Drawing.Point(143, 189);
+            this.btnOK.Location = new System.Drawing.Point(54, 187);
             this.btnOK.Margin = new System.Windows.Forms.Padding(6);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(137, 44);
@@ -92,11 +92,26 @@
             this.btnOK.UIText = "确定";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // btnCancel
+            // 
+            this.btnCancel.BackColor = System.Drawing.Color.Transparent;
+            this.btnCancel.CustomerInformation = "";
+            this.btnCancel.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
+            this.btnCancel.Font = new System.Drawing.Font("微软雅黑", 12F);
+            this.btnCancel.Location = new System.Drawing.Point(252, 187);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(6);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(137, 44);
+            this.btnCancel.TabIndex = 7;
+            this.btnCancel.UIText = "取消";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(430, 260);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtUserName);
@@ -123,5 +138,6 @@
         private System.Windows.Forms.Label labPassword;
         private System.Windows.Forms.Label labName;
         private HslCommunication.Controls.UserButton btnOK;
+        private HslCommunication.Controls.UserButton btnCancel;
     }
 }

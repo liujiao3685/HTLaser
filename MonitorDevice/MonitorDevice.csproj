@@ -98,6 +98,10 @@
       <Project>{3D3B2D92-B001-463D-9A59-941E18E64503}</Project>
       <Name>MES</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SQLServerDAL\SQLServerDAL.csproj">
+      <Project>{f65e82d4-8866-498b-8cf0-fb5ebc50cf17}</Project>
+      <Name>SQLServerDAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="HTLOGO.ico" />

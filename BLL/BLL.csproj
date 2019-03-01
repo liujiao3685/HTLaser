@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirBag.cs" />
+    <Compile Include="FailSafe.cs" />
     <Compile Include="OperateUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveWeldingData.cs" />

@@ -47,6 +47,7 @@
     <Compile Include="SpotDatas.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserInfo.cs" />
+    <Compile Include="WeldingInfo.cs" />
     <Compile Include="WeldModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
