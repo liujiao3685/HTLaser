@@ -19,5 +19,7 @@ namespace IDAL
 
         int GetNgCount();
 
+        ServiceResult UpdateManaulCheck(string BarCode, string NewResult, string Reason, string Operator);
+
     }
 }

@@ -37,5 +37,10 @@ namespace BLL
             return idal.IsExist(barCode);
         }
 
+        public ServiceResult UpdateManaulCheck(string BarCode, string NewResult, string Reason, string Operator)
+        {
+            return idal.UpdateManaulCheck(BarCode, NewResult, Reason, Operator);
+        }
+
     }
 }

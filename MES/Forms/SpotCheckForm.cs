@@ -451,7 +451,10 @@ namespace MES.UI
             int type = m_dbTool.IsExist(ifexist);
             if (type != 1)
             {
-                MessageBox.Show(ResourceCulture.GetValue("TheEmpNoNotExist"));
+                if (type == -1)
+                {
+                    MessageBox.Show("数据库连接异常！");
+                }
                 return;
             }
 

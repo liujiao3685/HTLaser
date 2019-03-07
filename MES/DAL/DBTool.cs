@@ -102,7 +102,10 @@ namespace MES.DAL
             SqlCommand cmd = null;
             try
             {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+                if (m_sqlCon == null || m_sqlCon.State != ConnectionState.Open)
+                {
+                    m_sqlCon = helper.GetConnection();
+                }
 
                 cmd = new SqlCommand(sql, m_sqlCon);
 
@@ -121,36 +124,6 @@ namespace MES.DAL
             }
 
             return count;
-        }
-
-        public bool UpdateProduct(Product product)
-        {
-            try
-            {
-                string sql = "Update Product set Coaxiality=@coaxiality,Surface=@surface " +
-                            "where PNo = @pno;";
-
-                SqlParameter[] parameters =
-                {
-                    new SqlParameter{ParameterName = "@coaxiality",SqlDbType = SqlDbType.Float,SqlValue = product.Coaxiality},
-                    new SqlParameter{ParameterName = "@surface",SqlDbType = SqlDbType.NVarChar,SqlValue = product.Surface},
-                    new SqlParameter{ParameterName = "@pno",SqlDbType =  SqlDbType.Int,SqlValue = product.PNo}
-                };
-
-                SqlCommand cmd = m_sqlCon.CreateCommand();
-                PrepareCommand(cmd, m_sqlCon, null, CommandType.Text, sql, parameters);
-
-                int result = cmd.ExecuteNonQuery();
-
-                if (result < 0) return false;
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Program.LogNet.WriteError("异常", "UpdateProduct--->" + ex.Message);
-                return false;
-            }
         }
 
         /// <summary>
@@ -283,7 +256,10 @@ namespace MES.DAL
             SqlCommand cmd = null;
             try
             {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+                if (m_sqlCon == null || m_sqlCon.State != ConnectionState.Open)
+                {
+                    m_sqlCon = helper.GetConnection();
+                }
 
                 cmd = new SqlCommand(sql, m_sqlCon);
                 reader = cmd.ExecuteReader();
@@ -297,12 +273,6 @@ namespace MES.DAL
             {
                 type = -1;//异常
                 Program.LogNet.WriteError("异常", "IsExist-->" + ex.Message);
-            }
-            finally
-            {
-                reader?.Close();
-                cmd?.Dispose();
-                m_sqlCon.Close();
             }
             return type;
         }
@@ -319,7 +289,10 @@ namespace MES.DAL
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
+                if (m_sqlCon == null || m_sqlCon.State != ConnectionState.Open)
+                {
+                    m_sqlCon = helper.GetConnection();
+                }
 
                 //开始事务
                 m_sqlTran = m_sqlCon.BeginTransaction();
@@ -483,131 +456,6 @@ namespace MES.DAL
         }
 
         /// <summary>
-        /// 查询所有产品
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="cmdText"></param>
-        /// <param name="ps"></param>
-        /// <returns></returns>
-        public List<Product> SelectProducts(string cmdText)
-        {
-            List<Product> list = new List<Product>();
-            Product p;
-
-            SqlCommand cmd = null;
-            SqlDataReader reader = null;
-
-            try
-            {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
-
-                cmd = m_sqlCon.CreateCommand();
-                PrepareCommand(cmd, m_sqlCon, null, CommandType.Text, cmdText, null);
-                reader = cmd.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    p = new Product();
-                    p.Id = Convert.ToInt32(reader["ID"]);
-                    p.PNo = reader["PNo"].ToString();
-                    p.StorageTime = Convert.ToDateTime(reader["StorageTime"]);
-
-                    if (reader["QCResult"] == System.DBNull.Value || reader["Coaxiality"] == System.DBNull.Value
-                        || reader["Surface"] == System.DBNull.Value || reader["WeldPower"] == System.DBNull.Value
-                        || reader["XPos"] == System.DBNull.Value || reader["YPos"] == System.DBNull.Value
-                        || reader["ZPos"] == System.DBNull.Value || reader["RPos"] == System.DBNull.Value
-                        || reader["Pressure"] == System.DBNull.Value || reader["Flow"] == System.DBNull.Value
-                        || reader["WeldSpeed"] == System.DBNull.Value || reader["LwmCheck"] == System.DBNull.Value
-                        || reader["WeldTime"] == System.DBNull.Value
-                        )
-                    {
-                        continue;
-                    }
-
-                    p.QCResult = reader["QCResult"].ToString();
-                    p.Coaxiality = Convert.ToDouble(reader["Coaxiality"]);
-                    p.Surface = reader["Surface"].ToString();
-                    p.LwmCheck = reader["LwmCheck"].ToString();
-                    p.WeldPower = Convert.ToInt32(reader["WeldPower"]);
-                    p.WeldSpeed = Convert.ToInt32(reader["WeldSpeed"]);
-                    p.XPos = Convert.ToDouble(reader["XPos"]);
-                    p.YPos = Convert.ToDouble(reader["YPos"]);
-                    p.ZPos = Convert.ToDouble(reader["ZPos"]);
-                    p.RPos = Convert.ToDouble(reader["RPos"]);
-                    p.Pressure = Convert.ToDouble(reader["Pressure"]);
-                    p.Flow = Convert.ToDouble(reader["Flow"]);
-                    p.WeldTime = Convert.ToInt32(reader["WeldTime"]);
-
-                    list.Add(p);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Program.LogNet.WriteError("异常", ex.StackTrace + "--->" + ex.Message);
-                list = null;
-            }
-            finally
-            {
-                cmd?.Parameters.Clear();
-                reader?.Close();
-                m_sqlCon.Close();
-            }
-
-            return list;
-        }
-
-        public List<Product> TableToProduct(DataTable table)
-        {
-            List<Product> list = new List<Product>();
-            Product p;
-
-            try
-            {
-                if (m_sqlCon.State != ConnectionState.Open) m_sqlCon.Open();
-                if (table == null || table.Rows.Count < 0) return null;
-
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    p = new Product();
-                    p.Id = Convert.ToInt32(table.Rows[i]["ID"]);
-                    p.WorkNo = table.Rows[i]["ID"].ToString();
-                    p.PNo = table.Rows[i]["PNo"].ToString();
-                    p.Surface = table.Rows[i]["Surface"].ToString();
-                    p.QCResult = table.Rows[i]["QCResult"].ToString();
-                    p.Coaxiality = Convert.ToDouble(table.Rows[i]["Coaxiality"]);
-                    p.CoaxUp = Convert.ToDouble(table.Rows[i]["CoaxUp"]);
-                    p.CoaxDown = Convert.ToDouble(table.Rows[i]["CoaxDown"]);
-                    p.WeldDepth = Convert.ToDouble(table.Rows[i]["WeldDepth"]);
-                    p.Surface = table.Rows[i]["Surface"].ToString();
-                    p.LwmCheck = table.Rows[i]["LwmCheck"].ToString();
-
-                    p.WeldPower = Convert.ToInt32(table.Rows[i]["WeldPower"]);
-                    p.WeldSpeed = Convert.ToInt32(table.Rows[i]["WeldSpeed"]);
-                    p.Pressure = Convert.ToDouble(table.Rows[i]["Pressure"]);
-                    p.Flow = Convert.ToDouble(table.Rows[i]["Flow"]);
-                    p.FlowUp = Convert.ToDouble(table.Rows[i]["FlowUp"]);
-                    p.FlowDown = Convert.ToDouble(table.Rows[i]["FlowDown"]);
-                    p.XPos = Convert.ToDouble(table.Rows[i]["XPos"]);
-                    p.YPos = Convert.ToDouble(table.Rows[i]["YPos"]);
-                    p.ZPos = Convert.ToDouble(table.Rows[i]["ZPos"]);
-                    p.RPos = Convert.ToDouble(table.Rows[i]["RPos"]);
-                    p.WeldTime = Convert.ToInt32(table.Rows[i]["WeldTime"]);
-
-                    list.Add(p);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                list = null;
-                Program.LogNet.WriteError("异常", ex.StackTrace + "--->" + ex.Message);
-            }
-
-            return list;
-        }
-
-        /// <summary>
         /// 查询表数据
         /// </summary>
         /// <param name="sql">查询语句</param>
@@ -621,12 +469,10 @@ namespace MES.DAL
                     m_sqlCon = helper.GetConnection();
                 }
 
-                //SqlCommand cmd = new SqlCommand(sql, m_sqlCon);
-                //SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                //DataSet ds = new DataSet();
-                //adapter.Fill(ds);
-
-                DataSet ds = SqlHelper.ExecuteDataset(SqlHelper.SQLServerConnectionString, CommandType.Text, m_sqlCon);
+                SqlCommand cmd = new SqlCommand(sql, m_sqlCon);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
 
                 return ds.Tables[0];
             }

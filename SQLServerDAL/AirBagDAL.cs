@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace SQLServerDAL
 {
+    /***
+    insert into TABLE
+    select 'pid' as [F_Id], [Customer], 'newType' as [ProductCode], 'newType' as [FullName], [FigureNumber], [ClientNumber]
+     from TABLE WHERE Model='oldType';
+     * */
     public class AirBagDAL : IAirBag
     {
         public int GetCountByCondition(string sqlCondition)
@@ -31,7 +36,7 @@ namespace SQLServerDAL
             try
             {
                 string sql = "SELECT COUNT(*) FROM Product WHERE QCResult IS NOT NULL";
-                count = SqlHelper.ExecuteNonQuery(SqlHelper.SQLServerConnectionString,System.Data.CommandType.Text,sql);
+                count = SqlHelper.ExecuteNonQuery(SqlHelper.SQLServerConnectionString, System.Data.CommandType.Text, sql);
             }
             catch (Exception ex)
             {
@@ -60,7 +65,7 @@ namespace SQLServerDAL
             int count = 0;
             try
             {
-                string sql = "SELECT COUNT(*) FROM Product WHERE QCResult='NG'";
+                string sql = "SELECT COUNT(*) FROM Product WHERE QCResult IS NOT NULL";
                 count = SqlHelper.ExecuteNonQuery(SqlHelper.SQLServerConnectionString, System.Data.CommandType.Text, sql);
             }
             catch (Exception ex)
@@ -120,5 +125,45 @@ namespace SQLServerDAL
             return result;
 
         }
+
+        public ServiceResult UpdateManaulCheck(string BarCode, string NewResult, string Reason, string Operator)
+        {
+            ServiceResult result = new ServiceResult();
+
+            try
+            {
+                //先备份
+                string sqlInsert = "UPDATE Product SET QCResult=@QCResult,ManualCheck=@ManualCheck,ManualOperator=@ManualOperator,ManualTime=GETDATE() WHERE PNo=@PNo";
+                SqlParameter[] paramInsert = new SqlParameter[4];
+                paramInsert[0] = new SqlParameter("@QCResult", System.Data.SqlDbType.NVarChar, 50);
+                paramInsert[0].Value = NewResult;
+                paramInsert[1] = new SqlParameter("@ManualOperator", System.Data.SqlDbType.NVarChar, 50);
+                paramInsert[1].Value = Operator;
+                paramInsert[2] = new SqlParameter("@PNo", System.Data.SqlDbType.NVarChar, 50);
+                paramInsert[2].Value = BarCode;
+                paramInsert[3] = new SqlParameter("@ManualCheck", System.Data.SqlDbType.NVarChar, 50);
+                paramInsert[3].Value = Reason;
+
+                int count = SqlHelper.ExecuteNonQuery(SqlHelper.SQLServerConnectionString, System.Data.CommandType.Text, sqlInsert, paramInsert);
+
+                if (count > 0)
+                {
+                    result.IsSuccess = true;
+                    result.Msg = "成功！";
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Msg = string.Format("失败 - count:{0}", count);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Msg = string.Format("异常 - {0}", ex.Message);
+            }
+            return result;
+        }
+
     }
 }

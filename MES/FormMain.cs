@@ -65,6 +65,7 @@ namespace MES
         public DataTable UsersTable;
         public int Culture = 1;
         public string ScanIP = string.Empty;
+        public Entity.User CurrentUser = null;
 
         #endregion
 
@@ -481,7 +482,6 @@ namespace MES
         }
 
         #endregion
-
         #region 扫描仪相关
 
         private bool OpenScanSocket()
@@ -595,7 +595,14 @@ namespace MES
             ServiceResult result = AnalysisBarCode.BarCode(StationName, barCode);
             if (!result.IsSuccess)
             {
-                SendScannerResult(2);
+                if (result.Msg.Contains("已入库"))
+                {
+                    SendScannerResult(3);
+                }
+                else
+                {
+                    SendScannerResult(2);
+                }
             }
             else
             {
@@ -825,11 +832,11 @@ namespace MES
                 {
                     if (b_surfaceCheck && b_coaCheckS && WeldInfoS.LwmCheck)
                     {
-                        WeldInfoS.QCResult = b_qcResult = true;
+                        WeldInfoS.QCResult = true;
                     }
                     else
                     {
-                        WeldInfoS.QCResult = b_qcResult = false;
+                        WeldInfoS.QCResult = false;
                     }
 
                     try
@@ -946,6 +953,53 @@ namespace MES
         }
 
         #endregion
+        #region 登录相关
+        private bool Result = false;
+
+        /// <summary>
+        /// 检测当前登录用户权限
+        /// </summary>
+        /// <returns>是否拥有管理员权限</returns>
+        public bool CheckUserAuth()
+        {
+            if (CurrentUser == null)
+            {
+                MessageBox.Show(ResourceCulture.GetValue("PleaseLogin"));
+                ShowLogin();
+                return false;
+            }
+            if (!(CurrentUser.Auth == "管理员" || CurrentUser.Auth == "Admin"))
+            {
+                MessageBox.Show(ResourceCulture.GetValue("AuthNotEnough"));
+                return false;
+            }
+            return true;
+        }
+
+        private void ShowLogin()
+        {
+            LoginForm login = new LoginForm(this);
+            login.LoginResultEvent += LoginResult;
+            login.m_culture = Culture;
+            login.ShowDialog();
+
+            if (CurrentUser != null)
+            {
+                toolCurrentUser.BackColor = Color.GreenYellow;
+                if (Culture == 1) toolCurrentUser.Text = "当前用户：" + CurrentUser.Auth;
+                else toolCurrentUser.Text = "CurrentUser：" + CurrentUser.Auth;
+            }
+        }
+
+        public void LoginResult(object sender, MyEvent e)
+        {
+            Result = e.LoginResult;
+            CurrentUser = e.LoginUser;
+        }
+
+        #endregion
+
+        #region ShowMessage
 
         public delegate void SetTips(string s, bool boo);
         public void AddTips(string v, bool error)
@@ -996,51 +1050,6 @@ namespace MES
             }
 
             //Invoke(new MethodInvoker(delegate () { }));
-        }
-
-        #region 登录相关
-        private bool Result = false;
-        public Entity.User CurrentUser = null;
-
-        /// <summary>
-        /// 检测当前登录用户权限
-        /// </summary>
-        /// <returns>是否拥有管理员权限</returns>
-        public bool CheckUserAuth()
-        {
-            if (CurrentUser == null)
-            {
-                MessageBox.Show(ResourceCulture.GetValue("PleaseLogin"));
-                ShowLogin();
-                return false;
-            }
-            if (!(CurrentUser.Auth == "管理员" || CurrentUser.Auth == "Admin"))
-            {
-                MessageBox.Show(ResourceCulture.GetValue("AuthNotEnough"));
-                return false;
-            }
-            return true;
-        }
-
-        private void ShowLogin()
-        {
-            LoginForm login = new LoginForm(this);
-            login.LoginResultEvent += LoginResult;
-            login.m_culture = Culture;
-            login.ShowDialog();
-
-            if (CurrentUser != null)
-            {
-                toolCurrentUser.BackColor = Color.GreenYellow;
-                if (Culture == 1) toolCurrentUser.Text = "当前用户：" + CurrentUser.Auth;
-                else toolCurrentUser.Text = "CurrentUser：" + CurrentUser.Auth;
-            }
-        }
-
-        public void LoginResult(object sender, MyEvent e)
-        {
-            Result = e.LoginResult;
-            CurrentUser = e.LoginUser;
         }
 
         #endregion
@@ -1402,48 +1411,6 @@ namespace MES
             {
 
             }*/
-        }
-
-        private void ReceiveCallback(IAsyncResult ar)
-        {
-            if (ar.AsyncState is StateObject state)
-            {
-                try
-                {
-                    Socket client = state.WorkSocket;
-                    int bytesRead = client.EndReceive(ar);
-
-                    if (bytesRead > 0)
-                    {
-                        // 接收到了数据
-                        state.AlreadyDealLength += bytesRead;
-                        if (state.AlreadyDealLength < state.DataLength)
-                        {
-                            // 获取接下来的所有的数据
-                            client.BeginReceive(state.Buffer, state.AlreadyDealLength,
-                                state.DataLength - state.AlreadyDealLength, SocketFlags.None,
-                                new AsyncCallback(ReceiveCallback), state);
-                        }
-                        else
-                        {
-                            // 接收到了所有的数据，通知接收数据的线程继续
-                            state.WaitDone.Set();
-                        }
-                    }
-                    else
-                    {
-                        // 对方关闭了网络通讯
-                        state.IsClose = true;
-                        state.WaitDone.Set();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    state.IsError = true;
-                    state.ErrerMsg = ex.Message;
-                    state.WaitDone.Set();
-                }
-            }
         }
 
         #endregion
