@@ -12,36 +12,62 @@ namespace CommonLibrary
     public class TcpBase
     {
         private Socket Client;
-
-        private string Ip;
-
+        private string IpAddress;
         private int Port;
-
-        //通知一个或多个正在等待的线程已发生事件
-        public ManualResetEvent TimeOutEvent;
-
-        public bool IsConn;
+        public bool Connected = false;
 
         public TcpBase()
         {
-
+            Init();
         }
 
-        public Socket CreateSocket(string ip, int port)
+        public TcpBase(string ipAddress)
         {
-            Ip = ip;
-            Port = port;
-            Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IsConn = false;
-            TimeOutEvent = new ManualResetEvent(false);
-            return Client;
+            Init(ipAddress);
         }
 
+        public TcpBase(string ipAddress, int port)
+        {
+            Init(ipAddress, port);
+        }
+
+        private void Init(string ipAddress = "", int port = 0)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(ipAddress))
+                {
+                    IpAddress = ipAddress;
+                }
+                if (port != 0)
+                {
+                    Port = port;
+                }
+
+                if (Client == null || !Client.Connected)
+                {
+                    IPAddress ip = IPAddress.Parse(IpAddress);
+                    IPEndPoint ipe = new IPEndPoint(ip, Port);
+
+                    Client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    Client.Connect(ipe);
+                    Connected = true;
+                }
+            }
+            catch (System.Exception)
+            {
+                Connected = false;
+            }
+        }
+
+        #region 异步
+        //通知一个或多个正在等待的线程已发生事件
+        public ManualResetEvent TimeOutEvent;
         public bool Connect(int timeOut)
         {
             if (Client == null) return false;
 
-            Client.BeginConnect(Ip, Port, new AsyncCallback(CallBackMethod), Client);
+            Client.BeginConnect(IpAddress, Port, new AsyncCallback(CallBackMethod), Client);
 
             //阻止当前线程，直到ManualResetEvent对象被set或者超过timeout时间
             //waitone收到信号返回true，否则返回false
@@ -50,9 +76,8 @@ namespace CommonLibrary
                 Client.Close();
             }
 
-            return IsConn;
+            return Connected;
         }
-
         public void CallBackMethod(IAsyncResult ar)
         {
             try
@@ -61,13 +86,13 @@ namespace CommonLibrary
                 if (Client != null)
                 {
                     Client.EndConnect(ar);
-                    IsConn = true;
+                    Connected = true;
                 }
 
             }
             catch (Exception)
             {
-                IsConn = false;
+                Connected = false;
             }
             finally
             {
@@ -76,12 +101,24 @@ namespace CommonLibrary
 
         }
 
+        #endregion
+
+        public void Close()
+        {
+            if (Client != null)
+            {
+                Client.Shutdown(SocketShutdown.Both);
+                Client.Close();
+                Client.Dispose();
+                Client = null;
+            }
+        }
+
         public bool SafeClose(Socket socket)
         {
             try
             {
                 if (socket == null) return false;
-                if (!socket.Connected) return false;
 
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();

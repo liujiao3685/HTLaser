@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -12,47 +13,80 @@ namespace CommonLibrary.Scanner
 {
     public class KeyenceSR751 : TcpBase
     {
-        public static string ScanIp = ConfigurationManager.AppSettings["ScanIP"].ToString(); //"192.168.0.78";
+        public static string IpAddress; //"192.168.0.78";
+        private static int ScanPort;
+        public Socket ScannerSocket;
 
-        public static int ScanPort = 9004;
-
-        public Socket ScanSocket;
-
-        private static readonly object myLock = new object();
-        private static KeyenceSR751 sR751 = null;
+        private static KeyenceSR751 keyenceSR751;
+        private static readonly object locker = new object();
         public static KeyenceSR751 GetInstance()
         {
-            if (sR751 == null)
+            if (keyenceSR751 == null)
             {
-                lock (myLock)
+                lock (locker)
                 {
-                    sR751 = new KeyenceSR751(ScanIp, ScanPort);
+                    keyenceSR751 = new KeyenceSR751();
                 }
             }
-            return sR751;
+            return keyenceSR751;
         }
 
         public KeyenceSR751()
         {
-
+            Init();
+        }
+        public KeyenceSR751(string ipAddress)
+        {
+            Init(ipAddress);
         }
 
-        public KeyenceSR751(string ip, int port)
+        public KeyenceSR751(string ip, int port = 9004)
         {
-            ScanIp = ip;
+            IpAddress = ip;
             ScanPort = port;
-            Open(20);
+            Init();
+        }
+
+        public void Init(string address = "")
+        {
+            try
+            {
+                ScanPort = 9004;
+                if (!string.IsNullOrEmpty(address))
+                {
+                    IpAddress = address;
+                }
+                else
+                {
+                    IpAddress = ConfigurationManager.AppSettings["ScanIP"].ToString();
+                }
+                if (ScannerSocket == null || !ScannerSocket.Connected)
+                {
+                    IPAddress ip = IPAddress.Parse(IpAddress);
+                    IPEndPoint ipe = new IPEndPoint(ip, ScanPort);
+
+                    ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    ScannerSocket.Connect(ipe);
+                    Connected = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Connected = false;
+            }
         }
 
         public bool IsConnection()
         {
-            if (ScanSocket != null && ScanSocket.Connected)
+            if (ScannerSocket != null && ScannerSocket.Connected)
             {
-                IsConn = true;
+                Connected = true;
             }
-            IsConn = false;
-            return IsConn;
+            Connected = false;
+            return Connected;
         }
+
+        #region 异步连接，可设置连接超时
 
         /// <summary>
         /// 打开扫码枪连接
@@ -60,44 +94,44 @@ namespace CommonLibrary.Scanner
         /// </summary>
         /// <param name="timeOut">连接延迟</param>
         /// <returns></returns>
-        public bool Open(int timeOut)
+        public bool OpenAsync(int timeOut)
         {
-            ScanSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IsConn = false;
+            ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Connected = false;
             TimeOutEvent = new ManualResetEvent(false);
             try
             {
-                ScanSocket.BeginConnect(ScanIp, ScanPort, new AsyncCallback(ScanCallBackMethod), ScanSocket);
+                ScannerSocket.BeginConnect(IpAddress, ScanPort, new AsyncCallback(ScanCallBackMethod), ScannerSocket);
 
                 //阻止当前线程，直到ManualResetEvent对象被set或者超过timeout时间
                 //waitone收到信号返回true，否则返回false
                 if (!TimeOutEvent.WaitOne(timeOut, false))
                 {
-                    SafeClose(ScanSocket);
+                    SafeClose(ScannerSocket);
                 }
             }
             catch (Exception ex)
             {
-                IsConn = false;
+                Connected = false;
             }
 
-            return IsConn;
+            return Connected;
         }
 
         private void ScanCallBackMethod(IAsyncResult ar)
         {
             try
             {
-                ScanSocket = ar.AsyncState as Socket;
-                if (ScanSocket != null)
+                ScannerSocket = ar.AsyncState as Socket;
+                if (ScannerSocket != null)
                 {
-                    ScanSocket.EndConnect(ar);
-                    IsConn = true;
+                    ScannerSocket.EndConnect(ar);
+                    Connected = true;
                 }
             }
             catch (Exception ex)
             {
-                IsConn = false;
+                Connected = false;
             }
             finally
             {
@@ -105,28 +139,89 @@ namespace CommonLibrary.Scanner
             }
         }
 
+        #endregion
+
+        #region 读写扫描枪
+        private static object WriteReadLock = new object();
+        public Result Write(string content)
+        {
+            if ((ScannerSocket == null || !ScannerSocket.Connected) && !string.IsNullOrEmpty(IpAddress))
+            {
+                Init();
+            }
+            return Write(ScannerSocket, content);
+        }
+        private Result Write(Socket socket, string content)
+        {
+            Result result = new Result(false, string.Format("写失败"), null);
+            try
+            {
+                lock (WriteReadLock)
+                {
+                    ScannerSocket.Send(Encoding.ASCII.GetBytes(content));
+
+                    result.IsSuccess = true;
+                    result.Content = null;
+                    result.Msg = "写成功";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Msg = String.Format("写异常：{0}", ex.Message);
+                result = null;
+            }
+            return result;
+        }
+
+        public Result Read()
+        {
+            if ((ScannerSocket == null || !ScannerSocket.Connected) && !string.IsNullOrEmpty(IpAddress))
+            {
+                Init();
+            }
+            return Read(ScannerSocket);
+        }
+        private Result Read(Socket socket, string order = "")
+        {
+            Result result = new Result(false, string.Format("读失败"), null);
+            try
+            {
+                lock (WriteReadLock)
+                {
+                    var content = new byte[1024];
+                    ScannerSocket.Receive(content);
+
+                    result.IsSuccess = true;
+                    result.Content = content;
+                    result.Msg = "读成功";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Msg = String.Format("写异常：{0}", ex.Message);
+                result = null;
+            }
+            return result;
+        }
+        #endregion
+
         public bool Open()
         {
             try
             {
-                ScanSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ScanIp), ScanPort);
-                ScanSocket.Connect(endPoint);
-                IsConn = true;
+                ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(IpAddress), ScanPort);
+                ScannerSocket.Connect(endPoint);
+                Connected = true;
             }
             catch (Exception ex)
             {
-                IsConn = false;
+                Connected = false;
             }
-            return IsConn;
+            return Connected;
         }
-
-        public bool Close()
-        {
-            IsConn = false;
-            return SafeClose(ScanSocket);
-        }
-
 
     }
 }

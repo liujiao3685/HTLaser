@@ -48,7 +48,7 @@ namespace CommonLibrary.Lwm
 
         public LwmData ReceiveByTelegram(byte[] telegramID)
         {
-            if (!IsConn) Open(LwmIp, LwmPort);
+            if (!Connected) Open(LwmIp, LwmPort);
 
             LwmData lwmData = new LwmData();
             byte[] temp = new byte[1024];
@@ -110,7 +110,7 @@ namespace CommonLibrary.Lwm
         {
             try
             {
-                if (!IsConn) Open(LwmIp, LwmPort);
+                if (!Connected) Open(LwmIp, LwmPort);
 
                 LwmSocket.Send(telegramID);
             }
@@ -124,7 +124,7 @@ namespace CommonLibrary.Lwm
         public bool Open(int timeout)
         {
             LwmSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IsConn = false;
+            Connected = false;
             TimeOutEvent = new System.Threading.ManualResetEvent(false);
             try
             {
@@ -139,9 +139,9 @@ namespace CommonLibrary.Lwm
             }
             catch (Exception ex)
             {
-                IsConn = false;
+                Connected = false;
             }
-            return IsConn;
+            return Connected;
         }
 
         private void LwmCallBack(IAsyncResult ar)
@@ -152,13 +152,13 @@ namespace CommonLibrary.Lwm
                 if (LwmSocket != null)
                 {
                     LwmSocket.EndConnect(ar);
-                    IsConn = true;
+                    Connected = true;
                 }
 
             }
             catch (Exception)
             {
-                IsConn = false;
+                Connected = false;
             }
             finally
             {
@@ -178,12 +178,12 @@ namespace CommonLibrary.Lwm
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
                 socket.Connect(endPoint);
-                IsConn = true;
+                Connected = true;
                 return true;
             }
             catch (Exception)
             {
-                IsConn = false;
+                Connected = false;
                 return false;
             }
         }
@@ -205,12 +205,6 @@ namespace CommonLibrary.Lwm
         private void ReceiveCallBack(IAsyncResult ar)
         {
             throw new NotImplementedException();
-        }
-
-        public bool Close()
-        {
-            IsConn = false;
-            return base.SafeClose(LwmSocket);
         }
 
     }

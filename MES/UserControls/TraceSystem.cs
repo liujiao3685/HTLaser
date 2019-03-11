@@ -130,7 +130,6 @@ namespace MES.UserControls
             timeCheckStart.Value = DateTime.Now.AddDays(-1);
             timeCheckEnd.Value = DateTime.Now;
         }
-
         //样式设置
         private void initDGVStyle()
         {
@@ -148,7 +147,6 @@ namespace MES.UserControls
             dgvLookBoard.ColumnHeadersDefaultCellStyle.Font = new Font("Tahoma", 15F, FontStyle.Regular, GraphicsUnit.Pixel, 134);
             dgvLookBoard.RowsDefaultCellStyle.Font = new Font("Tahoma", 15F, FontStyle.Regular, GraphicsUnit.Pixel, 134);
         }
-
         //数据库查询字段
         private void initSqlStrings()
         {
@@ -159,7 +157,6 @@ namespace MES.UserControls
 
             m_conditionExtra = " QCResult is not null";
         }
-
         private void M_main_WeldSuccessEvent(object obj, MyEvent e)
         {
             m_weldSuccess = e.WeldSuccess;
@@ -185,7 +182,6 @@ namespace MES.UserControls
                 }));
             }
         }
-
 
         #endregion
 
@@ -275,6 +271,26 @@ namespace MES.UserControls
             btnSelectByTerm.Text = ResourceCulture.GetValue("Query");
             btnOutExcel.Text = ResourceCulture.GetValue("OutExcel");
             //btnManualCheck.Text = ResourceCulture.GetValue("ManualCheck");
+
+            grbSelectCondition.Text = ResourceCulture.GetValue("SelectCondition");
+            labBarCode.Text = ResourceCulture.GetValue("BarCode");
+            labOnTIme.Text = ResourceCulture.GetValue("StoreTime");
+            tabState.Text = ResourceCulture.GetValue("State");
+            tabCoax.Text = ResourceCulture.GetValue("Coaxiality");
+            tabSuface.Text = ResourceCulture.GetValue("Surface");
+            chkProductState.Text = ResourceCulture.GetValue("State");
+            chkCoaxState.Text = ResourceCulture.GetValue("CoaxState");
+            chkCoaxRange.Text = ResourceCulture.GetValue("CoaxRange");
+            chkWeldState.Text = ResourceCulture.GetValue("Surface");
+            chkWeldDepth.Text = ResourceCulture.GetValue("WeldDepthRange");
+            chkLwmState.Text = ResourceCulture.GetValue("LwmState");
+
+            grbManual.Text = ResourceCulture.GetValue("ManualCheck");
+            labCurResult.Text = ResourceCulture.GetValue("CurrentResult");
+            labUpResult.Text  = ResourceCulture.GetValue("NewResult");
+            labUpdateUser.Text = ResourceCulture.GetValue("Operator");
+            labManualReason.Text = ResourceCulture.GetValue("ModifyReason");
+            btnManualCheck.Text = ResourceCulture.GetValue("ManualCheck");
 
         }
         #endregion
@@ -431,16 +447,6 @@ namespace MES.UserControls
             //Query();
         }
 
-        private void cmbPageSize_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdatePageCount();
-        }
-
-        private void cmbPageSize_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            e.Handled = true;
-        }
-
         private void cmbSelectCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
             string trem = cmbSelectCondition.SelectedItem.ToString();
@@ -506,10 +512,6 @@ namespace MES.UserControls
             }
         }
 
-        /// <summary>
-        /// 根据界面数据
-        /// </summary>
-        /// <param name="sql"></param>
         private void UpdateFaceUIByCondition(string sql)
         {
             string sqlCount = String.Format("select count(1) from ({0}) t", sql);
@@ -528,7 +530,6 @@ namespace MES.UserControls
             ShowPage(Inum, PageSize);
 
         }
-
         /// <summary>
         /// 执行查询
         /// </summary>
@@ -560,7 +561,6 @@ namespace MES.UserControls
             LogHelper.WriteLog("查询数据", "耗时 - " + Math.Round(stopwatch.Elapsed.TotalSeconds, 2) + " s");
             m_main.AddTips("查询成功!", false);
         }
-
         /// <summary>
         /// 返回 finalSQL
         /// </summary>
@@ -692,8 +692,7 @@ namespace MES.UserControls
                 //{
                 Task.Factory.StartNew(() =>
                 {
-                    //ExcelProductTable = m_main.DbTool.SelectTable(sqlSelectFinal);
-                    ExcelProductTable = CurrentProductTable;
+                    ExcelProductTable = m_main.DbTool.SelectTable(sqlSelectFinal);
                     ExportExcel(saveFile.FileName);
                 });
                 //}));
@@ -726,7 +725,7 @@ namespace MES.UserControls
                     sw.Write(headName + ",");
                 }
 
-                sw.WriteLine(String.Empty);
+                sw.WriteLine(string.Empty);
 
                 for (int row = 0; row < ExcelProductTable.Rows.Count; row++)
                 {
@@ -742,8 +741,8 @@ namespace MES.UserControls
                         if (m_main.IsStation_S)
                             if (headName.Contains("WeldDepth")) continue;
 
-                        string value = String.Format("\t{0}", ExcelProductTable.Rows[row][col]);
-                        sw.Write(String.Format("\t{0}", value) + ",");
+                        string value = string.Format("\t{0}", ExcelProductTable.Rows[row][col]);
+                        sw.Write(string.Format("\t{0}", value) + ",");
                     }
                     sw.Write("\n");
                 }
@@ -1066,10 +1065,20 @@ namespace MES.UserControls
         }
         #endregion
 
+        private void cmbPageSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdatePageCount();
+        }
+
+        private void cmbPageSize_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
         private void dgvLookBoard_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewCell curCell = dgvLookBoard.CurrentCell;
-            if (curCell != null)
+            if (dgvLookBoard.Rows.Count > 1 && curCell != null)
             {
                 txtOldResult.Text = dgvLookBoard.Rows[curCell.RowIndex].Cells["colCheckResult"].Value.ToString();
             }

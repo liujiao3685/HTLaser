@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MES")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("MES")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2018")]
+[assembly: AssemblyCompany("深圳市华天激光科技有限公司")]
+[assembly: AssemblyProduct("HT 生产管理系统")]
+[assembly: AssemblyCopyright("Copyright © 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -33,8 +33,8 @@ using System.Runtime.InteropServices;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.1.8")]
-[assembly: AssemblyFileVersion("1.0.1.8")]
+[assembly: AssemblyVersion("1.0.1.9")]
+[assembly: AssemblyFileVersion("1.0.1.9")]
 
 //1.0.0.1
 /*1、增加日志系统，可选择日志等级、填写结果以及日志内容，可加载日志（清空日志功能暂时屏蔽）

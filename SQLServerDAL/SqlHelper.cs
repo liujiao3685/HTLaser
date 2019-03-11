@@ -37,6 +37,8 @@ namespace SQLServerDAL
     /// </summary>
     public sealed class SqlHelper
     {
+        //sqlcommand.CommandTimeout = 60;
+
         //Database connection strings
         public static readonly string SQLServerConnectionString = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
 

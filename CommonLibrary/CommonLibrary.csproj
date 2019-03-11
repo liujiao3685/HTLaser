@@ -33,6 +33,9 @@
     <Reference Include="HslCommunication">
       <HintPath>..\CommonLibs\HslCommunication.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\CommonLibs\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Opc.Ua.Client">
       <HintPath>..\CommonLibs\Opc.Ua.Client.dll</HintPath>
     </Reference>
@@ -61,15 +64,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="DB\DBHelper.cs" />
-    <Compile Include="DB\DBTool.cs" />
+    <Compile Include="Common\SoftBasic.cs" />
+    <Compile Include="DB\SQLHelper.cs" />
+    <Compile Include="Log\Log.cs" />
+    <Compile Include="Log\LogHelper.cs" />
+    <Compile Include="Lwm\LwmClient.cs" />
     <Compile Include="Lwm\LwmData.cs" />
     <Compile Include="Lwm\LwmHelper.cs" />
     <Compile Include="Lwm\OperateResult.cs" />
     <Compile Include="PLC\PlcHelper.cs" />
+    <Compile Include="Scanner\ComQueue.cs" />
     <Compile Include="Scanner\KeyenceSR751.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scanner\Scanner.cs" />
     <Compile Include="TcpBase.cs" />
     <Compile Include="Vision\DeviceData.cs" />
     <Compile Include="Vision\MeasureData.cs" />
@@ -104,5 +111,6 @@
       <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

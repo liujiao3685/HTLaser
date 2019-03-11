@@ -350,8 +350,12 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resource.en-US.resx" />
-    <EmbeddedResource Include="Properties\Resource.zh-CN.resx" />
+    <EmbeddedResource Include="Properties\Resource.en-US.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.zh-CN.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx" />
     <EmbeddedResource Include="Forms\FormCheckAuth.resx">
       <DependentUpon>FormCheckAuth.cs</DependentUpon>
@@ -435,6 +439,9 @@
       <DependentUpon>ProfileForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Configs\FSS_opcconfig.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Configs\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

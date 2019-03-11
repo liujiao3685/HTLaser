@@ -66,6 +66,7 @@ namespace MES.UI
             labName.Text = ResourceCulture.GetValue("UserName");
             labPassword.Text = ResourceCulture.GetValue("Password");
             btnOK.UIText = ResourceCulture.GetValue("OK");
+            btnCancel.UIText = ResourceCulture.GetValue("Cancel");
 
         }
 

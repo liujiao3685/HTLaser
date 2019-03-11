@@ -39,7 +39,7 @@
             this.toolParamSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMuduleSet = new System.Windows.Forms.ToolStripMenuItem();
             this.toolSpotRecord = new System.Windows.Forms.ToolStripMenuItem();
-            this.通讯监控ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolMachineState = new System.Windows.Forms.ToolStripMenuItem();
             this.toolLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolChinese = new System.Windows.Forms.ToolStripMenuItem();
             this.toolEnglish = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,7 +88,7 @@
             this.toolParamSetting,
             this.toolMuduleSet,
             this.toolSpotRecord,
-            this.通讯监控ToolStripMenuItem,
+            this.toolMachineState,
             this.toolLanguage,
             this.testToolStripMenuItem,
             this.点检中心ToolStripMenuItem});
@@ -155,13 +155,13 @@
             this.toolSpotRecord.Text = "&点检记录";
             this.toolSpotRecord.Click += new System.EventHandler(this.点检记录ToolStripMenuItem_Click);
             // 
-            // 通讯监控ToolStripMenuItem
+            // toolMachineState
             // 
-            this.通讯监控ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 11F);
-            this.通讯监控ToolStripMenuItem.Name = "通讯监控ToolStripMenuItem";
-            this.通讯监控ToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
-            this.通讯监控ToolStripMenuItem.Text = "&通讯监控";
-            this.通讯监控ToolStripMenuItem.Click += new System.EventHandler(this.通讯监控ToolStripMenuItem_Click);
+            this.toolMachineState.Font = new System.Drawing.Font("微软雅黑", 11F);
+            this.toolMachineState.Name = "toolMachineState";
+            this.toolMachineState.Size = new System.Drawing.Size(81, 24);
+            this.toolMachineState.Text = "&通讯监控";
+            this.toolMachineState.Click += new System.EventHandler(this.通讯监控ToolStripMenuItem_Click);
             // 
             // toolLanguage
             // 
@@ -176,14 +176,14 @@
             // toolChinese
             // 
             this.toolChinese.Name = "toolChinese";
-            this.toolChinese.Size = new System.Drawing.Size(108, 24);
+            this.toolChinese.Size = new System.Drawing.Size(180, 24);
             this.toolChinese.Text = "中文";
             this.toolChinese.Click += new System.EventHandler(this.中文ToolStripMenuItem_Click);
             // 
             // toolEnglish
             // 
             this.toolEnglish.Name = "toolEnglish";
-            this.toolEnglish.Size = new System.Drawing.Size(108, 24);
+            this.toolEnglish.Size = new System.Drawing.Size(180, 24);
             this.toolEnglish.Text = "英语";
             this.toolEnglish.Click += new System.EventHandler(this.英语ToolStripMenuItem_Click);
             // 
@@ -546,7 +546,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolSpotRecord;
         private System.Windows.Forms.NotifyIcon exeIcon;
         private System.Windows.Forms.Timer timerGC;
-        private System.Windows.Forms.ToolStripMenuItem 通讯监控ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolMachineState;
     }
 }
 

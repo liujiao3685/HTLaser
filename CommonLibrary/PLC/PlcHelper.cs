@@ -28,7 +28,7 @@ namespace CommonLibrary.PLC
 
         public OpcUaClient OpcUaClient = null;
 
-        public Boolean IsConnection()
+        public bool IsConnection()
         {
             if (OpcUaClient == null || !OpcUaClient.Connected)
             {

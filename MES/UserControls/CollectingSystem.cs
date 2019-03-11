@@ -76,11 +76,9 @@ namespace MES.UserControls
             m_main = main;
             m_culture = m_main.Culture;
             CultureChange();
-            //订阅主窗体条码改变事件
-            m_main.BarCodeChange += BarCodeChange;
-            //语言改变事件
-            if (m_main.UseLanguage == 1) m_main.CultureChangeEvent += M_main_CultureChangeEvent;
-            m_main.WindowStateEvent += M_main_WindowStateEvent;
+            m_main.BarCodeChange += BarCodeChange;//条码改变
+            if (m_main.UseLanguage == 1) m_main.CultureChangeEvent += M_main_CultureChangeEvent;//语言改变
+            m_main.WindowStateEvent += M_main_WindowStateEvent;//程序关闭
 
         }
 
@@ -92,12 +90,21 @@ namespace MES.UserControls
         private void CollectDataControl_Load(object sender, EventArgs e)
         {
             Init();
+        }
 
-            //CultureChange();
-            ////数据订阅:假设这个在服务器上是不断变化的
-            //m_opcUaClient.MonitorValue("ns=2;s=Products/StationA/Pressure",
-            //    new Action<float, Action>(MonitorPressureValue));
+        private void Init()
+        {
+            m_tool = m_main.DbTool;
+            m_opcUaClient = m_main.OpcUaClient;
 
+            Thread t_collectThread = new Thread(Collecting);
+            t_collectThread.IsBackground = true;
+            t_collectThread.Start();
+            m_isThreadRun = true;
+
+            Thread t_updateWeldParam = new Thread(UpdateDbData);
+            t_updateWeldParam.IsBackground = true;
+            //t_updateWeldParam.Start();
         }
 
         private void M_main_CultureChangeEvent(object obj, MyEvent e)
@@ -136,51 +143,32 @@ namespace MES.UserControls
 
         }
 
-        private void Init()
-        {
-            m_tool = m_main.DbTool;
-            m_opcUaClient = m_main.OpcUaClient;
-
-            Thread t_collectThread = new Thread(Collecting);
-            t_collectThread.IsBackground = true;
-            t_collectThread.Start();
-            m_isThreadRun = true;
-
-            Thread t_updateWeldParam = new Thread(UpdateDbData);
-            t_updateWeldParam.IsBackground = true;
-            t_updateWeldParam.Start();
-
-        }
-
-        //手动触发采集
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if (!m_isThreadRun)
-            {
-                btnStart.UIText = "停止";
+            //if (!m_isThreadRun)
+            //{
+            //    btnStart.UIText = "停止";
 
-                Thread collectThread = new Thread(Collecting);
-                collectThread.IsBackground = true;
-                m_isThreadRun = true;
-                collectThread.Start();
-            }
-            else
-            {
-                btnStart.UIText = "采集";
-                m_isThreadRun = false;
-            }
+            //    Thread collectThread = new Thread(Collecting);
+            //    collectThread.IsBackground = true;
+            //    m_isThreadRun = true;
+            //    collectThread.Start();
+            //}
+            //else
+            //{
+            //    btnStart.UIText = "采集";
+            //    m_isThreadRun = false;
+            //}
         }
 
         private ArrayList objs = new ArrayList();
-
-        private int m_errorCount = 0;
 
         /// <summary>
         /// 批量采集参数
         /// </summary>
         private void Collecting()
         {
-            while (m_isThreadRun && b_windowShow)
+            while (b_windowShow)
             {
                 if (!m_isThreadRun || m_opcUaClient == null || !m_opcUaClient.Connected) break;
 
@@ -203,7 +191,7 @@ namespace MES.UserControls
                         {
                             m_main.LogNetProgramer.WriteError("采集异常", "节点名：" + nodes[index] + ",读取失败！");
                             //m_isThreadRun = false;
-                            btnStart.UIText = "采集";
+                            //btnStart.UIText = "采集";
                             break;
                         }
                         index++;
@@ -211,12 +199,8 @@ namespace MES.UserControls
                 }
                 catch (Exception ex)
                 {
-                    m_errorCount++;
-                    if (m_errorCount > 15)
-                    {
-                        m_main.LogNetProgramer.WriteError("异常", "OPC采集焊接参数异常" + "--->" + ex.Message);
-                        m_errorCount = 0;
-                    }
+                    m_isThreadRun = false;
+                    CommonLibrary.Log.LogHelper.WriteLog("OPC采集焊接参数异常", ex);
                 }
 
                 if (m_isThreadRun && objs.Count > 0)
@@ -235,15 +219,11 @@ namespace MES.UserControls
                     }));
 
                     // if (!String.IsNullOrEmpty(m_barcode)) m_startSave = true;
-
-                    //SendReadSign(1);
-                    //m_main.AddTips("数据采集并保存成功！");
                 }
                 Thread.Sleep(1000);
             }
         }
 
-        //更新数据库焊接参数信息
         private void UpdateDbData()
         {
             while (b_windowShow)
@@ -299,7 +279,7 @@ namespace MES.UserControls
         private bool SaveWeldParam(double power, int speed, double xpos, double ypos, double zpos, double rpos,
             int time, double pressure, double flow, string pno)
         {
-            string sql = "update Product set XPos=@xpos,YPos=@ypos,ZPos=@zpos,RPos=@rpos where PNo=@pno";
+            string sql = "UPDATE Product SET XPos=@xpos,YPos=@ypos,ZPos=@zpos,RPos=@rpos WHERE PNo=@pno";
 
             SqlParameter[] sqlParameters =
             {
@@ -328,41 +308,6 @@ namespace MES.UserControls
         {
             m_barcode = e.BarCode;
             txtBarCode.Text = m_barcode;
-        }
-
-        /// <summary>
-        /// 发送是否成功信号  1：成功，2：失败
-        /// </summary>
-        private void SendSign(string node, int result)
-        {
-            try
-            {
-                bool boo = m_opcUaClient.WriteNode(node, result);
-                if (!boo)
-                {
-                    m_main.AddTips("采集反馈信号发送失败！", true);
-                }
-            }
-            catch (Exception ex)
-            {
-                m_main.LogNetProgramer.WriteError("异常", "SendSign--->" + ex.Message);
-            }
-        }
-
-        private void MonitorPressureValue(float value, Action action)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() =>
-                {
-                    MonitorPressureValue(value, action);
-                }));
-                return;
-            }
-            txtPressure.Text = value.ToString();
-
-            //若要停止，即调用action
-            //action?.Invoke();
         }
 
         /// <summary>

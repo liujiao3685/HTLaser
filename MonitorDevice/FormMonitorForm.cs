@@ -1,5 +1,5 @@
-﻿using CommonLibrary.Lwm;
-using CommonLibrary.PLC;
+﻿using CommonLibrary.Common;
+using CommonLibrary.Lwm;
 using CommonLibrary.Scanner;
 using CommonLibrary.Vision;
 using MES.DAL;
@@ -13,6 +13,11 @@ namespace MonitorDevice
     public partial class FormMonitorForm : Form
     {
         private bool IsStation_S;
+        private string PlcIp;
+        private string LwmIp;
+        private string ScannerIp;
+        private string VisionIp;
+        private string DBSMDIP;
 
         public FormMonitorForm()
         {
@@ -20,11 +25,18 @@ namespace MonitorDevice
             if (ConfigurationManager.AppSettings["StationName"].ToString() == "S")
             {
                 IsStation_S = true;
+                PlcIp = "192.168.0.75";
+                ScannerIp = "192.168.0.78";
             }
             else
             {
                 IsStation_S = false;
+                PlcIp = "192.168.0.85";
+                ScannerIp = "192.168.0.88";
             }
+            LwmIp = "192.168.0.60";
+            VisionIp = "192.168.0.66";
+            DBSMDIP = "18.7.0.150";
         }
 
         private void FormMonitor_Load(object sender, EventArgs e)
@@ -46,58 +58,83 @@ namespace MonitorDevice
 
         public bool CheckPlcState()
         {
-            if (!PlcHelper.GetInstance().IsConnection())
+            bool boo = false;
+            Invoke(new Action(() =>
             {
-                lanPlcState.LanternBackground = Color.Gray;
-                return false;
-            }
-            lanPlcState.LanternBackground = Color.LimeGreen;
-            return true;
+                //if (!PlcHelper.GetInstance().IsConnection())
+                if (!SoftBasic.IsPingOk(PlcIp))
+                {
+                    lanPlcState.LanternBackground = Color.Gray;
+                    boo = false;
+                }
+                else
+                {
+                    lanPlcState.LanternBackground = Color.LimeGreen;
+                    boo = true;
+                }
+            }));
+            return boo;
         }
 
         public bool CheckLwmState()
         {
-            if (!LwmHelper.GetInstance().IsConn)
+            bool boo = false;
+            Invoke(new Action(() =>
             {
-                lanLwmState.LanternBackground = Color.Gray;
-                return false;
-            }
-            lanLwmState.LanternBackground = Color.LimeGreen;
-            return true;
+                //if (!LwmClient.GetInstance().IsConnection())
+                if (!SoftBasic.IsPingOk(LwmIp))
+                {
+                    lanLwmState.LanternBackground = Color.Gray;
+                    boo = false;
+                }
+                else
+                {
+                    lanLwmState.LanternBackground = Color.LimeGreen;
+                    boo = true;
+                }
+            }));
+            return boo;
         }
 
-        public bool CheckDbState()
-        {
-            if (!MES.DAL.DBHelper.Instance.Open())
-            {
-                lanDbState.LanternBackground = Color.Gray;
-                return false;
-            }
-            lanDbState.LanternBackground = Color.LimeGreen;
-            return true;
-        }
 
         public bool CheckVisionState()
         {
-            if (!VisionLJ7000.Instance.OpenVision())
+            bool boo = false;
+            Invoke(new Action(() =>
             {
-                lanVisionState.LanternBackground = Color.Gray;
-                return false;
-            }
-            lanVisionState.LanternBackground = Color.LimeGreen;
-            return true;
+                // if (!VisionLJ7000.Instance.OpenVision())
+                if (!SoftBasic.IsPingOk(LwmIp))
+                {
+                    lanVisionState.LanternBackground = Color.Gray;
+                    boo = false;
+                }
+                else
+                {
+                    lanVisionState.LanternBackground = Color.LimeGreen;
+                    boo = true;
+                }
+            }));
+            return boo;
         }
-
 
         public bool CheckScanState()
         {
-            if (!KeyenceSR751.GetInstance().IsConn)
+            bool boo = false;
+            Invoke(new Action(() =>
             {
-                lanScanState.LanternBackground = Color.Gray;
-                return false;
-            }
-            lanScanState.LanternBackground = Color.LimeGreen;
-            return true;
+                //if (!KeyenceSR751.GetInstance().IsConnection())
+                if (!SoftBasic.IsPingOk(VisionIp))
+                {
+                    lanScanState.LanternBackground = Color.Gray;
+                    boo = false;
+                }
+                else
+                {
+                    lanScanState.LanternBackground = Color.LimeGreen;
+                    boo = true;
+                }
+            }));
+            return boo;
         }
 
 
@@ -105,12 +142,13 @@ namespace MonitorDevice
         {
             DisposeAll();
         }
-
         private void DisposeAll()
         {
             Dispose();
             Close();
         }
+
+        #region 数据库
 
         private void timerDB_Tick(object sender, EventArgs e)
         {
@@ -118,16 +156,43 @@ namespace MonitorDevice
             CheckSMDState();
         }
 
-        public bool CheckSMDState()
+        public bool CheckDbState()
         {
-            if (!SQLServerDAL.SqlHelper.IsConnection(SqlHelper.SQLServerConnectionStringTPOS))
+            bool boo = false;
+            // if (!SQLServerDAL.SqlHelper.IsConnection(SqlHelper.SQLServerConnectionString))
+            if (!SoftBasic.IsPingOk("127.0.0.1"))
             {
                 lanDbState.LanternBackground = Color.Gray;
-                return false;
+                boo = false;
             }
-            lanDbState.LanternBackground = Color.LimeGreen;
-            return true;
+            else
+            {
+                lanDbState.LanternBackground = Color.LimeGreen;
+                boo = true;
+            }
+            return boo;
         }
+
+        public bool CheckSMDState()
+        {
+            bool boo = false;
+            Invoke(new Action(() =>
+            {
+                // if (!SQLServerDAL.SqlHelper.IsConnection(SqlHelper.SQLServerConnectionStringTPOS))
+                if (!SoftBasic.IsPingOk(DBSMDIP))
+                {
+                    lanDbState.LanternBackground = Color.Gray;
+                    boo = false;
+                }
+                else
+                {
+                    lanDbState.LanternBackground = Color.LimeGreen;
+                    boo = true;
+                }
+            }));
+            return boo;
+        }
+        #endregion
 
         private void timerTPOS_Tick(object sender, EventArgs e)
         {

@@ -77,8 +77,7 @@ namespace ProductManage.UI
         public bool CheckScanState()
         {
             sw.Restart();
-            KeyenceSR751.ScanIp = main.ScanIP;
-            KeyenceSR751.ScanPort = 9004;
+            KeyenceSR751.IpAddress = main.ScanIP;
             if (main.m_socketScan == null || !main.m_socketScan.Connected)  //if (!KeyenceSR751.GetInstance().Open(20))
             {
                 lanScanState.LanternBackground = Color.Gray;

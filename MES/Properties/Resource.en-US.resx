@@ -350,7 +350,7 @@
     <value>WeldZPos</value>
   </data>
   <data name="Which" xml:space="preserve">
-    <value>Which</value>
+    <value>No</value>
   </data>
   <data name="WorkpiecePressure" xml:space="preserve">
     <value>PushPressure</value>
@@ -675,5 +675,35 @@
   </data>
   <data name="ProtectFlowUp" xml:space="preserve">
     <value>ProtectFlowUp</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CoaxRange" xml:space="preserve">
+    <value>CoaxRange</value>
+  </data>
+  <data name="CoaxState" xml:space="preserve">
+    <value>CoaxState</value>
+  </data>
+  <data name="CurrentResult" xml:space="preserve">
+    <value>OldResult:</value>
+  </data>
+  <data name="LwmState" xml:space="preserve">
+    <value>LwmState</value>
+  </data>
+  <data name="MachineState" xml:space="preserve">
+    <value>MachineState</value>
+  </data>
+  <data name="NewResult" xml:space="preserve">
+    <value>NewResult:</value>
+  </data>
+  <data name="SelectCondition" xml:space="preserve">
+    <value>QCondition</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="WeldDepthRange" xml:space="preserve">
+    <value>DepthRange</value>
   </data>
 </root>

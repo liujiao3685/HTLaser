@@ -15,7 +15,6 @@ using OpcUaHelper;
 using Application = System.Windows.Forms.Application;
 using DataTable = System.Data.DataTable;
 using System.Net.Sockets;
-using System.Net;
 using System.Data.SqlClient;
 using System.Data;
 using 生产管理系统.UI;
@@ -27,22 +26,17 @@ using System.Collections;
 using ProductManage.PLC;
 using ProductManage.Vision;
 using System.Runtime.InteropServices;
-using ProductManage.Lwm;
 using System.IO;
 using System.Reflection;
 using Model;
 using ProductManage.Log;
 using BLL;
 using System.Threading.Tasks;
+using CommonLibrary.Scanner;
+using CommonLibrary.Lwm;
 
 namespace MES
 {
-    /// <summary>
-    /// 工艺流程
-    /// 上料-> 扫码 ->焊接（大环：LWM+3D视觉检测）->清洁->同心度检测(视觉)->表面质量检测(视觉)->更新数据库->下料
-    /// 大环缝:熔深（mm）-->2~4, 偏心距（mm）-->  -0.15～0.2
-    /// 小环缝:熔深（mm）-->≥2.2，偏心距（mm）-->  -0.3～0.3
-    /// </summary>
     public partial class FormMain : Form
     {
         #region 公有变量
@@ -58,7 +52,7 @@ namespace MES
         public OpcUaTool.OpcUaClient OpcUaTool;
         public string OpcServiceUrl = "opc.tcp://192.168.0.75:4840";
 
-        public int DeviceState = 2;
+        public int DeviceState = 2;//1在线 2离线
 
         public XmlHelperBase XmlHelper;
         public Dictionary<string, string> SystemParamsDic;
@@ -66,6 +60,7 @@ namespace MES
         public int Culture = 1;
         public string ScanIP = string.Empty;
         public Entity.User CurrentUser = null;
+        public KeyenceSR751 keyenceSR751;
 
         #endregion
 
@@ -123,6 +118,8 @@ namespace MES
 
             if (Test == 0)
             {
+                keyenceSR751 = new KeyenceSR751(ScanIP);
+
                 //初始化PLC通讯
                 OpenPlc();
 
@@ -234,13 +231,13 @@ namespace MES
                 SetResourceCulture();
             }
         }
-
         private void SetResourceCulture()
         {
             Text = ResourceCulture.GetValue("ProductManageSystem")
-                   + "  [ Version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " ]";
+                   + "  [ Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " ]";
             exeIcon.Text = ResourceCulture.GetValue("ProductManageSystem");
 
+            toolMachineState.Text = ResourceCulture.GetValue("MachineState");
             toolLoginCenter.Text = ResourceCulture.GetValue("UserCenter");
             toolProtectCenter.Text = ResourceCulture.GetValue("OMCS");
             toolParamSetting.Text = ResourceCulture.GetValue("ParamSetting");
@@ -356,12 +353,7 @@ namespace MES
             }
             catch (Exception ex)
             {
-                m_errorCount++;
-                if (m_errorCount > 0)
-                {
-                    m_errorCount = 0;
-                    LogNetProgramer.WriteError("异常", "PLC连接失败：" + ex.Message);
-                }
+                CommonLibrary.Log.LogHelper.WriteLog("PLC连接失败", ex);
                 return false;
             }
             return true;
@@ -398,6 +390,7 @@ namespace MES
             if (OpcUaClient == null || !OpcUaClient.Connected)
             {
                 LogHelper.WriteLog("PLC状态", "PLC连接断开，请检查网络连接,并重启软件！");
+                OpenPlc();
                 return false;
             }
             return true;
@@ -406,10 +399,8 @@ namespace MES
         #region LWM相关
 
         private byte[] lwmData = new byte[1024 * 1024 * 1024];
-
         private bool SendLwmCodeResult = false;
-
-        private string m_lwmCode = string.Empty;
+        public LwmClient Lwm;
 
         /// <summary>
         /// 建立LWM通讯
@@ -418,13 +409,15 @@ namespace MES
         {
             try
             {
-                m_socketLwm = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.60"), 8000);//8000;//700：控制端口
+                Lwm = new LwmClient("192.168.0.60");
+                m_socketLwm = Lwm.LwmSocket;
 
-                if (!m_socketLwm.Connected)
-                {
-                    m_socketLwm.Connect(endPoint);
-                }
+                //m_socketLwm = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.60"), 8000);//8000;//700：控制端口
+                //if (!m_socketLwm.Connected)
+                //{
+                //    m_socketLwm.Connect(endPoint);
+                //}
 
                 return true;
             }
@@ -442,15 +435,26 @@ namespace MES
             {
                 try
                 {
-                    if (m_socketLwm == null || !m_socketLwm.Connected) OpenLwmSocket();
-                    m_socketLwm.Send(Encoding.ASCII.GetBytes(barcode));
-                    LogHelper.WriteLog("LWM条码", String.Format("LWM条码发送成功，条码：{0}", barcode));
+                    //if (m_socketLwm == null || !m_socketLwm.Connected) OpenLwmSocket();
+                    //m_socketLwm.Send(Encoding.ASCII.GetBytes(barcode));
 
-                    string callback = LwmCallBack();
-                    LogHelper.WriteLog("LWM条码", String.Format("LWM 回应 - 条码：{0}", callback));
+                    if (!Lwm.IsConnection()) Lwm.Init();
+                    Result result = Lwm.Write(barcode);
+                    if (result.IsSuccess)
+                    {
+                        LogHelper.WriteLog("LWM条码", string.Format("LWM条码发送成功，条码：{0}", barcode));
+                    }
+                    else
+                    {
+                        LogHelper.WriteLog("LWM条码", string.Format("LWM条码发送失败，条码：{0}，Msg:{1}", barcode, result.Msg));
+                    }
+
+                    //string callback;= LwmCallBack();
+                    string callback = Encoding.ASCII.GetString(Lwm.Read().Content);
+                    LogHelper.WriteLog("LWM条码", string.Format("LWM 回应 - 条码：{0}", callback));
 
                     SendLwmCodeResult = true;
-                    LwmHelper.GetInstance().SafeClose(m_socketLwm);
+                    Lwm.Close();
                 }
                 catch (Exception ex)
                 {
@@ -462,6 +466,27 @@ namespace MES
             {
                 SendLwmCodeResult = false;
                 LogHelper.WriteLog("LWM条码", String.Format("发送LWM条码失败，条码为空！"));
+            }
+        }
+
+        private void ReceiveLwmCodeOrder(bool order)
+        {
+            if (order)
+            {
+                LogHelper.WriteLog("ST70", "PLC发送条码指令：" + order);
+
+                string code = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
+                SendBarcodeToLwm(code);
+
+                if (SendLwmCodeResult)
+                {
+                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_SendLwmCodeOrder, false);
+                }
+                else
+                {
+                    LogHelper.WriteLog("ST70", "LWM条码发送失败！条码：" + code);
+                    AddTips("发送LWM条码失败！", true);
+                }
             }
         }
 
@@ -488,13 +513,14 @@ namespace MES
         {
             try
             {
-                m_socketScan = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ScanIP), 9004);
+                m_socketScan = keyenceSR751.ScannerSocket;
+                //m_socketScan = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                //IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ScanIP), 9004);
 
-                if (!m_socketScan.Connected)
-                {
-                    m_socketScan.Connect(endPoint);
-                }
+                //if (!m_socketScan.Connected)
+                //{
+                //    m_socketScan.Connect(endPoint);
+                //}
 
                 //开启监听线程
                 m_scanRun = m_socketScan.Connected;
@@ -536,41 +562,61 @@ namespace MES
                     }
                 }
 
-                //产品到位信号为 true 时 才开始去获取条码
+                //产品到位信号为 获取条码
                 if (m_scanPlcSign)
                 {
-                    if (!m_socketScan.Connected) OpenScanSocket();
-                    scanData = new byte[1024];
-                    int len = m_socketScan.Receive(scanData);
-                    if (len == 0)
+                    if (m_socketScan == null || !m_socketScan.Connected) OpenScanSocket();
+
+                    Result result = keyenceSR751.Read();
+                    scanData = result.Content;
+                    if (!result.IsSuccess)
                     {
-                        SendScannerResult(2);//此函数表示：发送扫码结果给PLC，1表示成功，2表示失败
+                        SendScannerResult(2);
                         b_scanSuccess = false;
                     }
-                    b_scanSuccess = true;
+                    else
+                    {
+                        b_scanSuccess = true;
+                    }
 
-                    //获取条码成功：开始解析条码，解析后将解析结果、条码发送至PLC
+                    //int len = m_socketScan.Receive(scanData);
+                    //if (len == 0)
+                    //{
+                    //    SendScannerResult(2);
+                    //    b_scanSuccess = false;
+                    //}
+                    //b_scanSuccess = true;
+
                     if (b_scanSuccess)
                     {
-                        string barCode = Encoding.UTF8.GetString(scanData, 0, len);
+                        //string barCode = Encoding.UTF8.GetString(scanData, 0, len);
+                        string barCode = Encoding.UTF8.GetString(result.Content);
                         int subIndex = barCode.IndexOfAny(chars);
 
                         barCode = barCode.Substring(0, subIndex);
-                        CurrentBarCode = barCode.Replace("\r", "");
-
-                        Invoke(new Action(() =>
+                        if (barCode.Contains("\r"))
                         {
-                            //判断回车
-                            if (scanData[len - 1] == 13)
+                            CurrentBarCode = barCode.Replace("\r", "");
+                            Invoke(new Action(() =>
                             {
                                 MonitorBarCode(CurrentBarCode);
                                 txtBarCode.Text = string.Empty;
-                            }
-                        }));
+                            }));
+                        }
+
+                        //Invoke(new Action(() =>
+                        //{
+                        //    //判断回车
+                        //    if (scanData[len - 1] == 13)
+                        //    {
+                        //        MonitorBarCode(CurrentBarCode);
+                        //        txtBarCode.Text = string.Empty;
+                        //    }
+                        //}));
+
                         b_scanSuccess = !b_scanSuccess;
                     }
                 }
-
                 Thread.Sleep(800);
             }
         }
@@ -702,19 +748,19 @@ namespace MES
         /// </summary>
         private void ThreadCollectSData()
         {
-            while (IsWindowShow && IsDoST20_Thread)
+            while (IsWindowShow)
             {
                 try
                 {
                     if (CheckPlcState())
                     {
-                        bool order = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCodeOrder);
-                        ReceiveOrder(order);
+                        bool lwmOrder = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCodeOrder);
+                        ReceiveLwmCodeOrder(lwmOrder);
 
                         Task.Factory.StartNew(() =>
                         {
                             int start = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_CcdOrder);
-                            LogHelper.WriteLog("采集焊接数据", string.Format("接收到PLC采集指令！指令：{0}", order));
+                            LogHelper.WriteLog("采集焊接数据", string.Format("接收到PLC采集指令！指令：{0}", lwmOrder));
 
                             if (start == 1)
                             {
@@ -734,7 +780,6 @@ namespace MES
                 }
                 catch (Exception ex)
                 {
-                    IsDoST20_Thread = false;
                     LogNetProgramer.WriteError("异常", "保存小环焊接数据异常-->" + ex.Message);
                 }
                 Thread.Sleep(200);
@@ -904,7 +949,6 @@ namespace MES
             }
             return res;
         }
-
 
         #endregion
 
@@ -1095,14 +1139,14 @@ namespace MES
         /// </summary>
         private void ThreadCollectLData()
         {
-            while (IsWindowShow && IsDoST70_Thread)
+            while (IsWindowShow)
             {
                 try
                 {
                     if (CheckPlcState())
                     {
-                        bool sendLwmCodeSign = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCodeOrder);//PLC 发送 是否发送条码给LWM信号
-                        ReceiveOrder(sendLwmCodeSign);
+                        bool lwmOrder = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCodeOrder);//PLC 发送 是否发送条码给LWM信号
+                        ReceiveLwmCodeOrder(lwmOrder);
 
                         Task.Factory.StartNew(() =>
                         {
@@ -1115,31 +1159,9 @@ namespace MES
                 }
                 catch (Exception ex)
                 {
-                    IsDoST70_Thread = false;
                     LogHelper.WriteLog("异常", "大环监控PLC - 异常：" + ex.Message);
                 }
-                Thread.Sleep(300);
-            }
-        }
-
-        private void ReceiveOrder(bool order)
-        {
-            if (order)
-            {
-                LogHelper.WriteLog("ST70", "PLC发送条码指令：" + order);
-
-                string code = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
-                SendBarcodeToLwm(code);
-
-                if (SendLwmCodeResult)
-                {
-                    OpcUaClient.WriteNode(PlcHelper.OPC_DB_SendLwmCodeOrder, false);
-                }
-                else
-                {
-                    LogHelper.WriteLog("ST70", "LWM条码发送失败！条码：" + code);
-                    AddTips("发送LWM条码失败！", true);
-                }
+                Thread.Sleep(200);
             }
         }
 
@@ -1478,7 +1500,7 @@ namespace MES
                     break;
             }
 
-            string sqlUpdateState = " update DeviceState set State=('" + m_light + "'),UpdateTime='" + DateTime.Now + "' ; ";
+            string sqlUpdateState = "UPDATE DeviceState SET State=('" + m_light + "'),UpdateTime=GETDATE()";
             int rs = DbTool.ModifyTable(sqlUpdateState, null);
             if (rs <= 0)
             {
@@ -1494,13 +1516,6 @@ namespace MES
         public void OnCultureChange(object obj, MyEvent e)
         {
             CultureChangeEvent?.Invoke(obj, e);
-        }
-
-        public delegate void ClickSpotFormHandle(object obj, MyEvent e);
-        public event ClickSpotFormHandle ClickSpotFormEvent;
-        public void OnClickSpotForm(object obj, MyEvent e)
-        {
-            ClickSpotFormEvent?.Invoke(obj, e);
         }
 
         public delegate void WeldSuccessHandle(object obj, MyEvent e);
@@ -1688,9 +1703,10 @@ namespace MES
             //{
             //    if (inputBox.Value == ConfigurationManager.AppSettings["QuitPwd"])
             //    {
-            exeIcon.Visible = false;
             IsWindowShow = false;
             OnWindowState(this, new MyEvent() { IsWindowShow = false });
+
+            Thread.Sleep(1000);
 
             Dispose();
             Application.Exit();

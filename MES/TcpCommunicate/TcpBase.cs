@@ -80,8 +80,10 @@ namespace ProductManage.TcpCommunicate
         {
             try
             {
-                if (socket == null) return false;
-                if (!socket.Connected) return false;
+                if (socket == null || !socket.Connected)
+                {
+                    return false;
+                }
 
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();

@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle111 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle112 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle113 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle114 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle115 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle116 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle117 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle118 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle119 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle120 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle121 = new System.Windows.Forms.DataGridViewCellStyle();
             this.txtNGPro = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.txtPassPro = new System.Windows.Forms.Label();
@@ -94,59 +94,61 @@
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelButtom = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.grbManual = new System.Windows.Forms.GroupBox();
             this.txtModifyUser = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.labManualReason = new System.Windows.Forms.Label();
             this.txtModifyReason = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
+            this.labUpdateUser = new System.Windows.Forms.Label();
             this.cmbNewResult = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labUpResult = new System.Windows.Forms.Label();
+            this.labCurResult = new System.Windows.Forms.Label();
             this.txtOldResult = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.grbSelectCondition = new System.Windows.Forms.GroupBox();
+            this.labOnTIme = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabState = new System.Windows.Forms.TabPage();
             this.chkProductState = new System.Windows.Forms.CheckBox();
             this.cmbProductState = new System.Windows.Forms.ComboBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabCoax = new System.Windows.Forms.TabPage();
             this.chkCoaxState = new System.Windows.Forms.CheckBox();
             this.chkCoaxRange = new System.Windows.Forms.CheckBox();
             this.numCoaxRangeUp = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.numCoaxRangeDowm = new System.Windows.Forms.NumericUpDown();
             this.cmbCoaxState = new System.Windows.Forms.ComboBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabSuface = new System.Windows.Forms.TabPage();
             this.numWeldDepthUp = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.numWeldDepthDown = new System.Windows.Forms.NumericUpDown();
             this.chkWeldDepth = new System.Windows.Forms.CheckBox();
             this.chkWeldState = new System.Windows.Forms.CheckBox();
             this.cmbWeldState = new System.Windows.Forms.ComboBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabLwm = new System.Windows.Forms.TabPage();
             this.chkLwmState = new System.Windows.Forms.CheckBox();
             this.cmbLwmState = new System.Windows.Forms.ComboBox();
             this.txtBarCode = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labBarCode = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panelMiddle = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLookBoard)).BeginInit();
             this.panelTop.SuspendLayout();
             this.panelButtom.SuspendLayout();
             this.panel6.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.grbManual.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.grbSelectCondition.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            this.tabState.SuspendLayout();
+            this.tabCoax.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxRangeUp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxRangeDowm)).BeginInit();
-            this.tabPage2.SuspendLayout();
+            this.tabSuface.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWeldDepthUp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWeldDepthDown)).BeginInit();
-            this.tabPage4.SuspendLayout();
+            this.tabLwm.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panelMiddle.SuspendLayout();
             this.SuspendLayout();
@@ -233,7 +235,7 @@
             // btnManualCheck
             // 
             this.btnManualCheck.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.btnManualCheck.Location = new System.Drawing.Point(325, 153);
+            this.btnManualCheck.Location = new System.Drawing.Point(323, 155);
             this.btnManualCheck.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btnManualCheck.Name = "btnManualCheck";
             this.btnManualCheck.Size = new System.Drawing.Size(110, 42);
@@ -245,7 +247,7 @@
             // txtQCResult
             // 
             this.txtQCResult.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.txtQCResult.Location = new System.Drawing.Point(1120, 222);
+            this.txtQCResult.Location = new System.Drawing.Point(101, 30);
             this.txtQCResult.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtQCResult.Name = "txtQCResult";
             this.txtQCResult.Size = new System.Drawing.Size(116, 28);
@@ -259,7 +261,7 @@
             this.cmbQCResult.Items.AddRange(new object[] {
             "Pass",
             "NG"});
-            this.cmbQCResult.Location = new System.Drawing.Point(1120, 234);
+            this.cmbQCResult.Location = new System.Drawing.Point(98, 33);
             this.cmbQCResult.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbQCResult.Name = "cmbQCResult";
             this.cmbQCResult.Size = new System.Drawing.Size(116, 29);
@@ -271,7 +273,7 @@
             // 
             this.labEach.AutoSize = true;
             this.labEach.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labEach.Location = new System.Drawing.Point(54, 16);
+            this.labEach.Location = new System.Drawing.Point(58, 16);
             this.labEach.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labEach.Name = "labEach";
             this.labEach.Size = new System.Drawing.Size(79, 19);
@@ -281,7 +283,7 @@
             // txtCurPage
             // 
             this.txtCurPage.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.txtCurPage.Location = new System.Drawing.Point(488, 11);
+            this.txtCurPage.Location = new System.Drawing.Point(501, 12);
             this.txtCurPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtCurPage.Name = "txtCurPage";
             this.txtCurPage.ReadOnly = true;
@@ -293,7 +295,7 @@
             // txtAllCount
             // 
             this.txtAllCount.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.txtAllCount.Location = new System.Drawing.Point(1026, 11);
+            this.txtAllCount.Location = new System.Drawing.Point(1034, 11);
             this.txtAllCount.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtAllCount.Name = "txtAllCount";
             this.txtAllCount.ReadOnly = true;
@@ -305,7 +307,7 @@
             // txtPageCount
             // 
             this.txtPageCount.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.txtPageCount.Location = new System.Drawing.Point(849, 11);
+            this.txtPageCount.Location = new System.Drawing.Point(853, 11);
             this.txtPageCount.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtPageCount.Name = "txtPageCount";
             this.txtPageCount.ReadOnly = true;
@@ -318,7 +320,7 @@
             // 
             this.labPage.AutoSize = true;
             this.labPage.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labPage.Location = new System.Drawing.Point(563, 15);
+            this.labPage.Location = new System.Drawing.Point(571, 16);
             this.labPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labPage.Name = "labPage";
             this.labPage.Size = new System.Drawing.Size(25, 19);
@@ -329,7 +331,7 @@
             // 
             this.labWhich.AutoSize = true;
             this.labWhich.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labWhich.Location = new System.Drawing.Point(432, 15);
+            this.labWhich.Location = new System.Drawing.Point(463, 15);
             this.labWhich.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labWhich.Name = "labWhich";
             this.labWhich.Size = new System.Drawing.Size(25, 19);
@@ -340,7 +342,7 @@
             // 
             this.labAfterPage.AutoSize = true;
             this.labAfterPage.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.labAfterPage.Location = new System.Drawing.Point(699, 13);
+            this.labAfterPage.Location = new System.Drawing.Point(710, 13);
             this.labAfterPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labAfterPage.Name = "labAfterPage";
             this.labAfterPage.Size = new System.Drawing.Size(46, 22);
@@ -354,7 +356,7 @@
             // 
             this.labNextPage.AutoSize = true;
             this.labNextPage.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.labNextPage.Location = new System.Drawing.Point(613, 13);
+            this.labNextPage.Location = new System.Drawing.Point(624, 13);
             this.labNextPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labNextPage.Name = "labNextPage";
             this.labNextPage.Size = new System.Drawing.Size(64, 22);
@@ -368,7 +370,7 @@
             // 
             this.labLastPage.AutoSize = true;
             this.labLastPage.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.labLastPage.Location = new System.Drawing.Point(351, 13);
+            this.labLastPage.Location = new System.Drawing.Point(362, 13);
             this.labLastPage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labLastPage.Name = "labLastPage";
             this.labLastPage.Size = new System.Drawing.Size(64, 22);
@@ -382,7 +384,7 @@
             // 
             this.labHomePage.AutoSize = true;
             this.labHomePage.Font = new System.Drawing.Font("Tahoma", 13F);
-            this.labHomePage.Location = new System.Drawing.Point(291, 13);
+            this.labHomePage.Location = new System.Drawing.Point(302, 13);
             this.labHomePage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labHomePage.Name = "labHomePage";
             this.labHomePage.Size = new System.Drawing.Size(46, 22);
@@ -404,7 +406,7 @@
             "500",
             "700",
             "900"});
-            this.cmbPageSize.Location = new System.Drawing.Point(157, 13);
+            this.cmbPageSize.Location = new System.Drawing.Point(161, 13);
             this.cmbPageSize.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbPageSize.Name = "cmbPageSize";
             this.cmbPageSize.Size = new System.Drawing.Size(87, 27);
@@ -416,7 +418,7 @@
             // 
             this.labItem.AutoSize = true;
             this.labItem.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labItem.Location = new System.Drawing.Point(1116, 14);
+            this.labItem.Location = new System.Drawing.Point(1123, 15);
             this.labItem.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labItem.Name = "labItem";
             this.labItem.Size = new System.Drawing.Size(25, 19);
@@ -427,7 +429,7 @@
             // 
             this.labPage2.AutoSize = true;
             this.labPage2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labPage2.Location = new System.Drawing.Point(917, 15);
+            this.labPage2.Location = new System.Drawing.Point(921, 15);
             this.labPage2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labPage2.Name = "labPage2";
             this.labPage2.Size = new System.Drawing.Size(25, 19);
@@ -438,29 +440,29 @@
             // 
             this.labSum2.AutoSize = true;
             this.labSum2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labSum2.Location = new System.Drawing.Point(979, 15);
+            this.labSum2.Location = new System.Drawing.Point(983, 15);
             this.labSum2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSum2.Name = "labSum2";
-            this.labSum2.Size = new System.Drawing.Size(31, 19);
+            this.labSum2.Size = new System.Drawing.Size(47, 19);
             this.labSum2.TabIndex = 45;
-            this.labSum2.Text = "共:";
+            this.labSum2.Text = "总计:";
             // 
             // labSum
             // 
             this.labSum.AutoSize = true;
             this.labSum.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.labSum.Location = new System.Drawing.Point(800, 16);
+            this.labSum.Location = new System.Drawing.Point(802, 14);
             this.labSum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSum.Name = "labSum";
-            this.labSum.Size = new System.Drawing.Size(31, 19);
+            this.labSum.Size = new System.Drawing.Size(47, 19);
             this.labSum.TabIndex = 44;
-            this.labSum.Text = "共:";
+            this.labSum.Text = "总计:";
             // 
             // labSelectValue
             // 
             this.labSelectValue.AutoSize = true;
             this.labSelectValue.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSelectValue.Location = new System.Drawing.Point(1036, 239);
+            this.labSelectValue.Location = new System.Drawing.Point(17, 40);
             this.labSelectValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSelectValue.Name = "labSelectValue";
             this.labSelectValue.Size = new System.Drawing.Size(73, 18);
@@ -543,9 +545,9 @@
             // colCoaxiality
             // 
             this.colCoaxiality.DataPropertyName = "Coaxiality";
-            dataGridViewCellStyle12.Format = "N3";
-            dataGridViewCellStyle12.NullValue = null;
-            this.colCoaxiality.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle111.Format = "N3";
+            dataGridViewCellStyle111.NullValue = null;
+            this.colCoaxiality.DefaultCellStyle = dataGridViewCellStyle111;
             this.colCoaxiality.HeaderText = "同心度(mm)";
             this.colCoaxiality.Name = "colCoaxiality";
             this.colCoaxiality.ReadOnly = true;
@@ -554,9 +556,9 @@
             // colWeldDepth
             // 
             this.colWeldDepth.DataPropertyName = "WeldDepth";
-            dataGridViewCellStyle13.Format = "N3";
-            dataGridViewCellStyle13.NullValue = null;
-            this.colWeldDepth.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle112.Format = "N3";
+            dataGridViewCellStyle112.NullValue = null;
+            this.colWeldDepth.DefaultCellStyle = dataGridViewCellStyle112;
             this.colWeldDepth.HeaderText = "焊缝高度差(mm)";
             this.colWeldDepth.Name = "colWeldDepth";
             this.colWeldDepth.ReadOnly = true;
@@ -581,9 +583,9 @@
             // colWeldPower
             // 
             this.colWeldPower.DataPropertyName = "WeldPower";
-            dataGridViewCellStyle14.Format = "N3";
-            dataGridViewCellStyle14.NullValue = null;
-            this.colWeldPower.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle113.Format = "N3";
+            dataGridViewCellStyle113.NullValue = null;
+            this.colWeldPower.DefaultCellStyle = dataGridViewCellStyle113;
             this.colWeldPower.HeaderText = "焊接功率(W)";
             this.colWeldPower.Name = "colWeldPower";
             this.colWeldPower.ReadOnly = true;
@@ -600,9 +602,9 @@
             // colPressure
             // 
             this.colPressure.DataPropertyName = "Pressure";
-            dataGridViewCellStyle15.Format = "N3";
-            dataGridViewCellStyle15.NullValue = null;
-            this.colPressure.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle114.Format = "N3";
+            dataGridViewCellStyle114.NullValue = null;
+            this.colPressure.DefaultCellStyle = dataGridViewCellStyle114;
             this.colPressure.HeaderText = "气体压力值(MPa)";
             this.colPressure.Name = "colPressure";
             this.colPressure.ReadOnly = true;
@@ -611,9 +613,9 @@
             // colFlow
             // 
             this.colFlow.DataPropertyName = "Flow";
-            dataGridViewCellStyle16.Format = "N3";
-            dataGridViewCellStyle16.NullValue = null;
-            this.colFlow.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle115.Format = "N3";
+            dataGridViewCellStyle115.NullValue = null;
+            this.colFlow.DefaultCellStyle = dataGridViewCellStyle115;
             this.colFlow.HeaderText = "保护气流量(L/min)";
             this.colFlow.Name = "colFlow";
             this.colFlow.ReadOnly = true;
@@ -622,9 +624,9 @@
             // colXPos
             // 
             this.colXPos.DataPropertyName = "XPos";
-            dataGridViewCellStyle17.Format = "N3";
-            dataGridViewCellStyle17.NullValue = null;
-            this.colXPos.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle116.Format = "N3";
+            dataGridViewCellStyle116.NullValue = null;
+            this.colXPos.DefaultCellStyle = dataGridViewCellStyle116;
             this.colXPos.HeaderText = "X坐标(mm)";
             this.colXPos.Name = "colXPos";
             this.colXPos.ReadOnly = true;
@@ -633,9 +635,9 @@
             // colYPos
             // 
             this.colYPos.DataPropertyName = "YPos";
-            dataGridViewCellStyle18.Format = "N3";
-            dataGridViewCellStyle18.NullValue = null;
-            this.colYPos.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle117.Format = "N3";
+            dataGridViewCellStyle117.NullValue = null;
+            this.colYPos.DefaultCellStyle = dataGridViewCellStyle117;
             this.colYPos.HeaderText = "Y坐标(mm)";
             this.colYPos.Name = "colYPos";
             this.colYPos.ReadOnly = true;
@@ -644,9 +646,9 @@
             // colZPos
             // 
             this.colZPos.DataPropertyName = "ZPos";
-            dataGridViewCellStyle19.Format = "N3";
-            dataGridViewCellStyle19.NullValue = null;
-            this.colZPos.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle118.Format = "N3";
+            dataGridViewCellStyle118.NullValue = null;
+            this.colZPos.DefaultCellStyle = dataGridViewCellStyle118;
             this.colZPos.HeaderText = "Z坐标(mm)";
             this.colZPos.Name = "colZPos";
             this.colZPos.ReadOnly = true;
@@ -655,9 +657,9 @@
             // colRPos
             // 
             this.colRPos.DataPropertyName = "RPos";
-            dataGridViewCellStyle20.Format = "N3";
-            dataGridViewCellStyle20.NullValue = null;
-            this.colRPos.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle119.Format = "N3";
+            dataGridViewCellStyle119.NullValue = null;
+            this.colRPos.DefaultCellStyle = dataGridViewCellStyle119;
             this.colRPos.HeaderText = "R坐标(°)";
             this.colRPos.Name = "colRPos";
             this.colRPos.ReadOnly = true;
@@ -666,9 +668,9 @@
             // colWeldTime
             // 
             this.colWeldTime.DataPropertyName = "WeldTime";
-            dataGridViewCellStyle21.Format = "N3";
-            dataGridViewCellStyle21.NullValue = null;
-            this.colWeldTime.DefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle120.Format = "N3";
+            dataGridViewCellStyle120.NullValue = null;
+            this.colWeldTime.DefaultCellStyle = dataGridViewCellStyle120;
             this.colWeldTime.HeaderText = "焊接时间(S)";
             this.colWeldTime.Name = "colWeldTime";
             this.colWeldTime.ReadOnly = true;
@@ -685,9 +687,9 @@
             // colTime
             // 
             this.colTime.DataPropertyName = "StorageTime";
-            dataGridViewCellStyle22.Format = "G";
-            dataGridViewCellStyle22.NullValue = null;
-            this.colTime.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle121.Format = "G";
+            dataGridViewCellStyle121.NullValue = null;
+            this.colTime.DefaultCellStyle = dataGridViewCellStyle121;
             this.colTime.HeaderText = "上线时间";
             this.colTime.Name = "colTime";
             this.colTime.ReadOnly = true;
@@ -697,7 +699,7 @@
             // 
             this.cmbSelectCondition.Font = new System.Drawing.Font("Tahoma", 12F);
             this.cmbSelectCondition.FormattingEnabled = true;
-            this.cmbSelectCondition.Location = new System.Drawing.Point(1120, 210);
+            this.cmbSelectCondition.Location = new System.Drawing.Point(101, 37);
             this.cmbSelectCondition.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbSelectCondition.Name = "cmbSelectCondition";
             this.cmbSelectCondition.Size = new System.Drawing.Size(103, 27);
@@ -710,7 +712,7 @@
             // 
             this.labSelectMethod.AutoSize = true;
             this.labSelectMethod.Font = new System.Drawing.Font("Tahoma", 11F);
-            this.labSelectMethod.Location = new System.Drawing.Point(1036, 227);
+            this.labSelectMethod.Location = new System.Drawing.Point(17, 28);
             this.labSelectMethod.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labSelectMethod.Name = "labSelectMethod";
             this.labSelectMethod.Size = new System.Drawing.Size(73, 18);
@@ -784,13 +786,9 @@
             // panelButtom
             // 
             this.panelButtom.Controls.Add(this.panel6);
+            this.panelButtom.Controls.Add(this.panel1);
             this.panelButtom.Controls.Add(this.panel5);
             this.panelButtom.Controls.Add(this.panel4);
-            this.panelButtom.Controls.Add(this.txtQCResult);
-            this.panelButtom.Controls.Add(this.cmbQCResult);
-            this.panelButtom.Controls.Add(this.labSelectMethod);
-            this.panelButtom.Controls.Add(this.cmbSelectCondition);
-            this.panelButtom.Controls.Add(this.labSelectValue);
             this.panelButtom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelButtom.Location = new System.Drawing.Point(0, 477);
             this.panelButtom.Name = "panelButtom";
@@ -799,55 +797,55 @@
             // 
             // panel6
             // 
-            this.panel6.Controls.Add(this.groupBox2);
+            this.panel6.Controls.Add(this.grbManual);
             this.panel6.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel6.Location = new System.Drawing.Point(737, 55);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(510, 221);
             this.panel6.TabIndex = 60;
             // 
-            // groupBox2
+            // grbManual
             // 
-            this.groupBox2.AutoSize = true;
-            this.groupBox2.Controls.Add(this.txtModifyUser);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.txtModifyReason);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.cmbNewResult);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.txtOldResult);
-            this.groupBox2.Controls.Add(this.btnManualCheck);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox2.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.groupBox2.Location = new System.Drawing.Point(0, 0);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(510, 221);
-            this.groupBox2.TabIndex = 60;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "人工干预";
+            this.grbManual.AutoSize = true;
+            this.grbManual.Controls.Add(this.txtModifyUser);
+            this.grbManual.Controls.Add(this.labManualReason);
+            this.grbManual.Controls.Add(this.txtModifyReason);
+            this.grbManual.Controls.Add(this.labUpdateUser);
+            this.grbManual.Controls.Add(this.cmbNewResult);
+            this.grbManual.Controls.Add(this.labUpResult);
+            this.grbManual.Controls.Add(this.labCurResult);
+            this.grbManual.Controls.Add(this.txtOldResult);
+            this.grbManual.Controls.Add(this.btnManualCheck);
+            this.grbManual.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grbManual.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.grbManual.Location = new System.Drawing.Point(0, 0);
+            this.grbManual.Name = "grbManual";
+            this.grbManual.Size = new System.Drawing.Size(510, 221);
+            this.grbManual.TabIndex = 60;
+            this.grbManual.TabStop = false;
+            this.grbManual.Text = "人工干预";
             // 
             // txtModifyUser
             // 
             this.txtModifyUser.BackColor = System.Drawing.SystemColors.Window;
             this.txtModifyUser.Font = new System.Drawing.Font("Tahoma", 12F);
             this.txtModifyUser.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.txtModifyUser.Location = new System.Drawing.Point(116, 165);
+            this.txtModifyUser.Location = new System.Drawing.Point(128, 165);
             this.txtModifyUser.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtModifyUser.Name = "txtModifyUser";
-            this.txtModifyUser.Size = new System.Drawing.Size(104, 27);
+            this.txtModifyUser.Size = new System.Drawing.Size(108, 27);
             this.txtModifyUser.TabIndex = 80;
             // 
-            // label9
+            // labManualReason
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label9.Location = new System.Drawing.Point(274, 40);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(79, 19);
-            this.label9.TabIndex = 79;
-            this.label9.Text = "干预原因:";
+            this.labManualReason.AutoSize = true;
+            this.labManualReason.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labManualReason.Location = new System.Drawing.Point(274, 40);
+            this.labManualReason.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labManualReason.Name = "labManualReason";
+            this.labManualReason.Size = new System.Drawing.Size(79, 19);
+            this.labManualReason.TabIndex = 79;
+            this.labManualReason.Text = "干预原因:";
             // 
             // txtModifyReason
             // 
@@ -858,16 +856,16 @@
             this.txtModifyReason.Size = new System.Drawing.Size(217, 76);
             this.txtModifyReason.TabIndex = 78;
             // 
-            // label7
+            // labUpdateUser
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label7.Location = new System.Drawing.Point(43, 169);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 19);
-            this.label7.TabIndex = 76;
-            this.label7.Text = "修改人:";
+            this.labUpdateUser.AutoSize = true;
+            this.labUpdateUser.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labUpdateUser.Location = new System.Drawing.Point(41, 169);
+            this.labUpdateUser.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labUpdateUser.Name = "labUpdateUser";
+            this.labUpdateUser.Size = new System.Drawing.Size(63, 19);
+            this.labUpdateUser.TabIndex = 76;
+            this.labUpdateUser.Text = "操作员:";
             // 
             // cmbNewResult
             // 
@@ -876,107 +874,121 @@
             this.cmbNewResult.Items.AddRange(new object[] {
             "OK",
             "NG"});
-            this.cmbNewResult.Location = new System.Drawing.Point(116, 107);
+            this.cmbNewResult.Location = new System.Drawing.Point(128, 107);
             this.cmbNewResult.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbNewResult.Name = "cmbNewResult";
-            this.cmbNewResult.Size = new System.Drawing.Size(104, 27);
+            this.cmbNewResult.Size = new System.Drawing.Size(108, 27);
             this.cmbNewResult.TabIndex = 75;
             this.cmbNewResult.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbPageSize_KeyPress);
             // 
-            // label4
+            // labUpResult
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label4.Location = new System.Drawing.Point(27, 109);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 19);
-            this.label4.TabIndex = 74;
-            this.label4.Text = "修改结果:";
+            this.labUpResult.AutoSize = true;
+            this.labUpResult.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labUpResult.Location = new System.Drawing.Point(25, 109);
+            this.labUpResult.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labUpResult.Name = "labUpResult";
+            this.labUpResult.Size = new System.Drawing.Size(79, 19);
+            this.labUpResult.TabIndex = 74;
+            this.labUpResult.Text = "修改结果:";
             // 
-            // label3
+            // labCurResult
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label3.Location = new System.Drawing.Point(27, 50);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(79, 19);
-            this.label3.TabIndex = 72;
-            this.label3.Text = "当前结果:";
+            this.labCurResult.AutoSize = true;
+            this.labCurResult.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labCurResult.Location = new System.Drawing.Point(25, 50);
+            this.labCurResult.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labCurResult.Name = "labCurResult";
+            this.labCurResult.Size = new System.Drawing.Size(79, 19);
+            this.labCurResult.TabIndex = 72;
+            this.labCurResult.Text = "当前结果:";
             // 
             // txtOldResult
             // 
-            this.txtOldResult.BackColor = System.Drawing.SystemColors.ScrollBar;
+            this.txtOldResult.BackColor = System.Drawing.Color.PowderBlue;
             this.txtOldResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtOldResult.Enabled = false;
-            this.txtOldResult.Location = new System.Drawing.Point(116, 48);
+            this.txtOldResult.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.txtOldResult.Location = new System.Drawing.Point(128, 48);
             this.txtOldResult.Name = "txtOldResult";
-            this.txtOldResult.Size = new System.Drawing.Size(104, 27);
+            this.txtOldResult.Size = new System.Drawing.Size(108, 27);
             this.txtOldResult.TabIndex = 61;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.labSelectMethod);
+            this.panel1.Controls.Add(this.labSelectValue);
+            this.panel1.Controls.Add(this.cmbSelectCondition);
+            this.panel1.Controls.Add(this.txtQCResult);
+            this.panel1.Controls.Add(this.cmbQCResult);
+            this.panel1.Location = new System.Drawing.Point(921, 133);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(259, 100);
+            this.panel1.TabIndex = 60;
+            this.panel1.Visible = false;
             // 
             // panel5
             // 
-            this.panel5.Controls.Add(this.groupBox1);
-            this.panel5.Location = new System.Drawing.Point(3, 58);
+            this.panel5.Controls.Add(this.grbSelectCondition);
+            this.panel5.Location = new System.Drawing.Point(3, 61);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(728, 213);
             this.panel5.TabIndex = 39;
             // 
-            // groupBox1
+            // grbSelectCondition
             // 
-            this.groupBox1.AutoSize = true;
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.tabControl1);
-            this.groupBox1.Controls.Add(this.txtBarCode);
-            this.groupBox1.Controls.Add(this.timeCheckStart);
-            this.groupBox1.Controls.Add(this.btnOutExcel);
-            this.groupBox1.Controls.Add(this.timeCheckEnd);
-            this.groupBox1.Controls.Add(this.btnSelectByTerm);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(728, 213);
-            this.groupBox1.TabIndex = 71;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "查询条件";
+            this.grbSelectCondition.AutoSize = true;
+            this.grbSelectCondition.Controls.Add(this.labOnTIme);
+            this.grbSelectCondition.Controls.Add(this.tabControl1);
+            this.grbSelectCondition.Controls.Add(this.txtBarCode);
+            this.grbSelectCondition.Controls.Add(this.timeCheckStart);
+            this.grbSelectCondition.Controls.Add(this.btnOutExcel);
+            this.grbSelectCondition.Controls.Add(this.timeCheckEnd);
+            this.grbSelectCondition.Controls.Add(this.btnSelectByTerm);
+            this.grbSelectCondition.Controls.Add(this.labBarCode);
+            this.grbSelectCondition.Controls.Add(this.label6);
+            this.grbSelectCondition.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grbSelectCondition.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.grbSelectCondition.Location = new System.Drawing.Point(0, 0);
+            this.grbSelectCondition.Name = "grbSelectCondition";
+            this.grbSelectCondition.Size = new System.Drawing.Size(728, 213);
+            this.grbSelectCondition.TabIndex = 71;
+            this.grbSelectCondition.TabStop = false;
+            this.grbSelectCondition.Text = "查询筛选";
             // 
-            // label5
+            // labOnTIme
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label5.Location = new System.Drawing.Point(318, 31);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(79, 19);
-            this.label5.TabIndex = 71;
-            this.label5.Text = "上线时间:";
+            this.labOnTIme.AutoSize = true;
+            this.labOnTIme.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labOnTIme.Location = new System.Drawing.Point(318, 31);
+            this.labOnTIme.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labOnTIme.Name = "labOnTIme";
+            this.labOnTIme.Size = new System.Drawing.Size(79, 19);
+            this.labOnTIme.TabIndex = 71;
+            this.labOnTIme.Text = "上线时间:";
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabState);
+            this.tabControl1.Controls.Add(this.tabCoax);
+            this.tabControl1.Controls.Add(this.tabSuface);
+            this.tabControl1.Controls.Add(this.tabLwm);
             this.tabControl1.Location = new System.Drawing.Point(6, 64);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(374, 143);
             this.tabControl1.TabIndex = 50;
             // 
-            // tabPage5
+            // tabState
             // 
-            this.tabPage5.Controls.Add(this.chkProductState);
-            this.tabPage5.Controls.Add(this.cmbProductState);
-            this.tabPage5.Location = new System.Drawing.Point(4, 28);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(366, 111);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "状态";
-            this.tabPage5.UseVisualStyleBackColor = true;
+            this.tabState.Controls.Add(this.chkProductState);
+            this.tabState.Controls.Add(this.cmbProductState);
+            this.tabState.Location = new System.Drawing.Point(4, 28);
+            this.tabState.Name = "tabState";
+            this.tabState.Size = new System.Drawing.Size(366, 111);
+            this.tabState.TabIndex = 4;
+            this.tabState.Text = "状态";
+            this.tabState.UseVisualStyleBackColor = true;
             // 
             // chkProductState
             // 
@@ -992,7 +1004,7 @@
             // cmbProductState
             // 
             this.cmbProductState.Enabled = false;
-            this.cmbProductState.Font = new System.Drawing.Font("Tahoma", 10F);
+            this.cmbProductState.Font = new System.Drawing.Font("Tahoma", 12F);
             this.cmbProductState.FormattingEnabled = true;
             this.cmbProductState.Items.AddRange(new object[] {
             "OK",
@@ -1000,25 +1012,25 @@
             this.cmbProductState.Location = new System.Drawing.Point(142, 23);
             this.cmbProductState.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbProductState.Name = "cmbProductState";
-            this.cmbProductState.Size = new System.Drawing.Size(103, 24);
+            this.cmbProductState.Size = new System.Drawing.Size(103, 27);
             this.cmbProductState.TabIndex = 46;
             this.cmbProductState.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbPageSize_KeyPress);
             // 
-            // tabPage1
+            // tabCoax
             // 
-            this.tabPage1.Controls.Add(this.chkCoaxState);
-            this.tabPage1.Controls.Add(this.chkCoaxRange);
-            this.tabPage1.Controls.Add(this.numCoaxRangeUp);
-            this.tabPage1.Controls.Add(this.label8);
-            this.tabPage1.Controls.Add(this.numCoaxRangeDowm);
-            this.tabPage1.Controls.Add(this.cmbCoaxState);
-            this.tabPage1.Location = new System.Drawing.Point(4, 28);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(366, 111);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "同心度";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabCoax.Controls.Add(this.chkCoaxState);
+            this.tabCoax.Controls.Add(this.chkCoaxRange);
+            this.tabCoax.Controls.Add(this.numCoaxRangeUp);
+            this.tabCoax.Controls.Add(this.label8);
+            this.tabCoax.Controls.Add(this.numCoaxRangeDowm);
+            this.tabCoax.Controls.Add(this.cmbCoaxState);
+            this.tabCoax.Location = new System.Drawing.Point(4, 28);
+            this.tabCoax.Name = "tabCoax";
+            this.tabCoax.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCoax.Size = new System.Drawing.Size(366, 111);
+            this.tabCoax.TabIndex = 0;
+            this.tabCoax.Text = "同心度";
+            this.tabCoax.UseVisualStyleBackColor = true;
             // 
             // chkCoaxState
             // 
@@ -1091,21 +1103,21 @@
             this.cmbCoaxState.TabIndex = 46;
             this.cmbCoaxState.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbPageSize_KeyPress);
             // 
-            // tabPage2
+            // tabSuface
             // 
-            this.tabPage2.Controls.Add(this.numWeldDepthUp);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.numWeldDepthDown);
-            this.tabPage2.Controls.Add(this.chkWeldDepth);
-            this.tabPage2.Controls.Add(this.chkWeldState);
-            this.tabPage2.Controls.Add(this.cmbWeldState);
-            this.tabPage2.Location = new System.Drawing.Point(4, 28);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(366, 111);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "表面质量";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabSuface.Controls.Add(this.numWeldDepthUp);
+            this.tabSuface.Controls.Add(this.label2);
+            this.tabSuface.Controls.Add(this.numWeldDepthDown);
+            this.tabSuface.Controls.Add(this.chkWeldDepth);
+            this.tabSuface.Controls.Add(this.chkWeldState);
+            this.tabSuface.Controls.Add(this.cmbWeldState);
+            this.tabSuface.Location = new System.Drawing.Point(4, 28);
+            this.tabSuface.Name = "tabSuface";
+            this.tabSuface.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSuface.Size = new System.Drawing.Size(366, 111);
+            this.tabSuface.TabIndex = 1;
+            this.tabSuface.Text = "表面质量";
+            this.tabSuface.UseVisualStyleBackColor = true;
             // 
             // numWeldDepthUp
             // 
@@ -1179,16 +1191,16 @@
             this.cmbWeldState.TabIndex = 48;
             this.cmbWeldState.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbPageSize_KeyPress);
             // 
-            // tabPage4
+            // tabLwm
             // 
-            this.tabPage4.Controls.Add(this.chkLwmState);
-            this.tabPage4.Controls.Add(this.cmbLwmState);
-            this.tabPage4.Location = new System.Drawing.Point(4, 28);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(366, 111);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "LWM";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabLwm.Controls.Add(this.chkLwmState);
+            this.tabLwm.Controls.Add(this.cmbLwmState);
+            this.tabLwm.Location = new System.Drawing.Point(4, 28);
+            this.tabLwm.Name = "tabLwm";
+            this.tabLwm.Size = new System.Drawing.Size(366, 111);
+            this.tabLwm.TabIndex = 3;
+            this.tabLwm.Text = "LWM";
+            this.tabLwm.UseVisualStyleBackColor = true;
             // 
             // chkLwmState
             // 
@@ -1210,7 +1222,7 @@
             "NG"});
             this.cmbLwmState.Location = new System.Drawing.Point(149, 23);
             this.cmbLwmState.Name = "cmbLwmState";
-            this.cmbLwmState.Size = new System.Drawing.Size(80, 27);
+            this.cmbLwmState.Size = new System.Drawing.Size(95, 27);
             this.cmbLwmState.TabIndex = 75;
             this.cmbLwmState.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cmbPageSize_KeyPress);
             // 
@@ -1225,16 +1237,16 @@
             this.txtBarCode.Size = new System.Drawing.Size(170, 27);
             this.txtBarCode.TabIndex = 43;
             // 
-            // label1
+            // labBarCode
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 12F);
-            this.label1.Location = new System.Drawing.Point(33, 30);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 19);
-            this.label1.TabIndex = 41;
-            this.label1.Text = "过程条码:";
+            this.labBarCode.AutoSize = true;
+            this.labBarCode.Font = new System.Drawing.Font("Tahoma", 12F);
+            this.labBarCode.Location = new System.Drawing.Point(33, 30);
+            this.labBarCode.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labBarCode.Name = "labBarCode";
+            this.labBarCode.Size = new System.Drawing.Size(79, 19);
+            this.labBarCode.TabIndex = 41;
+            this.labBarCode.Text = "过程条码:";
             // 
             // panel4
             // 
@@ -1285,28 +1297,29 @@
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelButtom.ResumeLayout(false);
-            this.panelButtom.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.grbManual.ResumeLayout(false);
+            this.grbManual.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.grbSelectCondition.ResumeLayout(false);
+            this.grbSelectCondition.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.tabState.ResumeLayout(false);
+            this.tabState.PerformLayout();
+            this.tabCoax.ResumeLayout(false);
+            this.tabCoax.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxRangeUp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numCoaxRangeDowm)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabSuface.ResumeLayout(false);
+            this.tabSuface.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numWeldDepthUp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numWeldDepthDown)).EndInit();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
+            this.tabLwm.ResumeLayout(false);
+            this.tabLwm.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panelMiddle.ResumeLayout(false);
@@ -1351,17 +1364,17 @@
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelButtom;
         private System.Windows.Forms.Panel panelMiddle;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox grbSelectCondition;
+        private System.Windows.Forms.Label labBarCode;
         private System.Windows.Forms.TextBox txtBarCode;
         private System.Windows.Forms.ComboBox cmbCoaxState;
         private System.Windows.Forms.ComboBox cmbWeldState;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TabPage tabState;
+        private System.Windows.Forms.TabPage tabCoax;
+        private System.Windows.Forms.TabPage tabSuface;
+        private System.Windows.Forms.TabPage tabLwm;
+        private System.Windows.Forms.Label labOnTIme;
         private System.Windows.Forms.ComboBox cmbProductState;
         private System.Windows.Forms.NumericUpDown numCoaxRangeUp;
         private System.Windows.Forms.Label label8;
@@ -1398,14 +1411,15 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.GroupBox grbManual;
+        private System.Windows.Forms.Label labCurResult;
+        private System.Windows.Forms.Label labUpResult;
         private System.Windows.Forms.ComboBox cmbNewResult;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label labUpdateUser;
+        private System.Windows.Forms.Label labManualReason;
         private System.Windows.Forms.TextBox txtModifyReason;
         public System.Windows.Forms.TextBox txtOldResult;
         private System.Windows.Forms.TextBox txtModifyUser;
+        private System.Windows.Forms.Panel panel1;
     }
 }
