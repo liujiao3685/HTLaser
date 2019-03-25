@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace CommonLibrary.Lwm
 {
+    public delegate void LwmDataRevice(LwmData Receive);
+
     public class LwmHelper : TcpBase
     {
+        public event LwmDataRevice LwmDataReviceEvent;
         public string LwmIp = "192.168.0.60";
 
         public int LwmPort = 8000;//8000;//700：控制端口
 
+        public Socket LwmSocket;
+        private Thread OnReadThread;
+
         private static readonly object locker = new object();
-
-        public Socket LwmSocket = null;
-
         private static LwmHelper lwm = null;
         public static LwmHelper GetInstance()
         {
@@ -33,7 +37,29 @@ namespace CommonLibrary.Lwm
 
         public LwmHelper()
         {
+            OnReadThread = new Thread(DoReadThread);
+            OnReadThread.IsBackground = true;
+            OnReadThread.SetApartmentState(ApartmentState.STA);
+            OnReadThread.Start();
+        }
 
+        private void DoReadThread()
+        {
+            while (true)
+            {
+                while (Connected)
+                {
+                    RecDatas = new byte[1024];
+                    RecDatas = Read();
+                    Thread.Sleep(50);
+                }
+                if (!Connected)
+                {
+                    Open(LwmIp, LwmPort);
+                    Thread.Sleep(2000);
+                }
+                Thread.Sleep(1000);
+            }
         }
 
         /// <summary>
@@ -48,51 +74,58 @@ namespace CommonLibrary.Lwm
 
         public LwmData ReceiveByTelegram(byte[] telegramID)
         {
-            if (!Connected) Open(LwmIp, LwmPort);
-
             LwmData lwmData = new LwmData();
-            byte[] temp = new byte[1024];
-            int offset = 0;
-            LwmSocket.Receive(temp);
-            lwmData.TelegramId = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.Statue = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.Length = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-
-            byte[] datas = new byte[lwmData.Length];
-            lwmData.ProgramNo = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.ConfigId = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.ConfigVersion = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.TotalResult = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.MoreResult = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            offset += 32;// reserved
-            lwmData.ErrorSignOutput = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.MeasurementID = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-            lwmData.CommentLength = BitConverter.ToInt32(temp, offset);
-            offset += 32;
-
-            for (int i = 0; i < 80; i++)
+            try
             {
-                lwmData.Comment[i] = BitConverter.ToChar(temp, offset + i);
-            }
-            offset += 80;
+                if (!Connected) Open(LwmIp, LwmPort);
 
-            for (int i = 0; i < 6; i++)
+                byte[] temp = new byte[1024];
+                int offset = 0;
+                LwmSocket.Receive(temp);
+                lwmData.TelegramId = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.Statue = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.Length = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+
+                byte[] datas = new byte[lwmData.Length];
+                lwmData.ProgramNo = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.ConfigId = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.ConfigVersion = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.TotalResult = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.MoreResult = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                offset += 32;// reserved
+                lwmData.ErrorSignOutput = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.MeasurementID = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+                lwmData.CommentLength = BitConverter.ToInt32(temp, offset);
+                offset += 32;
+
+                for (int i = 0; i < 80; i++)
+                {
+                    lwmData.Comment[i] = BitConverter.ToChar(temp, offset + i);
+                }
+                offset += 80;
+
+                for (int i = 0; i < 6; i++)
+                {
+                    lwmData.LwmDataTime[i] = BitConverter.ToInt16(temp, offset + i);
+                }
+
+                LwmDataReviceEvent?.Invoke(lwmData);
+
+            }
+            catch (Exception)
             {
-                lwmData.LwmDataTime[i] = BitConverter.ToInt16(temp, offset + i);
+                return null;
             }
-
-
-
             return lwmData;
         }
 

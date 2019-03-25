@@ -1,8 +1,8 @@
-﻿using MES;
+﻿using CommonLibrary.Lwm;
+using CommonLibrary.Scanner;
+using CommonLibrary.Vision;
+using MES;
 using MES.DAL;
-using ProductManage.Lwm;
-using ProductManage.Scanner;
-using ProductManage.Vision;
 using System;
 using System.Diagnostics;
 using System.Drawing;

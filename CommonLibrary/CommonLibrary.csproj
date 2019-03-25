@@ -110,6 +110,10 @@
       <Project>{30FFB1EF-D3D1-4F68-B697-C4930CF69565}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SQLServerDAL\SQLServerDAL.csproj">
+      <Project>{F65E82D4-8866-498B-8CF0-FB5EBC50CF17}</Project>
+      <Name>SQLServerDAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

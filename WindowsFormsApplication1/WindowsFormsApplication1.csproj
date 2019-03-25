@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -103,6 +104,7 @@
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
@@ -117,6 +119,7 @@
   <ItemGroup>
     <Compile Include="AppSetting.cs" />
     <Compile Include="Core\ExeHelper.cs" />
+    <Compile Include="Core\Factorial.cs" />
     <Compile Include="Core\OperateIniFile.cs" />
     <Compile Include="DAL\DBHelper.cs" />
     <Compile Include="DAL\DBTool.cs" />
@@ -137,11 +140,23 @@
     <Compile Include="Forms\FormCheckInternetState.Designer.cs">
       <DependentUpon>FormCheckInternetState.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormNineToNiie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormNineToNiie.Designer.cs">
+      <DependentUpon>FormNineToNiie.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormTest.Designer.cs">
       <DependentUpon>FormTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormTimerDelete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormTimerDelete.Designer.cs">
+      <DependentUpon>FormTimerDelete.cs</DependentUpon>
     </Compile>
     <Compile Include="Log\Log.cs" />
     <Compile Include="Log\LogHelper.cs" />
@@ -248,8 +263,14 @@
     <EmbeddedResource Include="Forms\FormCheckInternetState.resx">
       <DependentUpon>FormCheckInternetState.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormNineToNiie.resx">
+      <DependentUpon>FormNineToNiie.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTest.resx">
       <DependentUpon>FormTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTimerDelete.resx">
+      <DependentUpon>FormTimerDelete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.en-US.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -332,6 +353,14 @@
     <ProjectReference Include="..\MES\MES.csproj">
       <Project>{3d3b2d92-b001-463d-9a59-941e18e64503}</Project>
       <Name>MES</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{30FFB1EF-D3D1-4F68-B697-C4930CF69565}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLServerDAL\SQLServerDAL.csproj">
+      <Project>{f65e82d4-8866-498b-8cf0-fb5ebc50cf17}</Project>
+      <Name>SQLServerDAL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

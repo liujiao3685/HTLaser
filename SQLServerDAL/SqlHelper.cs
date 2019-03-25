@@ -41,6 +41,7 @@ namespace SQLServerDAL
 
         //Database connection strings
         public static readonly string SQLServerConnectionString = ConfigurationManager.ConnectionStrings["SQLServerConn"].ToString();
+        //public static readonly string SQLServerTDb180801Str = ConfigurationManager.ConnectionStrings["TDb180801"].ToString();
 
         /// <summary>
         /// 对接数据库

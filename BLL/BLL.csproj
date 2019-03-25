@@ -44,7 +44,7 @@
     <Compile Include="FailSafe.cs" />
     <Compile Include="OperateUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SaveWeldingData.cs" />
+    <Compile Include="Welding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DALFactory\DALFactory.csproj">

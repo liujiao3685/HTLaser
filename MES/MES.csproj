@@ -130,13 +130,11 @@
     <Compile Include="Core\Alarm.cs" />
     <Compile Include="Core\AnalysisBarCode.cs" />
     <Compile Include="DAL\SqlHelper.cs" />
-    <Compile Include="IDAL\IDbBase.cs" />
     <Compile Include="Log\LogHelper.cs" />
     <Compile Include="Lwm\LwmCmd.cs" />
     <Compile Include="Lwm\LwmData.cs" />
     <Compile Include="Lwm\LwmHelper.cs" />
     <Compile Include="Lwm\OperateResult.cs" />
-    <Compile Include="Scanner\KeyenceSR751.cs" />
     <Compile Include="PLC\CollectHelper.cs" />
     <Compile Include="Core\WindowsMessage.cs" />
     <Compile Include="Core\XmlHelperBase.cs" />
@@ -479,10 +477,10 @@
     <Content Include="HTLOGO.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Img\ClassIcon.ico" />
-    <Content Include="Img\RegistryEditor_5838.ico" />
-    <Content Include="Img\SingleMessage_5727.ico" />
-    <Content Include="Img\UserInterfaceEditor_5845.ico" />
+    <Content Include="Resources\ClassIcon.ico" />
+    <Content Include="Resources\RegistryEditor_5838.ico" />
+    <Content Include="Resources\SingleMessage_5727.ico" />
+    <Content Include="Resources\UserInterfaceEditor_5845.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">

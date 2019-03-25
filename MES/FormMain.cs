@@ -173,14 +173,16 @@ namespace MES
         /// </summary>
         private void InitThreads()
         {
-            //监听设备状态，三色灯、在线离线
+            //监控设备状态：在线，离线，报警
             Thread t_monitorState = new Thread(MonitorState);
             t_monitorState.IsBackground = true;
+            t_monitorState.SetApartmentState(ApartmentState.STA);
             t_monitorState.Start();
 
             //监听扫描仪线程
             Thread t_scanThread = new Thread(StartScanThread);
             t_scanThread.IsBackground = true;
+            t_scanThread.SetApartmentState(ApartmentState.STA);
             t_scanThread.Start();
 
             //采集同心度，表面质量，小环用
@@ -189,12 +191,14 @@ namespace MES
                 IsDoST20_Thread = true;
                 Thread t_coaSurface = new Thread(ThreadCollectSData);
                 t_coaSurface.IsBackground = true;
+                t_coaSurface.SetApartmentState(ApartmentState.STA);
                 t_coaSurface.Start();
 
+                b_startModifyS = false;
                 Thread t_modifySmallData = new Thread(ModifySmallData);
                 t_modifySmallData.IsBackground = true;
+                t_modifySmallData.SetApartmentState(ApartmentState.STA);
                 t_modifySmallData.Start();
-                b_startModifyS = false;
 
             }
 
@@ -206,12 +210,14 @@ namespace MES
                 IsDoST70_Thread = true;
                 Thread t_visionThread = new Thread(ThreadCollectLData);
                 t_visionThread.IsBackground = true;
+                t_visionThread.SetApartmentState(ApartmentState.STA);
                 t_visionThread.Start();
 
+                b_startModifyL = false;
                 Thread t_modifyLargeData = new Thread(ModifyLargeData);
                 t_modifyLargeData.IsBackground = true;
+                t_modifyLargeData.SetApartmentState(ApartmentState.STA);
                 t_modifyLargeData.Start();
-                b_startModifyL = false;
             }
 
         }
@@ -888,7 +894,7 @@ namespace MES
                     {
                         if (!string.IsNullOrEmpty(WeldInfoS.CurrentBarCode))
                         {
-                            SaveWeldingData bll = new SaveWeldingData();
+                            Welding bll = new Welding();
                             ServiceResult result = bll.SaveWeldingDataS(WeldInfoS);
 
                             if (result.IsSuccess) //if (c > 0)
@@ -1097,7 +1103,6 @@ namespace MES
         }
 
         #endregion
-
         #region 内存回收
         [DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize")]
         public static extern int SetProcessWorkingSetSize(IntPtr process, int minSize, int maxSize);
@@ -1336,7 +1341,7 @@ namespace MES
                     {
                         if (!string.IsNullOrEmpty(WeldInfoL.CurrentBarCode))
                         {
-                            SaveWeldingData bll = new SaveWeldingData();
+                            Welding bll = new Welding();
                             ServiceResult result = bll.SaveWeldingDataL(WeldInfoL);
                             if (result.IsSuccess)
                             {

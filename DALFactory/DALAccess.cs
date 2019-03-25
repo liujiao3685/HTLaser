@@ -47,6 +47,10 @@ namespace DALFactory
             return (IFailSafe)Assembly.Load(profilePath).CreateInstance(className);
         }
 
+        /// <summary>
+        /// 安全气囊工具类
+        /// </summary>
+        /// <returns></returns>
         public static IAirBag CreateAirBag()
         {
             string className = profilePath + ".AirBagDAL";

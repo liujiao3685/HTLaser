@@ -2,15 +2,13 @@
 using IDAL;
 using Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL
 {
-    public class SaveWeldingData
+    public class Welding
     {
+        public Action<bool> WeldSuccessCallBack;
+
         public ISaveWeldingData idal = DALAccess.CreateSaveWeldingData();
 
         #region 成员方法
@@ -58,5 +56,11 @@ namespace BLL
         }
 
         #endregion
+
+        public void DoWeldResultCallBack(bool result)
+        {
+            WeldSuccessCallBack?.Invoke(result);
+        }
+
     }
 }

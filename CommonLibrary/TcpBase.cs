@@ -15,6 +15,7 @@ namespace CommonLibrary
         private string IpAddress;
         private int Port;
         public bool Connected = false;
+        public string Last_Error;
 
         public TcpBase()
         {
@@ -58,6 +59,35 @@ namespace CommonLibrary
             {
                 Connected = false;
             }
+        }
+
+        public virtual void Send(byte[] data)
+        {
+            try
+            {
+                Client.Send(data, SocketFlags.None);
+            }
+            catch (Exception ex)
+            {
+                Last_Error = ex.Message;
+                Init();
+            }
+        }
+
+        public virtual byte[] Read()
+        {
+            byte[] data = new byte[1024];
+            try
+            {
+                Client.Receive(data);
+            }
+            catch (Exception ex)
+            {
+                Last_Error = ex.Message;
+                data = new byte[1024];
+                Init();
+            }
+            return data;
         }
 
         #region 异步

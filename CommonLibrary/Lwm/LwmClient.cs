@@ -11,7 +11,7 @@ namespace CommonLibrary.Lwm
         public string IpAddress;
         public Socket LwmSocket;
         public bool Connected = false;
-
+        public string last_error;
 
         private static LwmClient lwmClient;
         private static readonly object locker = new object();
@@ -87,7 +87,7 @@ namespace CommonLibrary.Lwm
             {
                 lock (WriteReadLock)
                 {
-                    LwmSocket.Send(Encoding.ASCII.GetBytes(content));
+                    LwmSocket.Send(Encoding.ASCII.GetBytes(content), SocketFlags.None);
 
                     result.IsSuccess = true;
                     result.Content = null;
