@@ -34,6 +34,8 @@ using BLL;
 using System.Threading.Tasks;
 using CommonLibrary.Scanner;
 using CommonLibrary.Lwm;
+using CommonLibrary.Common;
+using ProductManage.Forms;
 
 namespace MES
 {
@@ -479,7 +481,7 @@ namespace MES
         {
             if (order)
             {
-                LogHelper.WriteLog("ST70", "PLC发送条码指令：" + order);
+                LogHelper.WriteLog("ST70", "PLC发送条码至LWM指令：" + order);
 
                 string code = OpcUaClient.ReadNode<string>(PlcHelper.OPC_DB_LwmCode);
                 SendBarcodeToLwm(code);
@@ -644,6 +646,7 @@ namespace MES
         //发送条码检测结果
         private void MonitorBarCode(string barCode)
         {
+            CommonLibrary.Log.LogHelper.WriteLog("手动输入条码：" + barCode);
             ServiceResult result = AnalysisBarCode.BarCode(StationName, barCode);
             if (!result.IsSuccess)
             {
@@ -701,6 +704,7 @@ namespace MES
             catch (Exception ex)
             {
                 result = false;
+                CommonLibrary.Log.LogHelper.WriteLog("发送扫码结果 TO PLC异常：", ex);
                 LogNetProgramer.WriteError("异常", "发送扫码结果 TO PLC :" + ex.Message);
             }
 
@@ -763,25 +767,22 @@ namespace MES
                         bool lwmOrder = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCodeOrder);
                         ReceiveLwmCodeOrder(lwmOrder);
 
-                        Task.Factory.StartNew(() =>
+                        int start = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_CcdOrder);
+                        LogHelper.WriteLog("采集焊接数据", string.Format("接收到PLC采集指令！指令：{0}", lwmOrder));
+
+                        if (start == 1)
                         {
-                            int start = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_CcdOrder);
-                            LogHelper.WriteLog("采集焊接数据", string.Format("接收到PLC采集指令！指令：{0}", lwmOrder));
+                            LogHelper.WriteLog("采集焊接数据", string.Format("开始采集小环焊接数据！"));
 
-                            if (start == 1)
-                            {
-                                LogHelper.WriteLog("采集焊接数据", string.Format("开始采集小环焊接数据！"));
+                            CollectWeldData();
 
-                                CollectWeldData();
+                            UpdateCCDUI();
 
-                                UpdateCCDUI();
+                            LogHelper.WriteLog("采集焊接数据", string.Format("小环焊接数据采集完成！"));
+                            OpcUaClient.WriteNode(PlcHelper.OPC_DB_CcdOrder, 2);//采集指令置零
 
-                                LogHelper.WriteLog("采集焊接数据", string.Format("小环焊接数据采集完成！"));
-                                OpcUaClient.WriteNode(PlcHelper.OPC_DB_CcdOrder, 2);//采集指令置零
-
-                                if (DeviceState != 2) b_startModifyS = true;
-                            }
-                        });
+                            if (DeviceState != 2) b_startModifyS = true;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1153,13 +1154,10 @@ namespace MES
                         bool lwmOrder = OpcUaClient.ReadNode<bool>(PlcHelper.OPC_DB_SendLwmCodeOrder);//PLC 发送 是否发送条码给LWM信号
                         ReceiveLwmCodeOrder(lwmOrder);
 
-                        Task.Factory.StartNew(() =>
-                        {
-                            int order = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_VisionOrder);//PLC是否发送焊接指令
-                            LogHelper.WriteLog("ST70", String.Format("接受到PLC焊接指令：{0}", order));
+                        int order = OpcUaClient.ReadNode<int>(PlcHelper.OPC_DB_VisionOrder);//PLC是否发送焊接指令
+                        LogHelper.WriteLog("ST70", String.Format("接受到PLC焊接指令：{0}", order));
 
-                            AnalysisVisionData(order);
-                        });
+                        AnalysisVisionData(order);
                     }
                 }
                 catch (Exception ex)
@@ -1211,7 +1209,7 @@ namespace MES
 
                 CollectWeldDataL();
 
-                LogHelper.WriteLog("ST70", String.Format("采集完成！"));
+                LogHelper.WriteLog("ST70", String.Format("上位机采集完成！"));
 
                 TypeLwmResult(WeldInfoL.LwmResult);
 
@@ -1345,6 +1343,7 @@ namespace MES
                             ServiceResult result = bll.SaveWeldingDataL(WeldInfoL);
                             if (result.IsSuccess)
                             {
+                                b_startModifyL = false;
                                 LogHelper.WriteLog("ST70", string.Format("焊接数据保存成功！条码：{0}", WeldInfoL.CurrentBarCode));
 
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataOK"), false);
@@ -1359,7 +1358,6 @@ namespace MES
                                 AddTips(ResourceCulture.GetValue("SaveWeldDataFail") + "BarCode：" + CurrentBarCode, true);
                                 LogHelper.WriteLog("ST70", string.Format("焊接数据保存失败！条码：{0}，失败原因:{1}", WeldInfoL.CurrentBarCode, result.Msg));
                             }
-                            b_startModifyL = !b_startModifyL;
                         }
                         else
                         {
@@ -1414,6 +1412,10 @@ namespace MES
 
         private void testToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            FormRedisService form = new FormRedisService();
+            form.Show();
+
+            /**
             string sql = "select 结果 from V_ProductS where 产品编号=@Model";
 
             SqlParameter[] sqlParameters = new SqlParameter[1];
@@ -1424,9 +1426,9 @@ namespace MES
             if (Convert.ToBoolean(isHeated))
             {
 
-            }
+            }*/
 
-            /*
+            /**
             string sqlIsHeated = "SELECT bool1 FROM Product WHERE Pno = @Model";
 
             SqlParameter[] sqlParameters = new SqlParameter[1];
@@ -1615,16 +1617,16 @@ namespace MES
         {
             try
             {
-                string exeName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "MonitorDevice.exe");
-                Process process = Process.Start(exeName);
+                SoftBasic.ShowMoniorExe();
+
+                //string exeName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "MonitorDevice.exe");
+                //Process process = Process.Start(exeName);
             }
             catch (Exception ex)
             {
+                CommonLibrary.Log.LogHelper.WriteLog("启动设备监控程序失败:", ex);
                 MessageBox.Show("异常：" + ex.Message);
             }
-
-            //FormMonitor form = new FormMonitor(this);
-            //form.ShowDialog();
         }
 
         private void 点检记录ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1708,13 +1710,21 @@ namespace MES
             //{
             //    if (inputBox.Value == ConfigurationManager.AppSettings["QuitPwd"])
             //    {
-            IsWindowShow = false;
-            OnWindowState(this, new MyEvent() { IsWindowShow = false });
 
-            Thread.Sleep(1000);
+            DialogResult result = MessageBox.Show("确认退出吗?", " 操作提示",
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (result == DialogResult.OK)
+            {
+                IsWindowShow = false;
+                OnWindowState(this, new MyEvent() { IsWindowShow = false });
+                Thread.Sleep(500);
 
-            Dispose();
-            Application.Exit();
+                Dispose();
+                Thread.Sleep(500);
+                CommonLibrary.Log.LogHelper.WriteLog("应用程序正常关闭....");
+                Application.Exit();
+            }
+
             //    }
             //    else
             //    {

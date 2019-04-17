@@ -50,6 +50,7 @@ namespace CommonLibrary.Log
     public enum LoggerType
     {
         AppLogger,
+        ST010Logger
     }
 
     public class LogHelper
@@ -92,6 +93,14 @@ namespace CommonLibrary.Log
             }
         }
 
+        public static void WriteLog(string info, LoggerType loggerType)
+        {
+            if (logs[loggerType.ToString()].IsInfoEnabled)
+            {
+                logs[loggerType.ToString()].Info(info);
+            }
+        }
+
         public static void WriteLog(string info, Exception ex)
         {
             if (logerror.IsErrorEnabled)
@@ -114,6 +123,26 @@ namespace CommonLibrary.Log
             if (logs["AppLogger"].IsWarnEnabled)
             {
                 logs["AppLogger"].Warn(info);
+            }
+        }
+        public static void DeleteLogs(string fileDirect = "logs", int saveDay = 30)
+        {
+            DateTime nowTime = DateTime.Now;
+            DirectoryInfo root = new DirectoryInfo(fileDirect);
+            DirectoryInfo[] dics = root.GetDirectories();//获取文件夹
+
+            FileAttributes attr = File.GetAttributes(fileDirect);
+            if (attr == FileAttributes.Directory)//判断是不是文件夹
+            {
+                foreach (DirectoryInfo file in dics)
+                {
+                    TimeSpan t = nowTime - file.CreationTime;  //当前时间  减去 文件创建时间
+                    int day = t.Days;
+                    if (day > saveDay)   //保存的时间 ；  单位：天
+                    {
+                        Directory.Delete(file.FullName, true);//删除文件夹及子文件
+                    }
+                }
             }
         }
 

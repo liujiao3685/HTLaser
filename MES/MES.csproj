@@ -112,6 +112,14 @@
     <Reference Include="OpcUaHelper, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\OpcUaHelper.1.0.2\lib\OpcUaHelper.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\MyProjects\WindowsFormsApp\DLL\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\C#\MyProjects\WindowsFormsApp\DLL\ServiceStack.Redis.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data.Entity" />
@@ -126,10 +134,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSetting.cs" />
+    <Compile Include="BasicFramework\RedisCacheHelper.cs" />
     <Compile Include="BasicFramework\SoftBasic.cs" />
     <Compile Include="Core\Alarm.cs" />
     <Compile Include="Core\AnalysisBarCode.cs" />
     <Compile Include="DAL\SqlHelper.cs" />
+    <Compile Include="Forms\FormRedisService.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormRedisService.Designer.cs">
+      <DependentUpon>FormRedisService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Log\LogHelper.cs" />
     <Compile Include="Lwm\LwmCmd.cs" />
     <Compile Include="Lwm\LwmData.cs" />
@@ -348,6 +363,9 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormRedisService.resx">
+      <DependentUpon>FormRedisService.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.en-US.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -441,6 +459,7 @@
     </None>
     <None Include="Configs\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -471,8 +490,18 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dll\ACControl.dll" />
+    <Content Include="Dll\CSScriptLibrary.dll" />
     <Content Include="Dll\HslCommunication.dll" />
     <Content Include="Dll\HslControls.dll" />
+    <Content Include="Dll\LJV7_IF.dll" />
+    <Content Include="Dll\Newtonsoft.Json.dll" />
+    <Content Include="Dll\ServiceStack.Common.dll" />
+    <Content Include="Dll\ServiceStack.Interfaces.dll" />
+    <Content Include="Dll\ServiceStack.Redis.dll" />
+    <Content Include="Dll\ServiceStack.Text.dll" />
+    <Content Include="Dll\WeifenLuo.WinFormsUI.Docking.dll" />
+    <Content Include="MonitorDevice.exe" />
     <Content Include="Resources\HTLOGO.ico" />
     <Content Include="HTLOGO.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -3,11 +3,13 @@ using HslCommunication.BasicFramework;
 using SQLServerDAL;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Mail;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -15,8 +17,21 @@ namespace CommonLibrary.Common
 {
     public class SoftBasic
     {
-        #region 邮件功能
+        public static void ShowMoniorExe()
+        {
+            string fileName = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "MonitorDevice.exe");
+            Process splashProcess = null;
+            try
+            {
+                splashProcess = Process.Start(fileName);
+            }
+            catch (Win32Exception ex)
+            {
+                Log.LogHelper.WriteLog("启动设备监控程序失败：", ex);
+            }
+        }
 
+        #region 邮件功能
         private static string IsOpenSendMail = ConfigurationManager.AppSettings["IsOpenSendMail"]; //是否启用异常消息发送邮箱功能
         private static string SendUser = ConfigurationManager.AppSettings["MailUserName"];
         private static string SendPass = ConfigurationManager.AppSettings["MailPassword"];
@@ -59,7 +74,7 @@ namespace CommonLibrary.Common
             catch (Exception ex)
             {
             }
-        } 
+        }
         #endregion
 
 

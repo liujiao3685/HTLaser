@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using CommonLibrary.Log;
 using HslCommunication.LogNet;
 using MES.UI;
+using ProductManage.Forms;
 using ProductManage.UI;
 
 namespace MES
@@ -56,9 +57,10 @@ namespace MES
             Application.SetCompatibleTextRenderingDefault(false);
 
             LogHelper.WriteLog("应用程序正常启动...");
+            LogHelper.WriteLog("Test...", LoggerType.ST010Logger);
             LogNet.WriteInfo("正常", "应用程序正常启动...");
-            Application.Run(new SpotCheckForm());
-            //Application.Run(new FormMain());
+            //Application.Run(new SpotCheckForm());
+            Application.Run(new FormRedisService());
 
             //}
             //else

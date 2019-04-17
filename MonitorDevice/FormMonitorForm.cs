@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.Common;
+using CommonLibrary.Log;
 using CommonLibrary.Lwm;
 using CommonLibrary.Scanner;
 using CommonLibrary.Vision;
@@ -175,12 +176,15 @@ namespace MonitorDevice
 
         public bool CheckSMDState()
         {
-            bool boo = false;
-            Invoke(new Action(() =>
+            bool boo = false; try
             {
+
+                //Invoke(new Action(() =>
+                //{
                 // if (!SQLServerDAL.SqlHelper.IsConnection(SqlHelper.SQLServerConnectionStringTPOS))
                 if (!SoftBasic.IsPingOk(DBSMDIP))
                 {
+                    LogHelper.WriteLog("SMD数据库连接失败");
                     lanDbState.LanternBackground = Color.Gray;
                     boo = false;
                 }
@@ -189,7 +193,13 @@ namespace MonitorDevice
                     lanDbState.LanternBackground = Color.LimeGreen;
                     boo = true;
                 }
-            }));
+                //}));
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("SMD数据库连接异常", ex);
+                boo = false;
+            }
             return boo;
         }
         #endregion
