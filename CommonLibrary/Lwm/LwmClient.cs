@@ -3,15 +3,18 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Timers;
 
 namespace CommonLibrary.Lwm
 {
     public class LwmClient
     {
-        public string IpAddress;
+        public static string IpAddress;
         public Socket LwmSocket;
         public bool Connected = false;
         public string last_error;
+
+        private System.Timers.Timer KeepAliveTimer;
 
         private static LwmClient lwmClient;
         private static readonly object locker = new object();
@@ -21,19 +24,30 @@ namespace CommonLibrary.Lwm
             {
                 lock (locker)
                 {
-                    lwmClient = new LwmClient();
+                    lwmClient = new LwmClient(IpAddress);
                 }
             }
             return lwmClient;
         }
-        public LwmClient()
-        {
-            Init();
-        }
+
         public LwmClient(string ipAddress)
         {
             Init(ipAddress);
+            KeepAliveTimer = new System.Timers.Timer();
+            KeepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
+            KeepAliveTimer.Interval = 1000;
+            //KeepAliveTimer.AutoReset = true;
+            //KeepAliveTimer.Enabled = true;
         }
+
+        private void KeepAliveTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (!IsConnection())
+            {
+                ReConnect();
+            }
+        }
+
         public void Init(string ipAddress = "192.168.0.60")
         {
             try
@@ -67,6 +81,14 @@ namespace CommonLibrary.Lwm
             }
             Connected = false;
             return Connected;
+        }
+
+        public void ReConnect()
+        {
+            if (LwmSocket != null && !Connected)
+            {
+                Init(IpAddress);
+            }
         }
 
 

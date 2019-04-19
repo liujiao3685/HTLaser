@@ -17,6 +17,8 @@ namespace CommonLibrary.Scanner
         private static int ScanPort;
         public Socket ScannerSocket;
 
+        private System.Timers.Timer KeepAliveTimer;
+
         private static KeyenceSR751 keyenceSR751;
         private static readonly object locker = new object();
         public static KeyenceSR751 GetInstance()
@@ -25,19 +27,30 @@ namespace CommonLibrary.Scanner
             {
                 lock (locker)
                 {
-                    keyenceSR751 = new KeyenceSR751();
+                    keyenceSR751 = new KeyenceSR751(IpAddress);
                 }
             }
             return keyenceSR751;
         }
 
-        public KeyenceSR751()
-        {
-            Init();
-        }
         public KeyenceSR751(string ipAddress)
         {
             Init(ipAddress);
+
+            KeepAliveTimer = new System.Timers.Timer();
+            KeepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
+            KeepAliveTimer.Interval = 1000;
+            KeepAliveTimer.AutoReset = true;
+            KeepAliveTimer.Enabled = true;
+
+        }
+
+        private void KeepAliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (!IsConnection())
+            {
+                ReConnect();
+            }
         }
 
         public KeyenceSR751(string ip, int port = 9004)
@@ -69,6 +82,7 @@ namespace CommonLibrary.Scanner
                     ScannerSocket.Connect(ipe);
                     Connected = true;
                 }
+
             }
             catch (Exception ex)
             {
@@ -84,6 +98,18 @@ namespace CommonLibrary.Scanner
             }
             Connected = false;
             return Connected;
+        }
+
+        /// <summary>
+        /// 异步重连
+        /// </summary>
+        public void ReConnect()
+        {
+            if (ScannerSocket != null && !Connected)
+            {
+                //Init(IpAddress);
+                OpenAsync(3000);
+            }
         }
 
         #region 异步连接，可设置连接超时
