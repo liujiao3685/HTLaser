@@ -1,13 +1,10 @@
 ﻿using Model;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CommonLibrary.Scanner
 {
@@ -36,6 +33,7 @@ namespace CommonLibrary.Scanner
         public KeyenceSR751(string ipAddress)
         {
             Init(ipAddress);
+            IpAddress = ipAddress;
 
             KeepAliveTimer = new System.Timers.Timer();
             KeepAliveTimer.Elapsed += KeepAliveTimer_Elapsed;
@@ -60,7 +58,7 @@ namespace CommonLibrary.Scanner
             Init();
         }
 
-        public void Init(string address = "")
+        public void Init(string address = "127.0.0.1")
         {
             try
             {
@@ -75,12 +73,7 @@ namespace CommonLibrary.Scanner
                 }
                 if (ScannerSocket == null || !ScannerSocket.Connected)
                 {
-                    IPAddress ip = IPAddress.Parse(IpAddress);
-                    IPEndPoint ipe = new IPEndPoint(ip, ScanPort);
-
-                    ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    ScannerSocket.Connect(ipe);
-                    Connected = true;
+                    Open();
                 }
 
             }
@@ -96,7 +89,10 @@ namespace CommonLibrary.Scanner
             {
                 Connected = true;
             }
-            Connected = false;
+            else
+            {
+                Connected = false;
+            }
             return Connected;
         }
 
@@ -105,7 +101,7 @@ namespace CommonLibrary.Scanner
         /// </summary>
         public void ReConnect()
         {
-            if (ScannerSocket != null && !Connected)
+            if (!ScannerSocket.Connected || !Connected)
             {
                 //Init(IpAddress);
                 OpenAsync(3000);
@@ -123,7 +119,6 @@ namespace CommonLibrary.Scanner
         public bool OpenAsync(int timeOut)
         {
             ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            Connected = false;
             TimeOutEvent = new ManualResetEvent(false);
             try
             {
@@ -200,13 +195,30 @@ namespace CommonLibrary.Scanner
             return result;
         }
 
-        public Result Read()
+        public string Read(string order = "")
         {
             if ((ScannerSocket == null || !ScannerSocket.Connected) && !string.IsNullOrEmpty(IpAddress))
             {
                 Init();
             }
-            return Read(ScannerSocket);
+            Result result = Read(ScannerSocket);
+            if (result.IsSuccess)
+            {
+                return Encoding.ASCII.GetString(result.Content);
+            }
+            else
+            {
+                return result.Msg;
+            }
+        }
+
+        public override byte[] Read()
+        {
+            if ((ScannerSocket == null || !ScannerSocket.Connected) && !string.IsNullOrEmpty(IpAddress))
+            {
+                Init();
+            }
+            return Read(ScannerSocket).Content;
         }
         private Result Read(Socket socket, string order = "")
         {
@@ -215,6 +227,11 @@ namespace CommonLibrary.Scanner
             {
                 lock (WriteReadLock)
                 {
+                    if (order != "")
+                    {
+                        Write(order);
+                    }
+
                     var content = new byte[1024];
                     ScannerSocket.Receive(content);
 
@@ -233,13 +250,31 @@ namespace CommonLibrary.Scanner
         }
         #endregion
 
-        public bool Open()
+        private bool Open()
         {
             try
             {
                 ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(IpAddress), ScanPort);
                 ScannerSocket.Connect(endPoint);
+                Connected = true;
+            }
+            catch (Exception ex)
+            {
+                Connected = false;
+            }
+            return Connected;
+        }
+
+        private bool Open2()
+        {
+            try
+            {
+                IPAddress ip = IPAddress.Parse(IpAddress);
+                IPEndPoint ipe = new IPEndPoint(ip, ScanPort);
+
+                ScannerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                ScannerSocket.Connect(ipe);
                 Connected = true;
             }
             catch (Exception ex)

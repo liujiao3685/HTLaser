@@ -135,16 +135,10 @@ namespace CommonLibrary
 
         public void Close()
         {
-            if (Client != null)
-            {
-                Client.Shutdown(SocketShutdown.Both);
-                Client.Close();
-                Client.Dispose();
-                Client = null;
-            }
+            SafeClose(Client);
         }
 
-        public bool SafeClose(Socket socket)
+        protected bool SafeClose(Socket socket)
         {
             try
             {
